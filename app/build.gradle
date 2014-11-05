@@ -1,0 +1,22 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 7
+    buildToolsVersion "21.0.2"
+
+    defaultConfig {
+        applicationId "mn.aug.restfulandroid"
+        minSdkVersion 7
+        targetSdkVersion 7
+
+        testApplicationId "mn.aug.restfulandroid"
+        testInstrumentationRunner "android.test.InstrumentationTestRunner"
+    }
+
+    buildTypes {
+        release {
+            runProguard false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.txt'
+        }
+    }
+}

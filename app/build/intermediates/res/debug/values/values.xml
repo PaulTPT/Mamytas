@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/restful-android1/app/src/main/res/values/colors.xml -->
+    <eat-comment/>
+    <color name="background">#FF303030</color>
+    <color name="selected">#FF2A7997</color>
+    <color name="title_background">#FF101010</color>
+    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/restful-android1/app/src/main/res/values/strings.xml -->
+    <eat-comment/>
+    <string name="app_log_tag">RESTfulAndroid</string>
+    <string name="app_name">RESTful Android</string>
+    <string name="button_login_label">Login</string>
+    <string name="error_occurred">An error has occurred.</string>
+    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/restful-android1/app/src/main/res/values/styles.xml -->
+    <eat-comment/>
+    <style name="ProgressBar">
+        <item name="android:indeterminateOnly">true</item>
+        <item name="android:indeterminateDrawable">@drawable/progress</item>
+        <item name="android:indeterminateBehavior">repeat</item>
+        <item name="android:indeterminateDuration">1000</item>
+        <item name="android:minWidth">32dip</item>
+        <item name="android:maxWidth">32dip</item>
+        <item name="android:minHeight">32dip</item>
+        <item name="android:maxHeight">32dip</item>
+    </style>
+    <style name="RESTfulAndroidTheme" parent="@android:style/Theme">
+        <item name="android:windowTitleSize">40dip</item>
+        <item name="android:windowTitleBackgroundStyle">@style/TitlebarBackgroundStyle</item>
+    </style>
+    <style name="TitlebarBackgroundStyle">
+        <item name="android:background">@color/background</item>
+    </style>
+</resources>
