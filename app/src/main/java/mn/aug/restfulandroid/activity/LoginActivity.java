@@ -26,7 +26,9 @@ public class LoginActivity extends RESTfulActivity {
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
 
-	private AuthorizationManager mOAuthManager;
+    private IntentFilter filter;
+
+    private AuthorizationManager mOAuthManager;
 
 	private Button mButtonLogin;
     private EditText mEMailText;
@@ -52,23 +54,7 @@ public class LoginActivity extends RESTfulActivity {
 			}
 		});
 
-	}
-	private void startHomeActivity() {
-		Intent startHomeActivity = new Intent(this, TasksActivity.class);
-		startActivity(startHomeActivity);
-		finish();
-	}
 
-	/**
-	 * Authorizes app for use with Wunderlist.
-	 */
-	void loggin(String email,String password ) {
-		//Get name and password and retrieve token
-
-
-
-
-        IntentFilter filter = new IntentFilter(WunderlistServiceHelper.ACTION_REQUEST_RESULT);
         requestReceiver = new BroadcastReceiver() {
 
             @Override
@@ -93,14 +79,15 @@ public class LoginActivity extends RESTfulActivity {
                     if (resultCode == 200) {
 
                         Logger.debug(TAG, "Loggin Succesfull");
-
-						showToast("Login Succesfull !");
+                        showToast("Login Succesfull !");
+                        setRefreshing(false);
                         startHomeActivity();
 
 
                     } else {
-                        showToast(getString(R.string.error_occurred));
+                        showToast("Login failed... Try again");
                         mButtonLogin.setVisibility(View.VISIBLE);
+                        setRefreshing(false);
                     }
                 } else {
                     Logger.debug(TAG, "Result is NOT for our request ID");
@@ -109,23 +96,33 @@ public class LoginActivity extends RESTfulActivity {
             }
         };
 
-        mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
-        this.registerReceiver(requestReceiver, filter);
+        filter= new IntentFilter(WunderlistServiceHelper.ACTION_REQUEST_RESULT);
 
-        if (requestId == null) {
+        mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
+
+	}
+	private void startHomeActivity() {
+		Intent startHomeActivity = new Intent(this, TasksActivity.class);
+		startActivity(startHomeActivity);
+		finish();
+	}
+
+	/**
+	 * Authorizes app for use with Wunderlist.
+	 */
+	void loggin(String email,String password ) {
+		//Get name and password and retrieve token
             setRefreshing(true);
             requestId = mWunderlistServiceHelper.login(email,password);
-        } else if (mWunderlistServiceHelper.isRequestPending(requestId)) {
-            setRefreshing(true);
-        } else {
-            setRefreshing(false);
-        }
+
+
 	}
 
 	@Override
 	protected void onResume() {
 		super.onResume();
-		// Check to see if we're resuming after having authenticated with
+        this.registerReceiver(requestReceiver, filter);
+        // Check to see if we're resuming after having authenticated with
 		// Twitter
 		if (getIntent().getData() != null) {
 
