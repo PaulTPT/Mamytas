@@ -14,18 +14,18 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
 	public final String TAG = getClass().getSimpleName();
 
 	//Name of the database file
-	private static final String DATABASE_NAME = "wunderlist.db";
-	private static final int DATABASE_VERSION = 1;
+	public static final String DATABASE_NAME = "wunderlist.db";
+	public static final int DATABASE_VERSION = 1;
 
     //Strings for the COMMENTS TABLE
-    private static final String TABLE_COMMENTS = "comments";
-    private static final String COMMENTS_ID = "_id";
-    private static final String COMMENTS_STATE= "state";
-    private static final String COMMENTS_TEXT= "text";
-    private static final String COMMENTS_TASK_ID= "task_id";
+    public static final String TABLE_COMMENTS = "comments";
+    public static final String COMMENTS_ID = "_id";
+    public static final String COMMENTS_STATE= "state";
+    public static final String COMMENTS_TEXT= "text";
+    public static final String COMMENTS_TASK_ID= "task_id";
 
     // COMMENTS database creation sql statement
-    private static final String COMMENTS_CREATE =
+    public static final String COMMENTS_CREATE =
             "create table " + TABLE_COMMENTS + "("
             + COMMENTS_ID+ " integer primary key autoincrement, "
             + COMMENTS_STATE+ " text, "
@@ -35,13 +35,13 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
 
 
     //Strings for the LISTS TABLE
-    private static final String TABLE_LISTS = "lists";
-    private static final String LISTS_ID = "_id";
-    private static final String LISTS_STATE= "state";
-    private static final String LISTS_TITLE= "title";
+    public static final String TABLE_LISTS = "lists";
+    public static final String LISTS_ID = "_id";
+    public static final String LISTS_STATE= "state";
+    public static final String LISTS_TITLE= "title";
 
     // LISTS database creation sql statement
-    private static final String LISTS_CREATE =
+    public static final String LISTS_CREATE =
             "create table " + TABLE_LISTS + "("
                     + LISTS_ID+ " integer primary key autoincrement, "
                     + LISTS_STATE + " text "
@@ -50,15 +50,15 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
 
 
     //Strings for the OWNERSHIP TABLE
-    private static final String TABLE_OWNERSHIP = "ownership";
-    private static final String OWNERSHIP_ID = "_id";
-    private static final String OWNERSHIP_STATE= "state";
-    private static final String OWNERSHIP_TYPE= "type";
-    private static final String OWNERSHIP_OWNER= "owner";
-    private static final String OWNERSHIP_EFFECTIVE_ID= "effective_id";
+    public static final String TABLE_OWNERSHIP = "ownership";
+    public static final String OWNERSHIP_ID = "_id";
+    public static final String OWNERSHIP_STATE= "state";
+    public static final String OWNERSHIP_TYPE= "type";
+    public static final String OWNERSHIP_OWNER= "owner";
+    public static final String OWNERSHIP_EFFECTIVE_ID= "effective_id";
 
     // OWNERSHIP database creation sql statement
-    private static final String OWNERSHIP_CREATE =
+    public static final String OWNERSHIP_CREATE =
             "create table " + TABLE_OWNERSHIP + "("
                     + OWNERSHIP_ID+ " integer primary key autoincrement, "
                     + OWNERSHIP_STATE + "text, "
@@ -68,15 +68,15 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
                     +");";
 
     //Strings for the REMINDERS TABLE
-    private static final String TABLE_REMINDERS = "reminders";
-    private static final String REMINDERS_ID = "_id";
-    private static final String REMINDERS_STATE= "state";
-    private static final String REMINDERS_DATE= "date";
-    private static final String REMINDERS_OWNER= "owner";
-    private static final String REMINDERS_TASK_ID= "task_id";
+    public static final String TABLE_REMINDERS = "reminders";
+    public static final String REMINDERS_ID = "_id";
+    public static final String REMINDERS_STATE= "state";
+    public static final String REMINDERS_DATE= "date";
+    public static final String REMINDERS_OWNER= "owner";
+    public static final String REMINDERS_TASK_ID= "task_id";
 
     // REMINDERS database creation sql statement
-    private static final String REMINDERS_CREATE =
+    public static final String REMINDERS_CREATE =
             "create table " + TABLE_REMINDERS + "("
                     + REMINDERS_ID+ " integer primary key autoincrement, "
                     + REMINDERS_STATE + " text, "
@@ -88,15 +88,15 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
 
 
     //Strings for the TODOS TABLE
-    private static final String TABLE_TODOS = "todos";
-    private static final String TODOS_ID = "_id";
-    private static final String TODOS_STATE= "state";
-    private static final String TODOS_TITLE= "title";
-    private static final String TODOS_DUE_DATE= "due_date";
-    private static final String TODOS_LIST_ID= "list_id";
+    public static final String TABLE_TODOS = "todos";
+    public static final String TODOS_ID = "_id";
+    public static final String TODOS_STATE= "state";
+    public static final String TODOS_TITLE= "title";
+    public static final String TODOS_DUE_DATE= "due_date";
+    public static final String TODOS_LIST_ID= "list_id";
 
     // TODOS database creation sql statement
-    private static final String TODOS_CREATE =
+    public static final String TODOS_CREATE =
             "create table " + TABLE_TODOS + "("
                     +TODOS_ID+ " integer primary key autoincrement, "
                     + TODOS_STATE + " text, "
@@ -108,14 +108,14 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
 
 
     //Strings for the USERS TABLE
-    private static final String TABLE_USERS = "users";
-    private static final String USERS_ID = "_id";
-    private static final String USERS_STATE= "state";
-    private static final String USERS_NAME= "name";
-    private static final String USERS_PASSWORD= "password";
+    public static final String TABLE_USERS = "users";
+    public static final String USERS_ID = "_id";
+    public static final String USERS_STATE= "state";
+    public static final String USERS_NAME= "name";
+    public static final String USERS_PASSWORD= "password";
 
-    // USERSdatabase creation sql statement
-    private static final String USERS_CREATE =
+    // USERS database creation sql statement
+    public static final String USERS_CREATE =
             "create table " + TABLE_USERS + "("
             +USERS_ID+ " integer primary key autoincrement, "
             +USERS_STATE+ " text, "
