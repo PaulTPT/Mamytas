@@ -33,6 +33,8 @@ public class LoginActivity extends RESTfulActivity {
 	private Button mButtonLogin;
     private EditText mEMailText;
     private EditText mPasswordText;
+    private String name=null;
+    private String password=null;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -50,7 +52,9 @@ public class LoginActivity extends RESTfulActivity {
 
 			public void onClick(View v) {
 				mButtonLogin.setVisibility(View.INVISIBLE);
-                loggin(mEMailText.getText().toString(),mPasswordText.getText().toString());
+                name=mEMailText.getText().toString();
+                password=mPasswordText.getText().toString();
+                loggin(name,password);
 			}
 		});
 
@@ -80,6 +84,12 @@ public class LoginActivity extends RESTfulActivity {
 
                         Logger.debug(TAG, "Loggin Succesfull");
                         showToast("Login Succesfull !");
+
+
+
+                        "INSERT INTO USERS(NAME,PASSWORD) VALUES ('"
+                                + name + "','" + password + "')"
+
                         setRefreshing(false);
                         startHomeActivity();
 
@@ -110,10 +120,12 @@ public class LoginActivity extends RESTfulActivity {
 	/**
 	 * Authorizes app for use with Wunderlist.
 	 */
-	void loggin(String email,String password ) {
+	void loggin(String name,String password ) {
+
+
 		//Get name and password and retrieve token
             setRefreshing(true);
-            requestId = mWunderlistServiceHelper.login(email,password);
+            requestId = mWunderlistServiceHelper.login(name,password);
 
 	}
 
