@@ -2,13 +2,17 @@ package mn.aug.restfulandroid.service;
 
 import java.util.List;
 
+import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
+
 import mn.aug.restfulandroid.rest.RestMethod;
 import mn.aug.restfulandroid.rest.RestMethodFactory;
 import mn.aug.restfulandroid.rest.RestMethodResult;
 import mn.aug.restfulandroid.rest.RestMethodFactory.Method;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Tasks;
+import mn.aug.restfulandroid.util.Logger;
 
 /**
  * The TaskProcessor is a POJO for processing timeline requests.
@@ -62,7 +66,11 @@ public class TaskProcessor {
 				 * the content provider
 				 */
 
-				updateContentProvider(result);
+                Logger.debug("tasks", String.valueOf(result.getStatusCode()));
+
+                if(result.getStatusCode()==200) {
+                    updateDataBase(result.getResource());
+                }
 
 				// (9) Operation complete callback to Service
 
@@ -70,19 +78,23 @@ public class TaskProcessor {
 
 			}
 
-			private void updateContentProvider(RestMethodResult<Tasks> result) {
-				
-				Tasks tasksResult = result.getResource();
+			private void updateDataBase(Tasks tasksResult) {
+
 				List<Task> tasks = tasksResult.getTasks();
-				
-				// insert/update row for each Task in the TwitterTimline
-				for (Task task : tasks) {
-					Long id= task.getId();
-					String title    = task.getTitle();
-                    String duedate  = task.getDueDate();
-                    Long   idList   = task.getListId();
-					//TODO
-				}
+
+                if(tasks !=null) {
+                    // insert/update row for each Task
+                    for (Task task : tasks) {
+                        Long id = task.getId();
+                        String title = task.getTitle();
+                        String duedate = task.getDue_date();
+                        Long idList = task.getList_id();
+                        //TODO
+                    }
+                }
+
+
+
 				
 			}
 }

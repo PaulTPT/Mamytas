@@ -1,65 +1,68 @@
 package mn.aug.restfulandroid.rest.resource;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
+import mn.aug.restfulandroid.util.Logger;
 
 
 public class Task implements Resource {
 
-	private static final String ID_KEY = "id";
-	private static final String TITLE_KEY = "title";
-	private static final String DUE_DATE_KEY = "dueDate";
-    private static final String LIST_ID_KEY = "list_id";
+	private long id;
+	private String title;
+	private String due_date;
+    private long list_id;
 
-	private JSONObject task;
+    @JsonCreator
+    public Task(@JsonProperty("id")long id,@JsonProperty("title") String title,@JsonProperty("due_date") String due_date,@JsonProperty("list_id") long list_id) {
+        this.id = id;
+        this.title = title;
+        this.due_date = due_date;
+        this.list_id = list_id;
 
-	public Task(JSONObject taskData) {
-		this.task = taskData;
-		JSONArray names = this.task.names();
-		for (int i = 0; i < names.length(); i++) {
-			try {
-				System.out.println(names.get(i));
-			} catch (JSONException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
-	}
-	
-	public Long getId(){
-		try {
-			return this.task.getLong(ID_KEY);
-		} catch (JSONException e) {
-			e.printStackTrace();
-			return null;
-		}
-	}
-
-	public String getTitle() {
-        try {
-            return this.task.getString(TITLE_KEY);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+        Logger.debug("task", toString());
     }
 
-    public String getDueDate() {
-        try {
-            return this.task.getString(DUE_DATE_KEY);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+
+    public long getId() {
+        return id;
     }
 
-    public Long getListId() {
-        try {
-            return this.task.getLong(LIST_ID_KEY);
-        } catch (JSONException e) {
-            e.printStackTrace();
-            return null;
-        }
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDue_date() {
+        return due_date;
+    }
+
+    public void setDue_date(String due_date) {
+        this.due_date = due_date;
+    }
+
+    public long getList_id() {
+        return list_id;
+    }
+
+    public void setList_id(long list_id) {
+        this.list_id = list_id;
+    }
+
+    @Override
+    public String toString() {
+        return "Task{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", due_date='" + due_date + '\'' +
+                ", list_id=" + list_id +
+                '}';
     }
 }

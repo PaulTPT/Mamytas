@@ -1,17 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/restful-android1/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="background">#FF303030</color>
     <color name="selected">#FF2A7997</color>
     <color name="title_background">#FF101010</color>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/restful-android1/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_log_tag">RESTfulAndroid</string>
     <string name="app_name">RESTful Android</string>
     <string name="button_login_label">Login</string>
     <string name="error_occurred">An error has occurred.</string>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/restful-android1/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="ProgressBar">
         <item name="android:indeterminateOnly">true</item>

@@ -69,7 +69,6 @@ public abstract class RESTfulActivity extends Activity {
 
 	}
 
-    @Override
-    protected void onPause(){};
+
 
 }

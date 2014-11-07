@@ -1,5 +1,6 @@
 package mn.aug.restfulandroid.rest;
 
+import java.io.IOException;
 import java.net.URI;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,10 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import android.content.Context;
+
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class LoginRestMethod extends AbstractRestMethod<Login>{
 
@@ -37,8 +42,21 @@ public class LoginRestMethod extends AbstractRestMethod<Login>{
     @Override
     protected Login parseResponseBody(String responseBody) throws Exception {
 
-        JSONObject json = new JSONObject(responseBody);
-        return new Login(json);
+        Login login=null;
+
+        if (responseBody!= null && responseBody.length()>0) {
+            try {
+                final ObjectMapper mapper = new ObjectMapper();
+                login = mapper.readValue(responseBody, Login.class);
+            } catch (JsonParseException e) {
+                e.printStackTrace();
+            } catch (JsonMappingException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        return login;
 
     }
 

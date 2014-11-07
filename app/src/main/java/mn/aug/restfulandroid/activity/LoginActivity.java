@@ -115,7 +115,6 @@ public class LoginActivity extends RESTfulActivity {
             setRefreshing(true);
             requestId = mWunderlistServiceHelper.login(email,password);
 
-
 	}
 
 	@Override

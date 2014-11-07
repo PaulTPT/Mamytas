@@ -44,7 +44,8 @@ public abstract class AbstractRestMethod<T extends Resource> implements RestMeth
 
 		try {
 			responseBody = new String(response.body, getCharacterEncoding(response.headers));
-			resource = parseResponseBody(responseBody);
+            if(status==200)
+			    resource = parseResponseBody(responseBody);
 		} catch (Exception ex) {
 			// TODO Should we set some custom status code?
 			status += 500; // spec only defines up to 505

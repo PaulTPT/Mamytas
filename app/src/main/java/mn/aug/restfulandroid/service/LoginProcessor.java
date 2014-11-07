@@ -66,8 +66,11 @@ public class LoginProcessor {
 				 * on success Parsing the JSON response (on success) and inserting into
 				 * the content provider
 				 */
+        Logger.debug("login",String.valueOf(result.getStatusCode()));
 
-        registerToken(result);
+        if(result.getStatusCode()==200) {
+            registerToken(result.getResource().getToken());
+        }
 
         // (9) Operation complete callback to Service
 
@@ -75,15 +78,9 @@ public class LoginProcessor {
 
     }
 
-    private void registerToken(RestMethodResult<Login> result) {
+    private void registerToken(String token) {
 
         AuthorizationManager authMan = AuthorizationManager.getInstance(mContext);
-        Logger.debug("login",String.valueOf(result.getStatusCode()));
-        if(result.getStatusCode()==200) {
-           // Logger.debug("login", result.getResource().getToken());
-            authMan.saveToken(result.getResource().getToken());
-        }
-
-
+        authMan.saveToken(token);
     }
 }

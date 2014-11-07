@@ -8,6 +8,8 @@ import org.json.JSONException;
 
 import android.net.Uri;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+
 
 /**
  * Facade representing the Tasks data
@@ -22,27 +24,14 @@ public class Tasks implements Resource {
 	public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
 			+ "/" + PATH);
 
-    private JSONArray tasksData;
     private List<Task> tasks;
 
-    public Tasks(JSONArray tasksData) {
-        this.tasksData = tasksData;
+    @JsonCreator
+    public Tasks(List<Task> tasks) {
+        this.tasks=tasks;
     }
 
     public List<Task> getTasks() {
-        //lazy load
-        if(tasks == null){
-            tasks = new ArrayList<Task>();
-            for (int i = 0; i < tasksData.length(); i++) {
-                try {
-                    Task task = new Task(tasksData.getJSONObject(i));
-                    tasks.add(task);
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-            }
-        }
 
         return tasks;
     }

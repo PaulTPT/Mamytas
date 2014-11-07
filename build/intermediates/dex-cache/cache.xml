@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<pre-dex-items>
+
+    <item
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\jackson-databind-2.4.3-07794ac808e3575e769e4a6838800a43ced72381.jar"
+        jar="C:\Users\Paul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.4.3\feff63199be7b8f495c2f3e2096dcb6bd5e5b0b3\jackson-databind-2.4.3.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="feff63199be7b8f495c2f3e2096dcb6bd5e5b0b3"/>
+    <item
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\jackson-core-2.4.3-be36770268bc2f16b3a31b6eca92d8ef1b52bdcd.jar"
+        jar="C:\Users\Paul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.4.3\4cb3dbb0c2f75b51aa7543c53252989785a0c609\jackson-core-2.4.3.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="4cb3dbb0c2f75b51aa7543c53252989785a0c609"/>
+    <item
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.4.3-812b1cd8e432c97b798f16ceb2b79b34a1c72746.jar"
+        jar="C:\Users\Paul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.4.3\a30ec6f59b6d31b2df06fa73925fda2fc7e84486\jackson-annotations-2.4.3.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="a30ec6f59b6d31b2df06fa73925fda2fc7e84486"/>
+
+</pre-dex-items>

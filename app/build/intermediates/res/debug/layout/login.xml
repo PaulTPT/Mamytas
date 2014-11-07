@@ -36,4 +36,4 @@
         android:layout_alignLeft="@+id/email"
         android:text="password" />
 
-</RelativeLayout><!-- From: file:/C:/Users/Paul/AndroidStudioProjects/restful-android1/app/src/main/res/layout/login.xml -->
+</RelativeLayout><!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/layout/login.xml -->
