@@ -13,6 +13,7 @@ import android.net.Uri;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import mn.aug.restfulandroid.provider.UsersDBAccess;
 import mn.aug.restfulandroid.util.Logger;
 
 

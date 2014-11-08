@@ -3,6 +3,8 @@ package mn.aug.restfulandroid.service;
 import java.util.List;
 
 import android.content.Context;
+
+import mn.aug.restfulandroid.provider.UsersDBAccess;
 import mn.aug.restfulandroid.rest.RestMethod;
 import mn.aug.restfulandroid.rest.RestMethodFactory;
 import mn.aug.restfulandroid.rest.RestMethodResult;
@@ -24,10 +26,13 @@ public class LoginProcessor {
 
     private LoginProcessorCallback mCallback;
     private Context mContext;
+    private UsersDBAccess userDBAccess;
 
 
     public LoginProcessor(Context context) {
+
         mContext = context;
+        userDBAccess=new UsersDBAccess(mContext);
     }
 
 
@@ -70,6 +75,14 @@ public class LoginProcessor {
 
         if(result.getStatusCode()==200) {
             registerToken(result.getResource().getToken());
+
+            Logger.debug("split",new String(body));
+            String[] strings=(new String(body)).split("&");
+            String name= strings[0].split("email=")[1];
+            String password=strings[1].split("password=")[1];
+            userDBAccess.open();
+            userDBAccess.addUser(name,password);
+            userDBAccess.close();
         }
 
         // (9) Operation complete callback to Service

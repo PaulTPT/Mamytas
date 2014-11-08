@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.activity.base.RESTfulActivity;
+import mn.aug.restfulandroid.provider.UsersDBAccess;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
@@ -36,7 +37,9 @@ public class LoginActivity extends RESTfulActivity {
     private String name=null;
     private String password=null;
 
-	@Override
+
+
+    @Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		setContentResId(R.layout.login);
@@ -85,10 +88,6 @@ public class LoginActivity extends RESTfulActivity {
                         Logger.debug(TAG, "Loggin Succesfull");
                         showToast("Login Succesfull !");
 
-
-
-                        "INSERT INTO USERS(NAME,PASSWORD) VALUES ('"
-                                + name + "','" + password + "')"
 
                         setRefreshing(false);
                         startHomeActivity();

@@ -120,8 +120,8 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
             +USERS_ID+ " integer primary key autoincrement, "
             +USERS_STATE+ " text, "
             +USERS_NAME+" text, "
-            +USERS_PASSWORD+ " text, "
-            +"),";
+            +USERS_PASSWORD+ " text "
+            +")";
 
 
 	public ProviderDbHelper(Context context) {
