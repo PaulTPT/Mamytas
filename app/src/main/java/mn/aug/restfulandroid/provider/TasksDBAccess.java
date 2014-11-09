@@ -49,7 +49,7 @@ public class TasksDBAccess {
      */
     public boolean storeTodo(Task todo) {
 
-        if (!TodoIsInDB(todo)) {
+        if (!TodoIsInDB(todo)) try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.TODOS_ID, todo.getId());
             values.put(ProviderDbHelper.TODOS_TITLE, todo.getTitle());
@@ -57,6 +57,9 @@ public class TasksDBAccess {
             values.put(ProviderDbHelper.TODOS_LIST_ID, todo.getList_id());
             bdd.insert(ProviderDbHelper.TABLE_TODOS, null, values);
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return false;
 
@@ -71,13 +74,16 @@ public class TasksDBAccess {
      */
     public boolean updateTodo(Task todo) {
 
-        if (TodoIsInDB(todo)) {
+        if (TodoIsInDB(todo)) try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.TODOS_TITLE, todo.getTitle());
             values.put(ProviderDbHelper.TODOS_DUE_DATE, todo.getDue_date());
             values.put(ProviderDbHelper.TODOS_LIST_ID, todo.getList_id());
             bdd.update(ProviderDbHelper.TABLE_TODOS, values, ProviderDbHelper.TODOS_ID + " = " + todo.getId(), null);
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return false;
 
@@ -92,8 +98,14 @@ public class TasksDBAccess {
     public Task retrieveTodo(int todoID) {
 
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_TITLE, ProviderDbHelper.TODOS_DUE_DATE, ProviderDbHelper.TODOS_LIST_ID},
-                ProviderDbHelper.TODOS_ID + " LIKE \"" + todoID + "\"", null, null, null, null);
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_TITLE, ProviderDbHelper.TODOS_DUE_DATE, ProviderDbHelper.TODOS_LIST_ID},
+                    ProviderDbHelper.TODOS_ID + " LIKE \"" + todoID + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
         if (c.getCount() == 0)
             return null;
         else {
@@ -115,7 +127,12 @@ public class TasksDBAccess {
     public boolean deleteTodo(int todoID) {
 
         if (TodoIsInDB(retrieveTodo(todoID))) {
-            bdd.delete(ProviderDbHelper.TABLE_TODOS, ProviderDbHelper.TODOS_ID + " = " + todoID, null);
+            try {
+                bdd.delete(ProviderDbHelper.TABLE_TODOS, ProviderDbHelper.TODOS_ID + " = " + todoID, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
             return true;
         }
         return false;
@@ -130,8 +147,13 @@ public class TasksDBAccess {
      */
     public boolean deleteTodosFromList(int list_ID) {
 
+        try {
             bdd.delete(ProviderDbHelper.TABLE_TODOS, ProviderDbHelper.TODOS_LIST_ID + " = " + list_ID, null);
-            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
 
 
     }
@@ -146,8 +168,14 @@ public class TasksDBAccess {
 
         List<Integer> list = new ArrayList<Integer>();
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_ID},
-                ProviderDbHelper.TODOS_LIST_ID + " LIKE \"" + listID + "\"", null, null, null, null);
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_ID},
+                    ProviderDbHelper.TODOS_LIST_ID + " LIKE \"" + listID + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
         int count=c.getCount();
         if (c.getCount() == 0)
             return null;
@@ -165,17 +193,28 @@ public class TasksDBAccess {
 
     private boolean TodoIsInDB(Task task) {
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_TITLE}, ProviderDbHelper.TODOS_ID + " LIKE \"" + task.getId() + "\"", null, null, null, null);
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_TITLE}, ProviderDbHelper.TODOS_ID + " LIKE \"" + task.getId() + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return c.getCount() != 0;
     }
 
     private boolean setStatus(Task task, String state) {
 
         if (TodoIsInDB(task)) {
-            ContentValues values = new ContentValues();
-            values.put(ProviderDbHelper.TODOS_STATE, state);
-            bdd.update(ProviderDbHelper.TABLE_TODOS, values, ProviderDbHelper.TODOS_ID + " = " + task.getId(), null);
-            return true;
+            try {
+                ContentValues values = new ContentValues();
+                values.put(ProviderDbHelper.TODOS_STATE, state);
+                bdd.update(ProviderDbHelper.TABLE_TODOS, values, ProviderDbHelper.TODOS_ID + " = " + task.getId(), null);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         }
         return false;
     }

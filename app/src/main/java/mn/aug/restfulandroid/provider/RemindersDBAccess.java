@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mn.aug.restfulandroid.rest.resource.Reminder;
 import mn.aug.restfulandroid.rest.resource.Task;
 
@@ -22,118 +25,6 @@ public class RemindersDBAccess {
         myHelper = new ProviderDbHelper(context);
     }
 
-    /**
-     * Store a new reminder into the database
-     *
-     * @param reminder The reminder to be stored
-     * @return The reminder stored with its ID
-     */
-    public static Reminder storeReminder(Reminder reminder) {
-        checkDB();
-
-        String requete = "INSERT INTO REMINDERS (DATE,TASK_ID,OWNER) VALUES ('"
-                + reminder.getDate() + "'," + reminder.getTask_id() + ",'"
-                + reminder.getOwner() + "')";
-        try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = stmt.getGeneratedKeys();
-            rs.next();
-            int id = rs.getInt(1);
-            reminder.setId(id);
-            stmt.close();
-            return reminder;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return null;
-        }
-
-    }
-
-    /**
-     * Retrieve the reminders relative to a task
-     *
-     * @param TaskID The id of the task
-     * @return The reminders
-     */
-    public static List<Reminder> retrieveTaskReminders(int TaskID) {
-        checkDB();
-        List<Reminder> list = new ArrayList<Reminder>();
-
-        try {
-            String requete = "SELECT ID, DATE, OWWNER FROM REMINDERS WHERE TASK_ID= "
-                    + TaskID;
-            ResultSet res;
-            Statement stmt = connec.createStatement();
-            res = stmt.executeQuery(requete);
-            while (res.next()) {
-                list.add(new Reminder(res.getInt(1), TaskID, res.getString(2),
-                        res.getString(3)));
-            }
-            res.close();
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-
-        return list;
-    }
-
-    /**
-     * Retrieve all the reminders
-     *
-     * @param user The user owning the reminders to retrieve
-     * @return The reminders
-     */
-    public static List<Reminder> retrieveRemindersFromUser(String user) {
-        checkDB();
-        List<Reminder> list = new ArrayList<Reminder>();
-
-        try {
-            String requete = "SELECT ID,TASK_ID,DATE FROM REMINDERS WHERE OWNER='"
-                    + user + "'";
-            ResultSet res;
-            Statement stmt = connec.createStatement();
-            res = stmt.executeQuery(requete);
-            while (res.next()) {
-                list.add(new Reminder(res.getInt(1), res.getInt(2), res
-                        .getString(3), user));
-            }
-            res.close();
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-
-        return list;
-    }
-
-    /**
-     * Delete a reminder from its ID
-     *
-     * @param reminderID The ID of the reminder to be deleted
-     * @return Whether it was successful or not
-     */
-    public static boolean deleteReminder(int reminderID) {
-        checkDB();
-
-        String requete = "DELETE FROM REMINDERS WHERE ID= " + reminderID;
-        try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
-            return true;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
     public void open() {
         //on ouvre la BDD en écriture
         bdd = myHelper.getWritableDatabase();
@@ -148,19 +39,140 @@ public class RemindersDBAccess {
         return bdd;
     }
 
-    private boolean ReminderIsInDB(Reminder reminder) {
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[]{ProviderDbHelper.REMINDERS_OWNER}, ProviderDbHelper.REMINDERS_ID + " LIKE \"" + reminder.getId() + "\"", null, null, null, null);
+    /**
+     * Store a new reminder into the database
+     *
+     * @param reminder The reminder to be stored
+     * @return The reminder stored with its ID
+     */
+    public  Reminder storeReminder(Reminder reminder) {
+
+        if (!reminderIsInDB(reminder)) {
+            try {
+                ContentValues values = new ContentValues();
+                values.put(ProviderDbHelper.REMINDERS_DATE, reminder.getDate());
+                values.put(ProviderDbHelper.REMINDERS_TASK_ID, reminder.getTask_id());
+                values.put(ProviderDbHelper.REMINDERS_OWNER, reminder.getOwner());
+                long id= bdd.insert(ProviderDbHelper.TABLE_REMINDERS, null, values);
+                reminder.setId((int) id);
+                return reminder;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+
+            }
+        }
+        return null;
+
+    }
+
+    /**
+     * Retrieve the reminders relative to a task
+     *
+     * @param taskID The id of the task
+     * @return The reminders
+     */
+    public List<Reminder> retrieveTaskReminders(int taskID) {
+
+        List<Reminder> list = new ArrayList<Reminder>();
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[]{ProviderDbHelper.REMINDERS_ID,ProviderDbHelper.REMINDERS_DATE,ProviderDbHelper.REMINDERS_OWNER},
+                    ProviderDbHelper.REMINDERS_TASK_ID + " LIKE \"" + taskID + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        int count=c.getCount();
+        if (c.getCount() == 0)
+            return null;
+        else {
+            for(int i=0;i<count;i++) {
+                list.add(new Reminder(c.getInt(0), taskID, c.getString(1),
+                        c.getString(2)));
+            }
+            return list;
+
+        }
+
+    }
+
+    /**
+     * Retrieve all the reminders
+     *
+     * @param user The user owning the reminders to retrieve
+     * @return The reminders
+     */
+    public  List<Reminder> retrieveRemindersFromUser(String user) {
+
+        List<Reminder> list = new ArrayList<Reminder>();
+
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[]{ProviderDbHelper.REMINDERS_ID,ProviderDbHelper.REMINDERS_TASK_ID,ProviderDbHelper.REMINDERS_DATE},
+                    ProviderDbHelper.REMINDERS_OWNER + " LIKE \"" + user + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        int count=c.getCount();
+        if (c.getCount() == 0)
+            return null;
+        else {
+            for(int i=0;i<count;i++) {
+                list.add(new Reminder(c.getInt(0), c.getInt(1),
+                        c.getString(2),user));
+            }
+            return list;
+
+        }
+
+    }
+
+    /**
+     * Delete a reminder from its ID
+     *
+     * @param reminderID The ID of the reminder to be deleted
+     * @return Whether it was successful or not
+     */
+    public  boolean deleteReminder(int reminderID) {
+
+        try {
+            bdd.delete(ProviderDbHelper.TABLE_REMINDERS, ProviderDbHelper.REMINDERS_ID + " = " + reminderID, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
+    }
+
+
+    private boolean reminderIsInDB(Reminder reminder) {
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[]{ProviderDbHelper.REMINDERS_OWNER}, ProviderDbHelper.REMINDERS_ID + " LIKE \"" + reminder.getId() + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return c.getCount() != 0;
     }
 
     private boolean setStatus(Reminder reminder, String state) {
 
-        if (ReminderIsInDB(reminder)) {
+        if (reminderIsInDB(reminder)) try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.REMINDERS_STATE, state);
             bdd.update(ProviderDbHelper.TABLE_REMINDERS, values, ProviderDbHelper.REMINDERS_ID + " = " + reminder.getId(), null);
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return false;
     }

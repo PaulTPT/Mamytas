@@ -45,9 +45,16 @@ public class UsersDBAccess {
     public boolean updateUser(String name, String password) {
 
         if (userIsInDB(name)) {
-            ContentValues values = new ContentValues();
-            values.put(ProviderDbHelper.USERS_PASSWORD, password);
-            bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = " + name, null);
+
+            try {
+                ContentValues values = new ContentValues();
+                values.put(ProviderDbHelper.USERS_PASSWORD, password);
+                bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = " + name, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+
             return true;
         }
         return false;
@@ -63,7 +70,12 @@ public class UsersDBAccess {
      */
     public boolean deleteUser(String name) {
         if (userIsInDB(name)) {
-            bdd.delete(ProviderDbHelper.TABLE_USERS, ProviderDbHelper.USERS_NAME + " = " + name, null);
+            try {
+                bdd.delete(ProviderDbHelper.TABLE_USERS, ProviderDbHelper.USERS_NAME + " = " + name, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
             return true;
         }
         return false;
@@ -81,11 +93,16 @@ public class UsersDBAccess {
     public boolean addUser(String name, String password) {
 
         if (!userIsInDB(name)) {
-            ContentValues values = new ContentValues();
-            values.put(ProviderDbHelper.USERS_NAME, name);
-            values.put(ProviderDbHelper.USERS_PASSWORD, password);
-            bdd.insert(ProviderDbHelper.TABLE_USERS, null, values);
-            return true;
+            try {
+                ContentValues values = new ContentValues();
+                values.put(ProviderDbHelper.USERS_NAME, name);
+                values.put(ProviderDbHelper.USERS_PASSWORD, password);
+                bdd.insert(ProviderDbHelper.TABLE_USERS, null, values);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         }
         return false;
 
@@ -101,7 +118,13 @@ public class UsersDBAccess {
      */
     public boolean validateUser(String name, String password) {
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name + "\"", null, null, null, null);
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         if (c.getCount() == 0)
             return false;
         else {
@@ -117,18 +140,27 @@ public class UsersDBAccess {
 
     private boolean userIsInDB(String name) {
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name + "\"", null, null, null, null);
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return c.getCount() != 0;
     }
 
 
     private boolean setStatus(String name, String state) {
 
-        if (userIsInDB(name)) {
+        if (userIsInDB(name)) try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.USERS_STATE, state);
             bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = " + name, null);
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         }
         return false;
 
