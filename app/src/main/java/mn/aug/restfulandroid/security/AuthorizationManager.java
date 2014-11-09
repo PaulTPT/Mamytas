@@ -24,8 +24,10 @@ public class AuthorizationManager implements RequestSigner {
 	private final SharedPreferences prefs;
 
     public static final String  WUNDERLIST_TOKEN="WUNDERLIST_TOKEN";
+    public static final String  WUNDERLIST_NAME="WUNDERLIST_NAME";
 
 	private String mToken;
+    private String mUser;
 
 
 	/**
@@ -59,14 +61,16 @@ public class AuthorizationManager implements RequestSigner {
 	 *            the token to persist, or <code>null</code> to clear it
 	 * @return <code>true</code> if the save was successful
 	 */
-	public boolean saveToken(String token) {
+	public boolean saveToken(String token, String user) {
 
 		SharedPreferences.Editor editor = prefs.edit();
 
 		if (token == null) {
 			editor.remove(WUNDERLIST_TOKEN);
+            editor.remove(WUNDERLIST_NAME);
 		} else {
 			editor.putString(WUNDERLIST_TOKEN, token);
+            editor.putString(WUNDERLIST_NAME, user);
 		}
 
 		return editor.commit();
@@ -76,9 +80,7 @@ public class AuthorizationManager implements RequestSigner {
 
 
 	/**
-	 * Returns a request token for authorizing the app with Twitter
-	 * 
-	 * @return Twitter request token
+	 * Retrieves  the request token for authorizing the app
 	 */
 	private void retrieveToken() {
 
@@ -88,14 +90,34 @@ public class AuthorizationManager implements RequestSigner {
         this.mToken=token;
 	}
 
+    /**
+     * Retrieves the name of the usere
+     */
+    private void retrieveName() {
+
+        //Appel au service pour récupérer le token
+
+        String name = prefs.getString(WUNDERLIST_NAME,null);
+        this.mUser=name;
+    }
+
 	/**
 	 * Returns the token (may be null)
-	 * 
+	 *
 	 * @return saved  token (or null if it does not exist)
 	 */
     public String getToken() {
 		return mToken;
 	}
+
+    /**
+     * Returns the user (may be null)
+     *
+     * @return saved user (or null if it does not exist)
+     */
+    public String getUser() {
+        return mUser;
+    }
 
 	/**
 	 * Determines whether a user is currently logged in
@@ -112,7 +134,8 @@ public class AuthorizationManager implements RequestSigner {
 	 */
 	public void logout() {
 		mToken = null;
-		saveToken(mToken);
+        mUser=null;
+		saveToken(mToken,mUser);
 	}
 
 	/**

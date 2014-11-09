@@ -138,7 +138,7 @@ public class UsersDBAccess {
 
     }
 
-    private boolean userIsInDB(String name) {
+    public boolean userIsInDB(String name) {
 
         Cursor c = null;
         try {
@@ -151,7 +151,7 @@ public class UsersDBAccess {
     }
 
 
-    private boolean setStatus(String name, String state) {
+    public boolean setStatus(String name, String state) {
 
         if (userIsInDB(name)) try {
             ContentValues values = new ContentValues();

@@ -115,7 +115,7 @@ public class CommentsDBAccess {
     }
 
 
-    private boolean commentIsInDB(Comment comment) {
+    public boolean commentIsInDB(Comment comment) {
 
         Cursor c = null;
         try {
@@ -127,7 +127,7 @@ public class CommentsDBAccess {
         return c.getCount() != 0;
     }
 
-    private boolean setStatus(Comment comment, String state) {
+    public boolean setStatus(Comment comment, String state) {
 
         if (commentIsInDB(comment)) {
             try {

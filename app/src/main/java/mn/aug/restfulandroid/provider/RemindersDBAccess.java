@@ -151,7 +151,7 @@ public class RemindersDBAccess {
     }
 
 
-    private boolean reminderIsInDB(Reminder reminder) {
+    public boolean reminderIsInDB(Reminder reminder) {
 
         Cursor c = null;
         try {
@@ -163,7 +163,7 @@ public class RemindersDBAccess {
         return c.getCount() != 0;
     }
 
-    private boolean setStatus(Reminder reminder, String state) {
+    public boolean setStatus(Reminder reminder, String state) {
 
         if (reminderIsInDB(reminder)) try {
             ContentValues values = new ContentValues();

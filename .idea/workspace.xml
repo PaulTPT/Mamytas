@@ -22,8 +22,15 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e05f68de-b564-44db-8b69-b2140a65ed8a" name="Default" comment="">
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/security/AuthorizationManager.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/security/AuthorizationManager.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/CommentsDBAccess.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/CommentsDBAccess.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ListsDBAccess.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ListsDBAccess.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/LoginProcessor.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/LoginProcessor.java" />
       <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/OwnershipDBAccess.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/OwnershipDBAccess.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/RemindersDBAccess.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/RemindersDBAccess.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/TaskProcessor.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/TaskProcessor.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TasksDBAccess.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TasksDBAccess.java" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/UsersDBAccess.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/UsersDBAccess.java" />
     </list>
     <ignored path="restful-android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -54,8 +61,8 @@
       <file leaf-file-name="RemindersDBAccess.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/RemindersDBAccess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1300" max-vertical-offset="3179">
-              <caret line="83" column="6" selection-start-line="83" selection-start-column="6" selection-end-line="97" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2524" max-vertical-offset="3179">
+              <caret line="165" column="10" selection-start-line="165" selection-start-column="10" selection-end-line="165" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#879#880#0" expanded="true" />
@@ -67,11 +74,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="OwnershipDBAccess.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="OwnershipDBAccess.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/OwnershipDBAccess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.29977116" vertical-offset="5411" max-vertical-offset="7480">
-              <caret line="326" column="54" selection-start-line="326" selection-start-column="54" selection-end-line="326" selection-end-column="54" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="6941" max-vertical-offset="7480">
+              <caret line="430" column="5" selection-start-line="430" selection-start-column="5" selection-end-line="430" selection-end-column="5" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#1131#1132#0" expanded="true" />
@@ -86,11 +93,34 @@
           </provider>
         </entry>
       </file>
+      <file leaf-file-name="TaskProcessor.java" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/TaskProcessor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.58444446" vertical-offset="1607" max-vertical-offset="2108">
+              <caret line="110" column="17" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
+              <folding>
+                <element signature="imports" expanded="true" />
+                <element signature="e#2171#2201#1" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="LoginProcessor.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/LoginProcessor.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="876" max-vertical-offset="1581">
+              <caret line="85" column="33" selection-start-line="85" selection-start-column="33" selection-end-line="85" selection-end-column="33" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file leaf-file-name="ListsDBAccess.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ListsDBAccess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2300" max-vertical-offset="2788">
-              <caret line="149" column="29" selection-start-line="149" selection-start-column="29" selection-end-line="149" selection-end-column="29" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2045" max-vertical-offset="2788">
+              <caret line="140" column="10" selection-start-line="140" selection-start-column="10" selection-end-line="140" selection-end-column="10" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#768#769#0" expanded="true" />
@@ -103,8 +133,8 @@
       <file leaf-file-name="CommentsDBAccess.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/CommentsDBAccess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1045" max-vertical-offset="2601">
-              <caret line="82" column="22" selection-start-line="82" selection-start-column="22" selection-end-line="82" selection-end-column="22" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1810" max-vertical-offset="2601">
+              <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#827#828#0" expanded="true" />
@@ -118,8 +148,8 @@
       <file leaf-file-name="TasksDBAccess.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TasksDBAccess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2793" max-vertical-offset="3842">
-              <caret line="178" column="7" selection-start-line="178" selection-start-column="7" selection-end-line="187" selection-end-column="9" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="204" max-vertical-offset="3842">
+              <caret line="200" column="9" selection-start-line="200" selection-start-column="9" selection-end-line="201" selection-end-column="33" />
               <folding>
                 <element signature="imports" expanded="true" />
                 <element signature="e#4673#4682#0" expanded="true" />
@@ -138,60 +168,25 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Task.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Task.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="935">
-              <caret line="8" column="13" selection-start-line="8" selection-start-column="13" selection-end-line="8" selection-end-column="13" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file leaf-file-name="UsersDBAccess.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/UsersDBAccess.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="2181" max-vertical-offset="2924">
-              <caret line="144" column="24" selection-start-line="144" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="2487" max-vertical-offset="2924">
+              <caret line="153" column="10" selection-start-line="153" selection-start-column="10" selection-end-line="153" selection-end-column="10" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="Comment.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Comment.java">
+      <file leaf-file-name="AuthorizationManager.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/security/AuthorizationManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="618" max-vertical-offset="1054">
-              <caret line="19" column="31" selection-start-line="19" selection-start-column="31" selection-end-line="19" selection-end-column="31" />
+            <state vertical-scroll-proportion="0.0" vertical-offset="1720" max-vertical-offset="2652">
+              <caret line="118" column="21" selection-start-line="118" selection-start-column="21" selection-end-line="118" selection-end-column="21" />
               <folding>
-                <element signature="imports" expanded="true" />
-                <element signature="e#575#576#0" expanded="true" />
-                <element signature="e#605#606#0" expanded="true" />
-                <element signature="e#648#649#0" expanded="true" />
-                <element signature="e#686#687#0" expanded="true" />
-                <element signature="e#725#726#0" expanded="true" />
-                <element signature="e#760#761#0" expanded="true" />
-                <element signature="e#816#817#0" expanded="true" />
-                <element signature="e#864#865#0" expanded="true" />
-                <element signature="e#890#891#0" expanded="true" />
-                <element signature="e#915#916#0" expanded="true" />
-                <element signature="e#948#949#0" expanded="true" />
-                <element signature="e#976#977#0" expanded="true" />
-                <element signature="e#1007#1008#0" expanded="true" />
-                <element signature="e#1034#1035#0" expanded="true" />
-                <element signature="e#1074#1075#0" expanded="true" />
-                <element signature="e#1106#1107#0" expanded="true" />
+                <element signature="e#2739#2740#0" expanded="true" />
+                <element signature="e#2767#2768#0" expanded="true" />
               </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="Resource.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Resource.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="187">
-              <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-              <folding />
             </state>
           </provider>
         </entry>
@@ -917,7 +912,6 @@
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/WunderlistServiceHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/WunderlistService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/RestMethodFactory.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/security/AuthorizationManager.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/RestClient.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/activity/TasksActivity.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/RestfulAndroid.java" />
@@ -929,24 +923,25 @@
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/LoginRestMethod.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/GetTasksRestMethod.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/AbstractRestMethod.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/TaskProcessor.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/UsersBDDAccess.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Login.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ProviderDbHelper.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/activity/LoginActivity.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/LoginProcessor.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/TaskList.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Task.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Listw.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Reminder.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/COmment.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Comment.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TasksDBAccess.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/UsersDBAccess.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/RemindersDBAccess.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/CommentsDBAccess.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TasksDBAccess.java" />
-        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ListsDBAccess.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/OwnershipDBAccess.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ListsDBAccess.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/CommentsDBAccess.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/security/AuthorizationManager.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/LoginProcessor.java" />
+        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/TaskProcessor.java" />
       </list>
     </option>
   </component>
@@ -1601,13 +1596,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/TaskProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="754" max-vertical-offset="1547">
-          <caret line="88" column="55" selection-start-line="88" selection-start-column="55" selection-end-line="88" selection-end-column="55" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/WunderlistService.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="714" max-vertical-offset="1751">
@@ -1628,14 +1616,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="816">
           <caret line="33" column="0" selection-start-line="33" selection-start-column="0" selection-end-line="33" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/security/AuthorizationManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1046" max-vertical-offset="2261">
-          <caret line="16" column="13" selection-start-line="16" selection-start-column="13" selection-end-line="16" selection-end-column="13" />
           <folding />
         </state>
       </provider>
@@ -1668,14 +1648,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="646" max-vertical-offset="3332">
           <caret line="38" column="0" selection-start-line="38" selection-start-column="0" selection-end-line="38" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/LoginProcessor.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1009" max-vertical-offset="1547">
-          <caret line="84" column="33" selection-start-line="84" selection-start-column="12" selection-end-line="84" selection-end-column="33" />
           <folding />
         </state>
       </provider>
@@ -1773,51 +1745,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ProviderDbHelper.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2287" max-vertical-offset="2720">
-          <caret line="106" column="0" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ListsDBAccess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2300" max-vertical-offset="2788">
-          <caret line="149" column="29" selection-start-line="149" selection-start-column="29" selection-end-line="149" selection-end-column="29" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#768#769#0" expanded="true" />
-            <element signature="e#794#795#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/CommentsDBAccess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1045" max-vertical-offset="2601">
-          <caret line="82" column="22" selection-start-line="82" selection-start-column="22" selection-end-line="82" selection-end-column="22" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#827#828#0" expanded="true" />
-            <element signature="e#853#854#0" expanded="true" />
-            <element signature="e#1907#1916#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/UsersDBAccess.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2181" max-vertical-offset="2924">
-          <caret line="144" column="24" selection-start-line="144" selection-start-column="0" selection-end-line="145" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/RemindersDBAccess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="1300" max-vertical-offset="3179">
-          <caret line="83" column="6" selection-start-line="83" selection-start-column="6" selection-end-line="97" selection-end-column="9" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="2524" max-vertical-offset="3179">
+          <caret line="165" column="10" selection-start-line="165" selection-start-column="10" selection-end-line="165" selection-end-column="10" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#879#880#0" expanded="true" />
@@ -1828,21 +1759,18 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TasksDBAccess.java">
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ProviderDbHelper.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="2793" max-vertical-offset="3842">
-          <caret line="178" column="7" selection-start-line="178" selection-start-column="7" selection-end-line="187" selection-end-column="9" />
-          <folding>
-            <element signature="imports" expanded="true" />
-            <element signature="e#4673#4682#0" expanded="true" />
-          </folding>
+        <state vertical-scroll-proportion="0.0" vertical-offset="2287" max-vertical-offset="2720">
+          <caret line="106" column="0" selection-start-line="106" selection-start-column="0" selection-end-line="106" selection-end-column="0" />
+          <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/OwnershipDBAccess.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.29977116" vertical-offset="5411" max-vertical-offset="7480">
-          <caret line="326" column="54" selection-start-line="326" selection-start-column="54" selection-end-line="326" selection-end-column="54" />
+        <state vertical-scroll-proportion="0.0" vertical-offset="6941" max-vertical-offset="7480">
+          <caret line="430" column="5" selection-start-line="430" selection-start-column="5" selection-end-line="430" selection-end-column="5" />
           <folding>
             <element signature="imports" expanded="true" />
             <element signature="e#1131#1132#0" expanded="true" />
@@ -1852,6 +1780,80 @@
             <element signature="e#9887#9893#0" expanded="true" />
             <element signature="e#10344#10351#0" expanded="true" />
             <element signature="e#11535#11543#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/ListsDBAccess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2045" max-vertical-offset="2788">
+          <caret line="140" column="10" selection-start-line="140" selection-start-column="10" selection-end-line="140" selection-end-column="10" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#768#769#0" expanded="true" />
+            <element signature="e#794#795#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/CommentsDBAccess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1810" max-vertical-offset="2601">
+          <caret line="128" column="0" selection-start-line="128" selection-start-column="0" selection-end-line="128" selection-end-column="0" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#827#828#0" expanded="true" />
+            <element signature="e#853#854#0" expanded="true" />
+            <element signature="e#1907#1916#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TasksDBAccess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2436" max-vertical-offset="3842">
+          <caret line="200" column="9" selection-start-line="200" selection-start-column="9" selection-end-line="201" selection-end-column="33" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#4673#4682#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/security/AuthorizationManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="1720" max-vertical-offset="2652">
+          <caret line="118" column="21" selection-start-line="118" selection-start-column="21" selection-end-line="118" selection-end-column="21" />
+          <folding>
+            <element signature="e#2739#2740#0" expanded="true" />
+            <element signature="e#2767#2768#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/UsersDBAccess.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="2283" max-vertical-offset="2924">
+          <caret line="153" column="10" selection-start-line="153" selection-start-column="10" selection-end-line="153" selection-end-column="10" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/LoginProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="876" max-vertical-offset="1581">
+          <caret line="85" column="33" selection-start-line="85" selection-start-column="33" selection-end-line="85" selection-end-column="33" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/TaskProcessor.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.58444446" vertical-offset="1607" max-vertical-offset="2108">
+          <caret line="110" column="17" selection-start-line="110" selection-start-column="17" selection-end-line="110" selection-end-column="17" />
+          <folding>
+            <element signature="imports" expanded="true" />
+            <element signature="e#2171#2201#1" expanded="true" />
           </folding>
         </state>
       </provider>

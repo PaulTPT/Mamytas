@@ -421,7 +421,7 @@ public class OwnershipDBAccess {
 
     }
 
-    private boolean setStatus(int id, String state) {
+    public boolean setStatus(int id, String state) {
 
         ContentValues values = new ContentValues();
         values.put(ProviderDbHelper.OWNERSHIP_STATE, state);

@@ -190,7 +190,7 @@ public class TasksDBAccess {
     }
 
 
-    private boolean TodoIsInDB(Task task) {
+    public boolean TodoIsInDB(Task task) {
 
         Cursor c = null;
         try {
@@ -202,7 +202,7 @@ public class TasksDBAccess {
         return c.getCount() != 0;
     }
 
-    private boolean setStatus(Task task, String state) {
+    public boolean setStatus(Task task, String state) {
 
         if (TodoIsInDB(task)) {
             try {

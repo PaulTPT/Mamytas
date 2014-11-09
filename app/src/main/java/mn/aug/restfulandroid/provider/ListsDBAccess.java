@@ -126,7 +126,7 @@ public class ListsDBAccess {
     }
 
 
-    private boolean ListIsInDB(Listw list) {
+    public boolean ListIsInDB(Listw list) {
 
         Cursor c = null;
         try {
@@ -138,7 +138,7 @@ public class ListsDBAccess {
         return c.getCount() != 0;
     }
 
-    private boolean setStatus(Listw list, String state) {
+    public boolean setStatus(Listw list, String state) {
 
         if (ListIsInDB(list)) {
             try {

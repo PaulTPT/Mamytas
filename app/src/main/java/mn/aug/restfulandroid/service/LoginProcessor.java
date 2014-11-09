@@ -74,15 +74,17 @@ public class LoginProcessor {
         Logger.debug("login",String.valueOf(result.getStatusCode()));
 
         if(result.getStatusCode()==200) {
-            registerToken(result.getResource().getToken());
-
             Logger.debug("split",new String(body));
             String[] strings=(new String(body)).split("&");
             String name= strings[0].split("email=")[1];
             String password=strings[1].split("password=")[1];
             userDBAccess.open();
-            userDBAccess.addUser(name,password);
+            if(!userDBAccess.userIsInDB(name))
+                userDBAccess.addUser(name,password);
+            else
+                userDBAccess.updateUser(name,password);
             userDBAccess.close();
+            registerToken(result.getResource().getToken(),name);
         }
 
         // (9) Operation complete callback to Service
@@ -91,9 +93,9 @@ public class LoginProcessor {
 
     }
 
-    private void registerToken(String token) {
+    private void registerToken(String token, String name) {
 
         AuthorizationManager authMan = AuthorizationManager.getInstance(mContext);
-        authMan.saveToken(token);
+        authMan.saveToken(token,name);
     }
 }
