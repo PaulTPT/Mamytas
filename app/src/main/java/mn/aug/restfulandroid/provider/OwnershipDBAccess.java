@@ -2,9 +2,13 @@ package mn.aug.restfulandroid.provider;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
-import mn.aug.restfulandroid.rest.resource.Reminder;
+import java.util.ArrayList;
+import java.util.List;
+
+import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
 
 /**
@@ -13,13 +17,18 @@ import mn.aug.restfulandroid.rest.resource.Task;
 public class OwnershipDBAccess {
 
 
+    private Context context = null;
     private SQLiteDatabase bdd;
-
     private ProviderDbHelper myHelper;
+    private TasksDBAccess tasksDBAccess;
+    private ListsDBAccess listsDBAccess;
 
     public OwnershipDBAccess(Context context) {
         //On créer la BDD et sa table
         myHelper = new ProviderDbHelper(context);
+        this.context = context;
+        tasksDBAccess = new TasksDBAccess(context);
+        listsDBAccess = new ListsDBAccess(context);
     }
 
 
@@ -45,29 +54,23 @@ public class OwnershipDBAccess {
      * @param todo The task
      * @return Whether it was successful
      */
-    public static Task addTask(String name, Task todo) {
-        checkDB();
-        String requete = "INSERT INTO OWNERSHIP (type,owner) VALUES ( 'TASK','"
-                + name + "')";
+    public Task addTask(String name, Task todo) {
+
         try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = stmt.getGeneratedKeys();
-            rs.next();
-            int id = rs.getInt(1);
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "TASKS");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER, name);
+            long id = bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
             todo.setId(id);
-            stmt.close();
 
-            Statement stmt2 = connec.createStatement();
-            String requete2 = "UPDATE OWNERSHIP SET EFFECTIVE_ID= " + id
-                    + " WHERE ID= " + id;
-            stmt2.executeUpdate(requete2);
-            stmt2.close();
-
-            TasksDatabase.storeTodo(todo);
+            values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, id);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = " + id, null);
+            tasksDBAccess.open();
+            tasksDBAccess.storeTodo(todo);
+            tasksDBAccess.close();
             return todo;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -81,17 +84,16 @@ public class OwnershipDBAccess {
      * @param todo The task
      * @return Whether it was successful
      */
-    public static Task addSharedTask(String name, Task todo) {
-        checkDB();
-        String requete = "INSERT INTO OWNERSHIP (type,owner,effective_id) VALUES ( 'TASK','"
-                + name + "'," + todo.getId() + ")";
+    public Task addSharedTask(String name, Task todo) {
+
         try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "TASKS");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER, name);
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, todo.getId());
+            bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
             return todo;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -105,29 +107,24 @@ public class OwnershipDBAccess {
      * @param list The list
      * @return Whether it was successful
      */
-    public static Listw addList(String name, Listw list) {
-        checkDB();
-        String requete = "INSERT INTO OWNERSHIP (type,owner) VALUES ( 'LIST','"
-                + name + "')";
+    public Listw addList(String name, Listw list) {
+
+
         try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete, Statement.RETURN_GENERATED_KEYS);
-            ResultSet rs = stmt.getGeneratedKeys();
-            rs.next();
-            int id = rs.getInt(1);
-            list.setId(id);
-            stmt.close();
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "LIST");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER, name);
+            long id = bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
+            list.setId((int) id);
 
-            Statement stmt2 = connec.createStatement();
-            String requete2 = "UPDATE OWNERSHIP SET EFFECTIVE_ID= " + id
-                    + " WHERE ID= " + id;
-            stmt2.executeUpdate(requete2);
-            stmt2.close();
-
-            ListsDatabase.storeList(list);
+            values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, id);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = " + id, null);
+            listsDBAccess.open();
+            listsDBAccess.storeList(list);
+            listsDBAccess.close();
             return list;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -141,24 +138,24 @@ public class OwnershipDBAccess {
      * @param list The list
      * @return Whether it was successful
      */
-    public static Listw shareListwithUser(String name, Listw list) {
-        checkDB();
-        String requete = "INSERT INTO OWNERSHIP (type,owner,effective_id) VALUES ( 'LIST','"
-                + name + "', " + list.getId() + " )";
+    public Listw shareListwithUser(String name, Listw list) {
+
+
         try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "LIST");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER, name);
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, list.getId());
+            bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
 
-            for (int taskId : TasksDatabase.retrieveTodosFromList(list.getId())) {
-                Task task = TasksDatabase.retrieveTodo(taskId);
-                OwnershipDatabase.addSharedTask(name, task);
-
+            for (int taskId : tasksDBAccess.retrieveTodosFromList(list.getId())) {
+                Task task = tasksDBAccess.retrieveTodo(taskId);
+                addSharedTask(name, task);
             }
 
             return list;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+
+        } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
@@ -171,18 +168,16 @@ public class OwnershipDBAccess {
      * @param todoID ID of the task
      * @return Whether it was successful
      */
-    public static boolean removeTask(int todoID) {
-        checkDB();
+    public boolean removeTask(int todoID) {
 
-        String requete = "DELETE FROM OWNERSHIP WHERE EFFECTIVE_ID= " + todoID;
         try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
-            TasksDatabase.deleteTodo(todoID);
+            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + todoID, null);
+            tasksDBAccess.open();
+            tasksDBAccess.deleteTodo(todoID);
+            tasksDBAccess.close();
             return true;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
@@ -194,23 +189,24 @@ public class OwnershipDBAccess {
      * @param listID ID of the list
      * @return Whether it was successful
      */
-    public static boolean removeListTasks(int listID) {
-        checkDB();
-        List<Integer> list = TasksDatabase.retrieveTodosFromList(listID);
-        TasksDatabase.deleteTodosFromList(listID);
-        String requete = "DELETE FROM OWNERSHIP WHERE EFFECTIVE_ID= ";
+    public boolean removeListTasks(int listID) {
+
+        tasksDBAccess.open();
+        List<Integer> list = tasksDBAccess.retrieveTodosFromList(listID);
+        tasksDBAccess.deleteTodosFromList(listID);
+        tasksDBAccess.close();
+
         try {
             for (int id : list) {
-                Statement stmt = connec.createStatement();
-                stmt.executeUpdate(requete + id);
-                stmt.close();
+                bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + id, null);
             }
             return true;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+
     }
 
     /**
@@ -220,33 +216,29 @@ public class OwnershipDBAccess {
      * @param user   The user which wants to delete the list
      * @return Whether it was successful
      */
-    public static boolean removeListFromUser(String user, int listID) {
-        checkDB();
+    public boolean removeListFromUser(String user, int listID) {
 
-        String requete = "DELETE FROM OWNERSHIP WHERE EFFECTIVE_ID= " + listID
-                + " AND OWNER= '" + user + "'";
-        String requete2 = "SELECT ID FROM OWNERSHIP WHERE EFFECTIVE_ID= "
-                + listID;
         try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
+            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + listID +
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = " + user, null);
 
-            // Do an other user still own the list ?
-            Statement stmt2 = connec.createStatement();
-            ResultSet res = stmt2.executeQuery(requete2);
-            if (!res.isBeforeFirst()) { // No one still owns the list
-                ListsDatabase.deleteList(listID); // We completely delete it
+            Cursor c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_ID}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " LIKE \"" + listID + "\"", null, null, null, null);
+
+            if (c.getCount() == 0) {
+                listsDBAccess.open();
+                listsDBAccess.deleteList(listID);
+                listsDBAccess.close();
                 removeListTasks(listID);
-
             }
-            stmt2.close();
+
             return true;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
+
+
     }
 
     /**
@@ -255,25 +247,28 @@ public class OwnershipDBAccess {
      * @param user Name of the user
      * @return List of the Ids
      */
-    public static List<Integer> getTasksIds(String user) {
-        checkDB();
+    public List<Integer> getTasksIds(String user) {
 
-        String requete = "SELECT EFFECTIVE_ID FROM OWNERSHIP WHERE TYPE = 'TASK' AND  OWNER= '"
-                + user + "'";
-        ResultSet res;
         List<Integer> list = new ArrayList<Integer>();
+        Cursor c;
+
         try {
-            Statement stmt = connec.createStatement();
-            res = stmt.executeQuery(requete);
-            while (res.next()) {
-                list.add(res.getInt(1));
-            }
-            stmt.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID}, ProviderDbHelper.OWNERSHIP_TYPE + " = " + "TASK" +
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = " + user, null, null, null, null);
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return list;
+        int count = c.getCount();
+        if (c.getCount() == 0)
+            return null;
+        else {
+            for (int i = 0; i < count; i++) {
+                list.add(c.getInt(0));
+            }
+            return list;
+
+        }
 
     }
 
@@ -283,25 +278,29 @@ public class OwnershipDBAccess {
      * @param user Name of the user
      * @return List of the Ids
      */
-    public static List<Integer> getListsIds(String user) {
-        checkDB();
+    public List<Integer> getListsIds(String user) {
 
-        String requete = "SELECT EFFECTIVE_ID FROM OWNERSHIP WHERE TYPE = 'LIST' AND  OWNER= '"
-                + user + "'";
-        ResultSet res;
+
         List<Integer> list = new ArrayList<Integer>();
+        Cursor c;
+
         try {
-            Statement stmt = connec.createStatement();
-            res = stmt.executeQuery(requete);
-            while (res.next()) {
-                list.add(res.getInt(1));
-            }
-            stmt.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID}, ProviderDbHelper.OWNERSHIP_TYPE + " = " + "LIST" +
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = " + user, null, null, null, null);
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return list;
+        int count = c.getCount();
+        if (c.getCount() == 0)
+            return null;
+        else {
+            for (int i = 0; i < count; i++) {
+                list.add(c.getInt(0));
+            }
+            return list;
+
+        }
 
     }
 
@@ -312,7 +311,7 @@ public class OwnershipDBAccess {
      * @param id   Id of the task
      * @return Whether the user owns the task
      */
-    public static boolean userOwnsTask(String user, int id) {
+    public boolean userOwnsTask(String user, int id) {
         List<Integer> list = getTasksIds(user);
         return list.contains(id);
 
@@ -325,7 +324,7 @@ public class OwnershipDBAccess {
      * @param id   Id of the list
      * @return Whether the user owns the list
      */
-    public static boolean userOwnsList(String user, int id) {
+    public boolean userOwnsList(String user, int id) {
         List<Integer> list = getListsIds(user);
         return list.contains(id);
 
@@ -337,14 +336,15 @@ public class OwnershipDBAccess {
      * @param user The name of the user
      * @return A list of all the tasks owned by the user
      */
-    public static List<Task> getTodos(String user) {
+    public List<Task> getTodos(String user) {
 
         List<Task> list = new ArrayList<Task>();
 
+        tasksDBAccess.open();
         for (int id : getTasksIds(user)) {
-            list.add(TasksDatabase.retrieveTodo(id));
-
+            list.add(tasksDBAccess.retrieveTodo(id));
         }
+        tasksDBAccess.close();
 
         return list;
     }
@@ -355,14 +355,15 @@ public class OwnershipDBAccess {
      * @param user The name of the user
      * @return A list of all the lists owned by the user
      */
-    public static List<Listw> getLists(String user) {
+    public List<Listw> getLists(String user) {
 
         List<Listw> list = new ArrayList<Listw>();
 
+        listsDBAccess.open();
         for (int id : getListsIds(user)) {
-            list.add(ListsDatabase.retrieveList(id));
-
+            list.add(listsDBAccess.retrieveList(id));
         }
+        listsDBAccess.close();
 
         return list;
     }
@@ -373,27 +374,21 @@ public class OwnershipDBAccess {
      * @param id The id of the list/task
      * @return Whether it is a task (If it is not a task, it is a list ...)
      */
-    public static boolean isTask(int id) {
-        checkDB();
+    public boolean isTask(int id) {
 
-        String requete = "SELECT TYPE FROM OWNERSHIP WHERE EFFECTIVE_ID= ";
-        ResultSet res;
+        Cursor c;
         try {
-            Statement stmt = connec.createStatement();
-            res = stmt.executeQuery(requete);
-            res.next();
-            if (res.getString(1).equals("TODO")) {
-                stmt.close();
-                return true;
-            } else {
-                stmt.close();
-                return false;
-            }
-
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TYPE}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + id, null, null, null, null);
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+        int count = c.getCount();
+        if (c.getCount() == 0)
+            return false;
+        else {
+            c.moveToFirst();
+            return c.getString(0).equals("TODO");
         }
 
     }
@@ -404,38 +399,36 @@ public class OwnershipDBAccess {
      * @param list_id id of the list
      * @return The list of owners
      */
-    public static ArrayList<String> getListOwners(int list_id) {
+    public ArrayList<String> getListOwners(int list_id) {
         ArrayList<String> owners = new ArrayList<String>();
 
-        checkDB();
-
-        String requete = "SELECT OWNER FROM OWNERSHIP WHERE EFFECTIVE_ID ="
-                + list_id;
-        ResultSet res;
+        Cursor c;
         try {
-            Statement stmt = connec.createStatement();
-            res = stmt.executeQuery(requete);
-            while (res.next()) {
-                owners.add(res.getString(1));
-            }
-            stmt.close();
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_OWNER}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + list_id, null, null, null, null);
+        } catch (Exception e) {
             e.printStackTrace();
+            return null;
+        }
+        int count = c.getCount();
+        if (c.getCount() == 0)
+            return owners;
+        else {
+            for(int i=0;i<count;i++) {
+                owners.add(c.getString(0));
+            }
+            return owners;
         }
 
-        return owners;
     }
 
     private boolean setStatus(int id, String state) {
 
-            ContentValues values = new ContentValues();
-            values.put(ProviderDbHelper.OWNERSHIP_STATE, state);
-            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = " + id, null);
-            return true;
+        ContentValues values = new ContentValues();
+        values.put(ProviderDbHelper.OWNERSHIP_STATE, state);
+        bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = " + id, null);
+        return true;
 
     }
-
 
 
 }
