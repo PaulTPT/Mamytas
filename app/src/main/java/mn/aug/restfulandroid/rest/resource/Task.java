@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import mn.aug.restfulandroid.util.Logger;
 
 
-public class Task implements Resource {
+public class Task implements Resource,TaskList {
 
 	private long id;
 	private String title;
