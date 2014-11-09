@@ -1,10 +1,11 @@
 package mn.aug.restfulandroid.provider;
 
+import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import mn.aug.restfulandroid.rest.resource.Reminder;
+import mn.aug.restfulandroid.rest.resource.Task;
 
 /**
  * Created by Paul on 09/11/2014.
@@ -16,22 +17,23 @@ public class OwnershipDBAccess {
 
     private ProviderDbHelper myHelper;
 
-    public OwnershipDBAccess(Context context){
+    public OwnershipDBAccess(Context context) {
         //On créer la BDD et sa table
         myHelper = new ProviderDbHelper(context);
     }
 
-    public void open(){
+
+    public void open() {
         //on ouvre la BDD en écriture
         bdd = myHelper.getWritableDatabase();
     }
 
-    public void close(){
+    public void close() {
         //on ferme l'accès à la BDD
         bdd.close();
     }
 
-    public SQLiteDatabase getBDD(){
+    public SQLiteDatabase getBDD() {
         return bdd;
     }
 
@@ -39,10 +41,8 @@ public class OwnershipDBAccess {
     /**
      * Add a task to the user's ownership list
      *
-     * @param name
-     *            Name of the user
-     * @param todo
-     *            The task
+     * @param name Name of the user
+     * @param todo The task
      * @return Whether it was successful
      */
     public static Task addTask(String name, Task todo) {
@@ -77,10 +77,8 @@ public class OwnershipDBAccess {
     /**
      * Add an existing task to the user's ownership list
      *
-     * @param name
-     *            Name of the user
-     * @param todo
-     *            The task
+     * @param name Name of the user
+     * @param todo The task
      * @return Whether it was successful
      */
     public static Task addSharedTask(String name, Task todo) {
@@ -103,10 +101,8 @@ public class OwnershipDBAccess {
     /**
      * Add a list to the user's ownership list
      *
-     * @param name
-     *            Name of the user
-     * @param list
-     *            The list
+     * @param name Name of the user
+     * @param list The list
      * @return Whether it was successful
      */
     public static Listw addList(String name, Listw list) {
@@ -141,10 +137,8 @@ public class OwnershipDBAccess {
     /**
      * Add a list to an other user's ownership list
      *
-     * @param name
-     *            Name of the user
-     * @param list
-     *            The list
+     * @param name Name of the user
+     * @param list The list
      * @return Whether it was successful
      */
     public static Listw shareListwithUser(String name, Listw list) {
@@ -174,8 +168,7 @@ public class OwnershipDBAccess {
     /**
      * Remove a task from the user's ownership list
      *
-     * @param todoID
-     *            ID of the task
+     * @param todoID ID of the task
      * @return Whether it was successful
      */
     public static boolean removeTask(int todoID) {
@@ -198,8 +191,7 @@ public class OwnershipDBAccess {
     /**
      * Remove all the tasks related to a list
      *
-     * @param listID
-     *            ID of the list
+     * @param listID ID of the list
      * @return Whether it was successful
      */
     public static boolean removeListTasks(int listID) {
@@ -224,12 +216,8 @@ public class OwnershipDBAccess {
     /**
      * Remove a list from the user's ownership list
      *
-     * @param listID
-     *            ID of the list
-     *
-     * @param user
-     *            The user which wants to delete the list
-     *
+     * @param listID ID of the list
+     * @param user   The user which wants to delete the list
      * @return Whether it was successful
      */
     public static boolean removeListFromUser(String user, int listID) {
@@ -264,8 +252,7 @@ public class OwnershipDBAccess {
     /**
      * Get all the IDs of the tasks owned by the user
      *
-     * @param user
-     *            Name of the user
+     * @param user Name of the user
      * @return List of the Ids
      */
     public static List<Integer> getTasksIds(String user) {
@@ -293,8 +280,7 @@ public class OwnershipDBAccess {
     /**
      * Get all the IDs of the lists owned by the user
      *
-     * @param user
-     *            Name of the user
+     * @param user Name of the user
      * @return List of the Ids
      */
     public static List<Integer> getListsIds(String user) {
@@ -322,10 +308,8 @@ public class OwnershipDBAccess {
     /**
      * Does the user own this task ?
      *
-     * @param user
-     *            Name of the user
-     * @param id
-     *            Id of the task
+     * @param user Name of the user
+     * @param id   Id of the task
      * @return Whether the user owns the task
      */
     public static boolean userOwnsTask(String user, int id) {
@@ -337,10 +321,8 @@ public class OwnershipDBAccess {
     /**
      * Does the user own this list ?
      *
-     * @param user
-     *            Name of the user
-     * @param id
-     *            Id of the list
+     * @param user Name of the user
+     * @param id   Id of the list
      * @return Whether the user owns the list
      */
     public static boolean userOwnsList(String user, int id) {
@@ -352,8 +334,7 @@ public class OwnershipDBAccess {
     /**
      * Get all the tasks owned by a user
      *
-     * @param user
-     *            The name of the user
+     * @param user The name of the user
      * @return A list of all the tasks owned by the user
      */
     public static List<Task> getTodos(String user) {
@@ -371,8 +352,7 @@ public class OwnershipDBAccess {
     /**
      * Get all the lists owned by a user
      *
-     * @param user
-     *            The name of the user
+     * @param user The name of the user
      * @return A list of all the lists owned by the user
      */
     public static List<Listw> getLists(String user) {
@@ -390,8 +370,7 @@ public class OwnershipDBAccess {
     /**
      * Is what corresponds to this Id a task ?
      *
-     * @param id
-     *            The id of the list/task
+     * @param id The id of the list/task
      * @return Whether it is a task (If it is not a task, it is a list ...)
      */
     public static boolean isTask(int id) {
@@ -447,6 +426,16 @@ public class OwnershipDBAccess {
 
         return owners;
     }
+
+    private boolean setStatus(int id, String state) {
+
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_STATE, state);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = " + id, null);
+            return true;
+
+    }
+
 
 
 }

@@ -15,46 +15,42 @@ public class UsersDBAccess {
 
     private ProviderDbHelper myHelper;
 
-    public UsersDBAccess(Context context){
+    public UsersDBAccess(Context context) {
         //On créer la BDD et sa table
         myHelper = new ProviderDbHelper(context);
     }
 
-    public void open(){
+    public void open() {
         //on ouvre la BDD en écriture
         bdd = myHelper.getWritableDatabase();
     }
 
-    public void close(){
+    public void close() {
         //on ferme l'accès à la BDD
         bdd.close();
     }
 
-    public SQLiteDatabase getBDD(){
+    public SQLiteDatabase getBDD() {
         return bdd;
     }
-
 
 
     /**
      * Change a user's password
      *
-     * @param name
-     *            Name of the user
-     *
-     * @param password
-     *            New password
-     *
+     * @param name     Name of the user
+     * @param password New password
      * @return Whether it was successful
      */
     public boolean updateUser(String name, String password) {
-        if(userIsInDB(name)){
+
+        if (userIsInDB(name)) {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.USERS_PASSWORD, password);
             bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = " + name, null);
             return true;
         }
-            return false;
+        return false;
 
 
     }
@@ -62,12 +58,11 @@ public class UsersDBAccess {
     /**
      * Delete a user
      *
-     * @param name
-     *            NAme of the user
+     * @param name NAme of the user
      * @return Whether it was successful
      */
-    public  boolean deleteUser(String name) {
-        if(userIsInDB(name)) {
+    public boolean deleteUser(String name) {
+        if (userIsInDB(name)) {
             bdd.delete(ProviderDbHelper.TABLE_USERS, ProviderDbHelper.USERS_NAME + " = " + name, null);
             return true;
         }
@@ -79,15 +74,13 @@ public class UsersDBAccess {
     /**
      * Add a user
      *
-     * @param name
-     *            The user's name
-     * @param password
-     *            The user's password
+     * @param name     The user's name
+     * @param password The user's password
      * @return Whether it was successful
      */
-    public  boolean addUser(String name, String password) {
+    public boolean addUser(String name, String password) {
 
-        if(!userIsInDB(name)){
+        if (!userIsInDB(name)) {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.USERS_NAME, name);
             values.put(ProviderDbHelper.USERS_PASSWORD, password);
@@ -97,26 +90,23 @@ public class UsersDBAccess {
         return false;
 
 
-
     }
 
     /**
      * Check if the user is known in the database and if its password is correct
      *
-     * @param name
-     *            Name of the user
-     * @param password
-     *            Password to check
+     * @param name     Name of the user
+     * @param password Password to check
      * @return Whether the user successfully logged-in
      */
     public boolean validateUser(String name, String password) {
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[] {ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name +"\"", null, null, null, null);
+        Cursor c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name + "\"", null, null, null, null);
         if (c.getCount() == 0)
             return false;
         else {
             c.moveToFirst();
-            String DBPassword=c.getString(0);
+            String DBPassword = c.getString(0);
             return password.equals(DBPassword);
 
 
@@ -125,16 +115,16 @@ public class UsersDBAccess {
 
     }
 
-    private boolean userIsInDB(String name){
+    private boolean userIsInDB(String name) {
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[] {ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name +"\"", null, null, null, null);
+        Cursor c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name + "\"", null, null, null, null);
         return c.getCount() != 0;
     }
 
 
-    private boolean setStatus(String name, String state){
+    private boolean setStatus(String name, String state) {
 
-        if(userIsInDB(name)){
+        if (userIsInDB(name)) {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.USERS_STATE, state);
             bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = " + name, null);

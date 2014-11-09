@@ -1,5 +1,6 @@
 package mn.aug.restfulandroid.provider;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -16,32 +17,15 @@ public class RemindersDBAccess {
 
     private ProviderDbHelper myHelper;
 
-    public RemindersDBAccess(Context context){
+    public RemindersDBAccess(Context context) {
         //On créer la BDD et sa table
         myHelper = new ProviderDbHelper(context);
     }
 
-    public void open(){
-        //on ouvre la BDD en écriture
-        bdd = myHelper.getWritableDatabase();
-    }
-
-    public void close(){
-        //on ferme l'accès à la BDD
-        bdd.close();
-    }
-
-    public SQLiteDatabase getBDD(){
-        return bdd;
-    }
-
-
-
     /**
      * Store a new reminder into the database
      *
-     * @param reminder
-     *            The reminder to be stored
+     * @param reminder The reminder to be stored
      * @return The reminder stored with its ID
      */
     public static Reminder storeReminder(Reminder reminder) {
@@ -70,8 +54,7 @@ public class RemindersDBAccess {
     /**
      * Retrieve the reminders relative to a task
      *
-     * @param TaskID
-     *            The id of the task
+     * @param TaskID The id of the task
      * @return The reminders
      */
     public static List<Reminder> retrieveTaskReminders(int TaskID) {
@@ -101,9 +84,7 @@ public class RemindersDBAccess {
     /**
      * Retrieve all the reminders
      *
-     * @param user
-     *            The user owning the reminders to retrieve
-     *
+     * @param user The user owning the reminders to retrieve
      * @return The reminders
      */
     public static List<Reminder> retrieveRemindersFromUser(String user) {
@@ -118,7 +99,7 @@ public class RemindersDBAccess {
             res = stmt.executeQuery(requete);
             while (res.next()) {
                 list.add(new Reminder(res.getInt(1), res.getInt(2), res
-                        .getString(3),user));
+                        .getString(3), user));
             }
             res.close();
             stmt.close();
@@ -133,8 +114,7 @@ public class RemindersDBAccess {
     /**
      * Delete a reminder from its ID
      *
-     * @param reminderID
-     *            The ID of the reminder to be deleted
+     * @param reminderID The ID of the reminder to be deleted
      * @return Whether it was successful or not
      */
     public static boolean deleteReminder(int reminderID) {
@@ -154,11 +134,35 @@ public class RemindersDBAccess {
 
     }
 
+    public void open() {
+        //on ouvre la BDD en écriture
+        bdd = myHelper.getWritableDatabase();
+    }
 
-    private boolean ReminderIsInDB(Reminder reminder){
+    public void close() {
+        //on ferme l'accès à la BDD
+        bdd.close();
+    }
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[] {ProviderDbHelper.REMINDERS_OWNER}, ProviderDbHelper.REMINDERS_ID + " LIKE \"" + reminder.getId() +"\"", null, null, null, null);
+    public SQLiteDatabase getBDD() {
+        return bdd;
+    }
+
+    private boolean ReminderIsInDB(Reminder reminder) {
+
+        Cursor c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[]{ProviderDbHelper.REMINDERS_OWNER}, ProviderDbHelper.REMINDERS_ID + " LIKE \"" + reminder.getId() + "\"", null, null, null, null);
         return c.getCount() != 0;
+    }
+
+    private boolean setStatus(Reminder reminder, String state) {
+
+        if (ReminderIsInDB(reminder)) {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.REMINDERS_STATE, state);
+            bdd.update(ProviderDbHelper.TABLE_REMINDERS, values, ProviderDbHelper.REMINDERS_ID + " = " + reminder.getId(), null);
+            return true;
+        }
+        return false;
     }
 
 

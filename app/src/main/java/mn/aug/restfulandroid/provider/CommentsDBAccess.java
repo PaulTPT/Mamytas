@@ -1,11 +1,12 @@
 package mn.aug.restfulandroid.provider;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import mn.aug.restfulandroid.rest.resource.Comment;
-import mn.aug.restfulandroid.rest.resource.Listw;
+import mn.aug.restfulandroid.rest.resource.Reminder;
 
 /**
  * Created by Paul on 09/11/2014.
@@ -16,33 +17,15 @@ public class CommentsDBAccess {
 
     private ProviderDbHelper myHelper;
 
-    public CommentsDBAccess(Context context){
+    public CommentsDBAccess(Context context) {
         //On créer la BDD et sa table
         myHelper = new ProviderDbHelper(context);
     }
 
-    public void open(){
-        //on ouvre la BDD en écriture
-        bdd = myHelper.getWritableDatabase();
-    }
-
-    public void close(){
-        //on ferme l'accès à la BDD
-        bdd.close();
-    }
-
-    public SQLiteDatabase getBDD(){
-        return bdd;
-    }
-
-
-
-
     /**
      * Store a new comment into the database
      *
-     * @param comment
-     *            The comment to be stored
+     * @param comment The comment to be stored
      * @return The comment stored with its ID
      */
     public static Comment storeComment(Comment comment) {
@@ -67,8 +50,6 @@ public class CommentsDBAccess {
 
     }
 
-
-
     /**
      * Retrieve the comments relative to a task
      *
@@ -85,8 +66,8 @@ public class CommentsDBAccess {
             ResultSet res;
             Statement stmt = connec.createStatement();
             res = stmt.executeQuery(requete);
-            while (res.next()){
-                list.add(new Comment(res.getInt(1),TaskID, res.getString(2)));
+            while (res.next()) {
+                list.add(new Comment(res.getInt(1), TaskID, res.getString(2)));
             }
             res.close();
             stmt.close();
@@ -101,8 +82,7 @@ public class CommentsDBAccess {
     /**
      * Delete a comment from its ID
      *
-     * @param commentID
-     *            The ID of the comment to be deleted
+     * @param commentID The ID of the comment to be deleted
      * @return Whether it was successful or not
      */
     public static boolean deleteComment(int commentID) {
@@ -122,12 +102,35 @@ public class CommentsDBAccess {
 
     }
 
+    public void open() {
+        //on ouvre la BDD en écriture
+        bdd = myHelper.getWritableDatabase();
+    }
 
+    public void close() {
+        //on ferme l'accès à la BDD
+        bdd.close();
+    }
 
-    private boolean ReminderIsInDB(Comment comment){
+    public SQLiteDatabase getBDD() {
+        return bdd;
+    }
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_COMMENTS, new String[] {ProviderDbHelper.COMMENTS_TEXT}, ProviderDbHelper.COMMENTS_ID + " LIKE \"" + comment.getId() +"\"", null, null, null, null);
+    private boolean CommentIsInDB(Comment comment) {
+
+        Cursor c = bdd.query(ProviderDbHelper.TABLE_COMMENTS, new String[]{ProviderDbHelper.COMMENTS_TEXT}, ProviderDbHelper.COMMENTS_ID + " LIKE \"" + comment.getId() + "\"", null, null, null, null);
         return c.getCount() != 0;
+    }
+
+    private boolean setStatus(Comment comment, String state) {
+
+        if (CommentIsInDB(comment)) {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.COMMENTS_STATE, state);
+            bdd.update(ProviderDbHelper.TABLE_COMMENTS, values, ProviderDbHelper.COMMENTS_ID + " = " + comment.getId(), null);
+            return true;
+        }
+        return false;
     }
 
 
