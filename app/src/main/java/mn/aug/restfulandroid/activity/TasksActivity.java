@@ -10,10 +10,16 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
 import android.widget.Toast;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.activity.base.RESTfulListActivity;
+import mn.aug.restfulandroid.provider.OwnershipDBAccess;
+import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
@@ -26,13 +32,14 @@ public class TasksActivity extends RESTfulListActivity {
 	private BroadcastReceiver requestReceiver;
 
 	private WunderlistServiceHelper mWunderlistServiceHelper;
+    private OwnershipDBAccess ownershipDBAccess;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 
 		setContentResId(R.layout.home);
 		setRefreshable(true);
-
+        ownershipDBAccess=new OwnershipDBAccess(this);
 		super.onCreate(savedInstanceState);
 	}
 
@@ -77,11 +84,18 @@ public class TasksActivity extends RESTfulListActivity {
 					if (resultCode == 200) {
 
 						Logger.debug(TAG, "Updating UI with new data");
+                        String user=AuthorizationManager.getInstance(context).getUser();
+                        ownershipDBAccess.open();
+                        List<Task> todos= ownershipDBAccess.getTodos(user);
+                        ArrayList<String> todos_titles=new ArrayList<String>();
+                        for (Task task:todos){
+                            todos_titles.add(task.getTitle());
+                        }
+                        String[] titles= (String[]) todos_titles.toArray();
 
-/*
-						String name = getNameFromContentProvider();
-						showNameToast(name);
-*/
+                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
+                                android.R.layout.simple_list_item_1, titles);
+                        setListAdapter(adapter);
 
 					} else {
 						showToast(getString(R.string.error_occurred));
@@ -103,27 +117,10 @@ public class TasksActivity extends RESTfulListActivity {
 			setRefreshing(true);
 		} else {
 			setRefreshing(false);
-			/*name = getNameFromContentProvider();
-			showNameToast(name);*/
 		}
 
 	}
 
-/*	private String getNameFromContentProvider() {
-
-		String name = null;
-
-		Cursor cursor = getContentResolver().query(ProfileConstants.CONTENT_URI, null, null, null, null);
-
-		if (cursor.moveToFirst()) {
-			int index = cursor.getColumnIndexOrThrow(ProfileConstants.NAME);
-			name = cursor.getString(index);
-		}
-
-		cursor.close();
-
-		return name;
-	}*/
 
 	@Override
 	protected void onPause() {
