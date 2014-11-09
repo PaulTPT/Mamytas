@@ -114,7 +114,6 @@ public class TasksDBAccess {
             String due_date=c.getString(1);
             Long   list_id=c.getLong(2);
             return new Task(todoID,title,due_date,list_id);
-
         }
     }
 

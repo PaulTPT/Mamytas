@@ -6,7 +6,6 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import mn.aug.restfulandroid.rest.resource.Listw;
-import mn.aug.restfulandroid.rest.resource.Reminder;
 
 /**
  * Created by Paul on 09/11/2014.
@@ -23,105 +22,6 @@ public class ListsDBAccess {
         myHelper = new ProviderDbHelper(context);
     }
 
-    /**
-     * Store a new list into the database
-     *
-     * @param list The list to be stored
-     * @return The list stored with its ID
-     */
-    public static boolean storeList(Listw list) {
-        checkDB();
-
-        String requete = "INSERT INTO LISTS(ID,TITLE) VALUES (" + list.getId()
-                + ",'" + list.getTitle() + "')";
-        try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
-            return true;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
-    /**
-     * Update a list
-     *
-     * @param list The list to be updated
-     * @return Whether the update was successful
-     */
-    public static boolean updateList(Listw list) {
-        checkDB();
-
-        String requete = "UPDATE LISTS SET TITLE= '" + list.getTitle()
-                + "' WHERE ID = " + list.getId();
-        try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
-            return true;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
-    /**
-     * Retrieve a list from its id
-     *
-     * @param listID The Id of the list to retrieve
-     * @return The list corresponding to the ID
-     */
-    public static Listw retrieveList(int listID) {
-        checkDB();
-
-        Listw list = new Listw();
-
-        try {
-            String requete = "SELECT ID, TITLE FROM LISTS WHERE ID= " + listID;
-            ResultSet res;
-            Statement stmt = connec.createStatement();
-            res = stmt.executeQuery(requete);
-            res.next();
-            list = new Listw(res.getInt(1), res.getString(2));
-            res.close();
-            stmt.close();
-        } catch (SQLException e) {
-            e.printStackTrace();
-
-        }
-
-        return list;
-    }
-
-    /**
-     * Delete a list from its ID
-     *
-     * @param listID The ID of the list to be deleted
-     * @return Whether it was successful or not
-     */
-    public static boolean deleteList(int listID) {
-        checkDB();
-
-        String requete = "DELETE FROM LISTS WHERE ID= " + listID;
-        try {
-            Statement stmt = connec.createStatement();
-            stmt.executeUpdate(requete);
-            stmt.close();
-            return true;
-        } catch (SQLException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
-            return false;
-        }
-
-    }
-
     public void open() {
         //on ouvre la BDD en écriture
         bdd = myHelper.getWritableDatabase();
@@ -136,23 +36,123 @@ public class ListsDBAccess {
         return bdd;
     }
 
+    /**
+     * Store a new list into the database
+     *
+     * @param list The list to be stored
+     * @return The list stored with its ID
+     */
+    public boolean storeList(Listw list) {
+
+        if (!ListIsInDB(list)) try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.LISTS_ID, list.getId());
+            values.put(ProviderDbHelper.LISTS_TITLE, list.getTitle());
+            bdd.insert(ProviderDbHelper.TABLE_LISTS, null, values);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+
+    }
+
+    /**
+     * Update a list
+     *
+     * @param list The list to be updated
+     * @return Whether the update was successful
+     */
+    public boolean updateList(Listw list) {
+
+
+        if (ListIsInDB(list)) try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.LISTS_TITLE, list.getTitle());
+            bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = " + list.getId(), null);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return false;
+
+    }
+
+    /**
+     * Retrieve a list from its id
+     *
+     * @param listID The Id of the list to retrieve
+     * @return The list corresponding to the ID
+     */
+    public Listw retrieveList(int listID) {
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_TITLE},
+                    ProviderDbHelper.LISTS_ID + " LIKE \"" + listID + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return null;
+        else {
+            c.moveToFirst();
+            String title = c.getString(0);
+            return new Listw(listID, title);
+        }
+    }
+
+    /**
+     * Delete a list from its ID
+     *
+     * @param listID The ID of the list to be deleted
+     * @return Whether it was successful or not
+     */
+    public boolean deleteList(int listID) {
+
+        if (ListIsInDB(retrieveList(listID))) {
+            try {
+                bdd.delete(ProviderDbHelper.TABLE_LISTS, ProviderDbHelper.LISTS_ID + " = " + listID, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+            return true;
+        }
+        return false;
+    }
+
+
     private boolean ListIsInDB(Listw list) {
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_TITLE}, ProviderDbHelper.LISTS_ID + " LIKE \"" + list.getId() + "\"", null, null, null, null);
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_TITLE}, ProviderDbHelper.LISTS_ID + " LIKE \"" + list.getId() + "\"", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return c.getCount() != 0;
     }
 
     private boolean setStatus(Listw list, String state) {
 
         if (ListIsInDB(list)) {
-            ContentValues values = new ContentValues();
-            values.put(ProviderDbHelper.LISTS_STATE, state);
-            bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = " + list.getId(), null);
+            try {
+                ContentValues values = new ContentValues();
+                values.put(ProviderDbHelper.LISTS_STATE, state);
+                bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = " + list.getId(), null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
             return true;
         }
         return false;
     }
-
 
 
 }
