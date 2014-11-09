@@ -180,6 +180,7 @@ public class TasksDBAccess {
             return null;
         else {
             for(int i=0;i<count;i++) {
+                c.move(i);
                 int list_id = c.getInt(0);
                 list.add(list_id);
             }

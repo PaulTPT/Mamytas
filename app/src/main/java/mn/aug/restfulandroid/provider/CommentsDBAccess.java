@@ -89,6 +89,7 @@ public class CommentsDBAccess {
             return null;
         else {
             for (int i = 0; i < count; i++) {
+                c.move(i);
                 list.add(new Comment(c.getInt(0), taskID, c.getString(1)));
             }
             return list;

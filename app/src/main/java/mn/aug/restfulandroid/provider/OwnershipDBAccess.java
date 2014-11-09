@@ -264,6 +264,7 @@ public class OwnershipDBAccess {
             return null;
         else {
             for (int i = 0; i < count; i++) {
+                c.move(i);
                 list.add(c.getInt(0));
             }
             return list;
@@ -296,6 +297,7 @@ public class OwnershipDBAccess {
             return null;
         else {
             for (int i = 0; i < count; i++) {
+                c.move(i);
                 list.add(c.getInt(0));
             }
             return list;
@@ -414,6 +416,7 @@ public class OwnershipDBAccess {
             return owners;
         else {
             for(int i=0;i<count;i++) {
+                c.move(i);
                 owners.add(c.getString(0));
             }
             return owners;

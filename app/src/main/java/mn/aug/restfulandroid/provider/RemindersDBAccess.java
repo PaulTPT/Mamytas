@@ -90,6 +90,7 @@ public class RemindersDBAccess {
             return null;
         else {
             for(int i=0;i<count;i++) {
+                c.move(i);
                 list.add(new Reminder(c.getInt(0), taskID, c.getString(1),
                         c.getString(2)));
             }
@@ -123,6 +124,7 @@ public class RemindersDBAccess {
             return null;
         else {
             for(int i=0;i<count;i++) {
+                c.move(i);
                 list.add(new Reminder(c.getInt(0), c.getInt(1),
                         c.getString(2),user));
             }
