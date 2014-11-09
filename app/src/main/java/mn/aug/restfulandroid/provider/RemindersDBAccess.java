@@ -4,6 +4,7 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import mn.aug.restfulandroid.rest.resource.Reminder;
 import mn.aug.restfulandroid.rest.resource.Task;
 
 /**
@@ -156,7 +157,7 @@ public class RemindersDBAccess {
 
     private boolean ReminderIsInDB(Reminder reminder){
 
-        Cursor c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[] {ProviderDbHelper.TODOS_TITLE}, ProviderDbHelper.TODOS_ID + " LIKE \"" + task.getId() +"\"", null, null, null, null);
+        Cursor c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[] {ProviderDbHelper.REMINDERS_OWNER}, ProviderDbHelper.REMINDERS_ID + " LIKE \"" + reminder.getId() +"\"", null, null, null, null);
         return c.getCount() != 0;
     }
 
