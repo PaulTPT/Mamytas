@@ -67,8 +67,9 @@ public class OwnershipDBAccess {
 
             tasksDBAccess.open();
             tasksDBAccess.storeTodo(todo);
-            tasksDBAccess.setStatus((int) todo.getId(),"new");
+            tasksDBAccess.setStatus(todo.getId(), "new");
             tasksDBAccess.close();
+            setTimer(todo.getId(), name, todo.getTimer());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -99,6 +100,7 @@ public class OwnershipDBAccess {
             tasksDBAccess.open();
             tasksDBAccess.storeTodo(todo);
             tasksDBAccess.close();
+            setTimer(todo.getId(), name, todo.getTimer());
             return todo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,6 +124,7 @@ public class OwnershipDBAccess {
             values.put(ProviderDbHelper.OWNERSHIP_OWNER, name);
             values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, todo.getId());
             bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
+            setTimer(todo.getId(), name, "0");
             return todo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -198,7 +201,7 @@ public class OwnershipDBAccess {
      * @param todoID ID of the task
      * @return Whether it was successful
      */
-    public boolean removeTask(int todoID) {
+    public boolean removeTask(long todoID) {
 
         try {
             bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + todoID+"'", null);
@@ -219,7 +222,7 @@ public class OwnershipDBAccess {
      * @param listID ID of the list
      * @return Whether it was successful
      */
-    public boolean removeListTasks(int listID) {
+    public boolean removeListTasks(long listID) {
 
         tasksDBAccess.open();
         List<Integer> list = tasksDBAccess.retrieveTodosFromList(listID);
@@ -246,7 +249,7 @@ public class OwnershipDBAccess {
      * @param user   The user which wants to delete the list
      * @return Whether it was successful
      */
-    public boolean removeListFromUser(String user, int listID) {
+    public boolean removeListFromUser(String user,long listID) {
 
         try {
             bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + listID +"'"+
@@ -277,9 +280,9 @@ public class OwnershipDBAccess {
      * @param user Name of the user
      * @return List of the Ids
      */
-    public List<Integer> getTasksIds(String user) {
+    public List<Long> getTasksIds(String user) {
 
-        List<Integer> list = new ArrayList<Integer>();
+        List<Long> list = new ArrayList<Long>();
         Cursor c;
 
         try {
@@ -294,7 +297,7 @@ public class OwnershipDBAccess {
         else {
             c.moveToFirst();
             do{
-                list.add(c.getInt(0));
+                list.add(c.getLong(0));
             }while(c.moveToNext());
             return list;
 
@@ -308,10 +311,10 @@ public class OwnershipDBAccess {
      * @param user Name of the user
      * @return List of the Ids
      */
-    public List<Integer> getListsIds(String user) {
+    public List<Long> getListsIds(String user) {
 
 
-        List<Integer> list = new ArrayList<Integer>();
+        List<Long> list = new ArrayList<Long>();
         Cursor c;
 
         try {
@@ -327,7 +330,7 @@ public class OwnershipDBAccess {
         else {
             c.moveToFirst();
             do{
-                 list.add(c.getInt(0));
+                 list.add(c.getLong(0));
             }while( c.moveToNext());
             return list;
 
@@ -342,8 +345,8 @@ public class OwnershipDBAccess {
      * @param id   Id of the task
      * @return Whether the user owns the task
      */
-    public boolean userOwnsTask(String user, int id) {
-        List<Integer> list = getTasksIds(user);
+    public boolean userOwnsTask(String user, long id) {
+        List<Long> list = getTasksIds(user);
         return list.contains(id);
 
     }
@@ -355,8 +358,8 @@ public class OwnershipDBAccess {
      * @param id   Id of the list
      * @return Whether the user owns the list
      */
-    public boolean userOwnsList(String user, int id) {
-        List<Integer> list = getListsIds(user);
+    public boolean userOwnsList(String user, long id) {
+        List<Long> list = getListsIds(user);
         return list.contains(id);
 
     }
@@ -371,11 +374,11 @@ public class OwnershipDBAccess {
 
         List<Task> list = new ArrayList<Task>();
 
-        List<Integer> ids=getTasksIds(user);
+        List<Long> ids=getTasksIds(user);
 
         if(ids!=null) {
             tasksDBAccess.open();
-            for (int id : ids) {
+            for (long id : ids) {
                 Logger.debug("id", String.valueOf(id));
                 list.add(tasksDBAccess.retrieveTodo(id));
             }
@@ -394,11 +397,11 @@ public class OwnershipDBAccess {
     public List<Listw> getLists(String user) {
 
         List<Listw> list = new ArrayList<Listw>();
-        List<Integer> ids=getListsIds(user);
+        List<Long> ids=getListsIds(user);
 
         if(ids!=null) {
             listsDBAccess.open();
-            for (int id : ids) {
+            for (long id : ids) {
                 list.add(listsDBAccess.retrieveList(id));
             }
             listsDBAccess.close();
@@ -413,7 +416,7 @@ public class OwnershipDBAccess {
      * @param id The id of the list/task
      * @return Whether it is a task (If it is not a task, it is a list ...)
      */
-    public boolean isTask(int id) {
+    public boolean isTask(long id) {
 
         Cursor c;
         try {
@@ -438,7 +441,7 @@ public class OwnershipDBAccess {
      * @param list_id id of the list
      * @return The list of owners
      */
-    public ArrayList<String> getListOwners(int list_id) {
+    public ArrayList<String> getListOwners(long list_id) {
         ArrayList<String> owners = new ArrayList<String>();
 
         Cursor c;
@@ -460,7 +463,7 @@ public class OwnershipDBAccess {
 
     }
 
-    public boolean setStatus(int id, String state) {
+    public boolean setStatus(long id, String state) {
 
         try {
             ContentValues values = new ContentValues();
@@ -474,12 +477,12 @@ public class OwnershipDBAccess {
 
     }
 
-    public String getStatus(int id) {
+    public String getStatus(long id) {
 
             Cursor c = null;
             try {
-                c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[]{ProviderDbHelper.REMINDERS_STATE},
-                        ProviderDbHelper.REMINDERS_ID + " ='" + id + "'", null, null, null, null);
+                c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_STATE},
+                        ProviderDbHelper.OWNERSHIP_ID + " ='" + id + "'", null, null, null, null);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -492,6 +495,39 @@ public class OwnershipDBAccess {
 
 
             }
+
+    }
+
+    public String getTimer(long id, String owner){
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TIMER},
+                    ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner+"'", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return null;
+        else {
+            c.moveToFirst();
+            return c.getString(0);
+        }
+
+    }
+
+    public boolean setTimer(long id, String owner, String timer) {
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TIMER, timer);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner + "'", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
 
     }
 

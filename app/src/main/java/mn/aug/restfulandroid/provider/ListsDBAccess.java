@@ -86,7 +86,7 @@ public class ListsDBAccess {
      * @param listID The Id of the list to retrieve
      * @return The list corresponding to the ID
      */
-    public Listw retrieveList(int listID) {
+    public Listw retrieveList(long listID) {
 
         Cursor c = null;
         try {
@@ -111,7 +111,7 @@ public class ListsDBAccess {
      * @param listID The ID of the list to be deleted
      * @return Whether it was successful or not
      */
-    public boolean deleteList(int listID) {
+    public boolean deleteList(long listID) {
 
         if (ListIsInDB(retrieveList(listID))) {
             try {

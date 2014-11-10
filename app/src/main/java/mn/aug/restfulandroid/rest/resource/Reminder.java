@@ -15,9 +15,7 @@ public class Reminder implements Resource
         String date = null;
         String owner = "null";
 
-        public Reminder() {
 
-        };
 
         @JsonCreator
         public Reminder(int id, int task_id, String date, String owner) {

@@ -96,7 +96,7 @@ public class TasksDBAccess {
      * @param todoID The Id of the task to retrieve
      * @return The task corresponding to the ID
      */
-    public Task retrieveTodo(int todoID) {
+    public Task retrieveTodo(long todoID) {
 
 
         Cursor c = null;
@@ -124,7 +124,7 @@ public class TasksDBAccess {
      * @param todoID The ID of the task to be deleted
      * @return Whether it was successful or not
      */
-    public boolean deleteTodo(int todoID) {
+    public boolean deleteTodo(long todoID) {
 
         if (TodoIsInDB(retrieveTodo(todoID))) {
             try {
@@ -145,7 +145,7 @@ public class TasksDBAccess {
      * @param list_ID The ID of the list to be deleted
      * @return Whether it was successful or not
      */
-    public boolean deleteTodosFromList(int list_ID) {
+    public boolean deleteTodosFromList(long list_ID) {
 
         try {
             bdd.delete(ProviderDbHelper.TABLE_TODOS, ProviderDbHelper.TODOS_LIST_ID + " = '" + list_ID + "'", null);
@@ -164,7 +164,7 @@ public class TasksDBAccess {
      * @param listID The Id of the list
      * @return The tasks ids corresponding to the list
      */
-    public List<Integer> retrieveTodosFromList(int listID) {
+    public List<Integer> retrieveTodosFromList(long listID) {
 
         List<Integer> list = new ArrayList<Integer>();
 
@@ -203,7 +203,7 @@ public class TasksDBAccess {
         return c.getCount() != 0;
     }
 
-    public boolean TodoIsInDB(int id) {
+    public boolean TodoIsInDB(long id) {
 
         Cursor c = null;
         try {
@@ -216,7 +216,7 @@ public class TasksDBAccess {
     }
 
 
-    public boolean setStatus(int id, String state) {
+    public boolean setStatus(long id, String state) {
 
         if (TodoIsInDB(id)) {
             try {
@@ -233,7 +233,7 @@ public class TasksDBAccess {
     }
 
 
-    public String getStatus(int id) {
+    public String getStatus(long id) {
 
         if (TodoIsInDB(id)) {
             Cursor c = null;

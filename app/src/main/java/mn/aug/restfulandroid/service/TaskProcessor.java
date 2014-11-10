@@ -111,9 +111,8 @@ public class TaskProcessor {
             for (Task task : tasks) {
 
                 if (!tasksDBAccess.TodoIsInDB(task)) {
-                    Logger.debug("hello", "todo is not in db !");
                     ownershipDBAccess.addTask(user, task);
-                    ArrayList<String> listOwners = ownershipDBAccess.getListOwners((int) task.getList_id());
+                    ArrayList<String> listOwners = ownershipDBAccess.getListOwners(task.getList_id());
                     for (String owner : listOwners) {
                         if (!owner.equals(user)) {
                             ownershipDBAccess.addSharedTask(owner, task);
@@ -122,9 +121,17 @@ public class TaskProcessor {
                     }
                 } else {
                     tasksDBAccess.updateTodo(task);
+                    ownershipDBAccess.setTimer(task.getId(),user,task.getTimer());
                     tasksDBAccess.setStatus((int) task.getId(),"up_to_date");
                 }
+
+                if (!ownershipDBAccess.userOwnsTask(user,task.getId())){
+                    ownershipDBAccess.addSharedTask(user, task);
+                    ownershipDBAccess.setTimer(task.getId(),user,task.getTimer());
+                }
             }
+
+
 
             List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("updating");
             if(list_ids!=null) for (int id : list_ids) {

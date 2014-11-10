@@ -7,7 +7,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
  */
 public class Listw implements Resource,TaskList {
 
-    private int id = 0;
+    private long id = 0;
     private String title = "null";
 
     public Listw() {
@@ -15,7 +15,7 @@ public class Listw implements Resource,TaskList {
     }
 
     @JsonCreator
-    public Listw(int id, String title) {
+    public Listw(long id, String title) {
         super();
         this.id = id;
         this.title = title;
@@ -23,11 +23,11 @@ public class Listw implements Resource,TaskList {
 
 
 
-    public int getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
