@@ -11,6 +11,9 @@ import android.database.sqlite.SQLiteOpenHelper;
  */
 public class ProviderDbHelper extends SQLiteOpenHelper {
 
+     private int count=0;
+     private SQLiteDatabase bdd=null;
+
     //Name of the database file
     public static final String DATABASE_NAME = "wunderlist.db";
     public static final int DATABASE_VERSION = 1;
@@ -119,6 +122,24 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
         db.execSQL(USERS_CREATE);
 
 
+    }
+
+    public SQLiteDatabase openBDD(){
+        if (bdd==null)
+            bdd = getWritableDatabase();
+        count++;
+        return bdd;
+    }
+
+    public boolean closeBDD(){
+        count--;
+        if (count==0) {
+            bdd.close();
+            bdd=null;
+            return true;
+        }else{
+            return false;
+        }
     }
 
     @Override

@@ -61,7 +61,7 @@ public class LoginProcessor {
 
 
 
-        @SuppressWarnings("unchecked")
+
         RestMethod<Login> getTokenMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
                 Login.CONTENT_URI, Method.PUT, null, body);
         RestMethodResult<Login> result = getTokenMethod.execute();

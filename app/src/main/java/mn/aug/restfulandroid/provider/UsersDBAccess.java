@@ -22,12 +22,12 @@ public class UsersDBAccess {
 
     public void open() {
         //on ouvre la BDD en écriture
-        bdd = myHelper.getWritableDatabase();
+        bdd = myHelper.openBDD();
     }
 
     public void close() {
         //on ferme l'accès à la BDD
-        bdd.close();
+        myHelper.closeBDD();
     }
 
     public SQLiteDatabase getBDD() {
@@ -49,7 +49,7 @@ public class UsersDBAccess {
             try {
                 ContentValues values = new ContentValues();
                 values.put(ProviderDbHelper.USERS_PASSWORD, password);
-                bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = " + name, null);
+                bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = '" + name+"'", null);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -71,7 +71,7 @@ public class UsersDBAccess {
     public boolean deleteUser(String name) {
         if (userIsInDB(name)) {
             try {
-                bdd.delete(ProviderDbHelper.TABLE_USERS, ProviderDbHelper.USERS_NAME + " = " + name, null);
+                bdd.delete(ProviderDbHelper.TABLE_USERS, ProviderDbHelper.USERS_NAME + " = '" + name+"'", null);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -120,7 +120,7 @@ public class UsersDBAccess {
 
         Cursor c = null;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name + "\"", null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " ='" + name + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -142,7 +142,7 @@ public class UsersDBAccess {
 
         Cursor c = null;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " LIKE \"" + name + "\"", null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_NAME}, ProviderDbHelper.USERS_NAME + " ='" + name + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -156,7 +156,7 @@ public class UsersDBAccess {
         if (userIsInDB(name)) try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.USERS_STATE, state);
-            bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = " + name, null);
+            bdd.update(ProviderDbHelper.TABLE_USERS, values, ProviderDbHelper.USERS_NAME + " = '" + name+"'", null);
             return true;
         } catch (Exception e) {
             e.printStackTrace();

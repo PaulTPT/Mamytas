@@ -26,12 +26,12 @@ public class CommentsDBAccess {
 
     public void open() {
         //on ouvre la BDD en écriture
-        bdd = myHelper.getWritableDatabase();
+        bdd = myHelper.openBDD();
     }
 
     public void close() {
         //on ferme l'accès à la BDD
-        bdd.close();
+       myHelper.closeBDD();
     }
 
     public SQLiteDatabase getBDD() {
@@ -79,19 +79,19 @@ public class CommentsDBAccess {
         Cursor c = null;
         try {
             c = bdd.query(ProviderDbHelper.TABLE_COMMENTS, new String[]{ProviderDbHelper.COMMENTS_ID, ProviderDbHelper.COMMENTS_TEXT},
-                    ProviderDbHelper.COMMENTS_TASK_ID + " LIKE \"" + taskID + "\"", null, null, null, null);
+                    ProviderDbHelper.COMMENTS_TASK_ID + " ='" + taskID + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        int count = c.getCount();
+
         if (c.getCount() == 0)
             return null;
         else {
-            for (int i = 0; i < count; i++) {
-                c.move(i);
+            c.moveToFirst();
+            do{
                 list.add(new Comment(c.getInt(0), taskID, c.getString(1)));
-            }
+            }while(c.moveToNext());
             return list;
 
         }
@@ -106,7 +106,7 @@ public class CommentsDBAccess {
     public boolean deleteComment(int commentID) {
 
         try {
-            bdd.delete(ProviderDbHelper.TABLE_COMMENTS, ProviderDbHelper.COMMENTS_ID + " = " + commentID, null);
+            bdd.delete(ProviderDbHelper.TABLE_COMMENTS, ProviderDbHelper.COMMENTS_ID + " = '" + commentID+"'", null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -120,7 +120,7 @@ public class CommentsDBAccess {
 
         Cursor c = null;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_COMMENTS, new String[]{ProviderDbHelper.COMMENTS_TEXT}, ProviderDbHelper.COMMENTS_ID + " LIKE \"" + comment.getId() + "\"", null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_COMMENTS, new String[]{ProviderDbHelper.COMMENTS_TEXT}, ProviderDbHelper.COMMENTS_ID + " ='" + comment.getId() + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -134,7 +134,7 @@ public class CommentsDBAccess {
             try {
                 ContentValues values = new ContentValues();
                 values.put(ProviderDbHelper.COMMENTS_STATE, state);
-                bdd.update(ProviderDbHelper.TABLE_COMMENTS, values, ProviderDbHelper.COMMENTS_ID + " = " + comment.getId(), null);
+                bdd.update(ProviderDbHelper.TABLE_COMMENTS, values, ProviderDbHelper.COMMENTS_ID + " = '" + comment.getId()+"'", null);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();

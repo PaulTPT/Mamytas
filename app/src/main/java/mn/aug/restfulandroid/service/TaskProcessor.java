@@ -28,14 +28,14 @@ public class TaskProcessor {
     private TaskProcessorCallback mCallback;
     private Context mContext;
     private OwnershipDBAccess ownershipDBAccess;
-    private TasksDBAccess taskspDBAccess;
+    private TasksDBAccess tasksDBAccess;
 
 
     public TaskProcessor(Context context) {
 
         mContext = context;
         ownershipDBAccess = new OwnershipDBAccess(mContext);
-        taskspDBAccess = new TasksDBAccess(mContext);
+        tasksDBAccess = new TasksDBAccess(mContext);
     }
 
 
@@ -68,7 +68,7 @@ public class TaskProcessor {
         RestMethodResult<Tasks> result = getTasksMethod.execute();
 
 				/*
-				 * (8) Insert-Update the ContentProvider status, and insert the result
+                 * (8) Insert-Update the ContentProvider status, and insert the result
 				 * on success Parsing the JSON response (on success) and inserting into
 				 * the content provider
 				 */
@@ -87,30 +87,38 @@ public class TaskProcessor {
 
     private void updateDataBase(Tasks tasksResult) {
 
+        /* TODO
+        Supprimer tache en local si supprimée sur le serveur
+        Mettre a jour status flag
+
+
+         */
+
         List<Task> tasks = tasksResult.getTasks();
 
-        if (tasks != null) {
+        String user = AuthorizationManager.getInstance(mContext).getUser();
+
+        if (tasks != null && user != null) {
             // insert/update row for each Task
-            taskspDBAccess.open();
+            tasksDBAccess.open();
             ownershipDBAccess.open();
             for (Task task : tasks) {
 
-                String user=AuthorizationManager.getInstance(mContext).getUser();
-
-                if (!taskspDBAccess.TodoIsInDB(task)) {
-                    Task newTask = ownershipDBAccess.addTask(user,task);
+                if (!tasksDBAccess.TodoIsInDB(task)) {
+                    Logger.debug("hello", "todo is not in db !");
+                    ownershipDBAccess.addTask(user, task);
                     ArrayList<String> listOwners = ownershipDBAccess.getListOwners((int) task.getList_id());
                     for (String owner : listOwners) {
-                        if (!owner.equals((String) user)) {
-                            ownershipDBAccess.addSharedTask(owner, newTask);
+                        if (!owner.equals(user)) {
+                            ownershipDBAccess.addSharedTask(owner, task);
                         }
 
                     }
-                }else{
-                    taskspDBAccess.updateTodo(task);
+                } else {
+                    tasksDBAccess.updateTodo(task);
                 }
             }
-            taskspDBAccess.close();
+            tasksDBAccess.close();
             ownershipDBAccess.close();
         }
 

@@ -107,7 +107,8 @@ public class AuthorizationManager implements RequestSigner {
 	 * @return saved  token (or null if it does not exist)
 	 */
     public String getToken() {
-		return mToken;
+        retrieveToken();
+        return mToken;
 	}
 
     /**
@@ -116,6 +117,7 @@ public class AuthorizationManager implements RequestSigner {
      * @return saved user (or null if it does not exist)
      */
     public String getUser() {
+        retrieveName();
         return mUser;
     }
 
@@ -147,6 +149,7 @@ public class AuthorizationManager implements RequestSigner {
 	public void authorize(Request request) {
 
         retrieveToken();
+
 
         List<String> values = new ArrayList<String>();
         values.add("Bearer " + mToken);

@@ -46,6 +46,9 @@ public abstract class AbstractRestMethod<T extends Resource> implements RestMeth
 			responseBody = new String(response.body, getCharacterEncoding(response.headers));
             if(status==200)
 			    resource = parseResponseBody(responseBody);
+            else if(status==401){
+                AuthorizationManager.getInstance(getContext()).logout();
+            }
 		} catch (Exception ex) {
 			// TODO Should we set some custom status code?
 			status += 500; // spec only defines up to 505

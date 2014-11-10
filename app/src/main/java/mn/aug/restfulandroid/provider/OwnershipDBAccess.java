@@ -10,6 +10,7 @@ import java.util.List;
 
 import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
+import mn.aug.restfulandroid.util.Logger;
 
 /**
  * Created by Paul on 09/11/2014.
@@ -34,12 +35,12 @@ public class OwnershipDBAccess {
 
     public void open() {
         //on ouvre la BDD en écriture
-        bdd = myHelper.getWritableDatabase();
+        bdd = myHelper.openBDD();
     }
 
     public void close() {
         //on ferme l'accès à la BDD
-        bdd.close();
+        myHelper.closeBDD();
     }
 
     public SQLiteDatabase getBDD() {
@@ -54,7 +55,35 @@ public class OwnershipDBAccess {
      * @param todo The task
      * @return Whether it was successful
      */
-    public Task addTask(String name, Task todo) {
+    public boolean addTask(String name, Task todo) {
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "TASKS");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER, name);
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, todo.getId());
+            values.put(ProviderDbHelper.OWNERSHIP_ID, todo.getId());
+            bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
+
+            tasksDBAccess.open();
+            tasksDBAccess.storeTodo(todo);
+            tasksDBAccess.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
+    /**
+     * Add a task to the user's ownership list
+     *
+     * @param name Name of the user
+     * @param todo The task
+     * @return Whether it was successful
+     */
+    public Task addTaskGetID(String name, Task todo) {
 
         try {
             ContentValues values = new ContentValues();
@@ -65,7 +94,7 @@ public class OwnershipDBAccess {
 
             values = new ContentValues();
             values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, id);
-            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = " + id, null);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id+"'", null);
             tasksDBAccess.open();
             tasksDBAccess.storeTodo(todo);
             tasksDBAccess.close();
@@ -119,7 +148,7 @@ public class OwnershipDBAccess {
 
             values = new ContentValues();
             values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, id);
-            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = " + id, null);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id+"'", null);
             listsDBAccess.open();
             listsDBAccess.storeList(list);
             listsDBAccess.close();
@@ -171,7 +200,7 @@ public class OwnershipDBAccess {
     public boolean removeTask(int todoID) {
 
         try {
-            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + todoID, null);
+            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + todoID+"'", null);
             tasksDBAccess.open();
             tasksDBAccess.deleteTodo(todoID);
             tasksDBAccess.close();
@@ -198,7 +227,7 @@ public class OwnershipDBAccess {
 
         try {
             for (int id : list) {
-                bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + id, null);
+                bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + id+"'", null);
             }
             return true;
 
@@ -219,10 +248,10 @@ public class OwnershipDBAccess {
     public boolean removeListFromUser(String user, int listID) {
 
         try {
-            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + listID +
-                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = " + user, null);
+            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + listID +"'"+
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user+"'", null);
 
-            Cursor c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_ID}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " LIKE \"" + listID + "\"", null, null, null, null);
+            Cursor c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_ID}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + listID + "'", null, null, null, null);
 
             if (c.getCount() == 0) {
                 listsDBAccess.open();
@@ -253,20 +282,19 @@ public class OwnershipDBAccess {
         Cursor c;
 
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID}, ProviderDbHelper.OWNERSHIP_TYPE + " = " + "TASK" +
-                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = " + user, null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID}, ProviderDbHelper.OWNERSHIP_TYPE + " = " + "'TASKS'" +
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user+"'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        int count = c.getCount();
         if (c.getCount() == 0)
             return null;
         else {
-            for (int i = 0; i < count; i++) {
-                c.move(i);
+            c.moveToFirst();
+            do{
                 list.add(c.getInt(0));
-            }
+            }while(c.moveToNext());
             return list;
 
         }
@@ -286,20 +314,20 @@ public class OwnershipDBAccess {
         Cursor c;
 
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID}, ProviderDbHelper.OWNERSHIP_TYPE + " = " + "LIST" +
-                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = " + user, null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID}, ProviderDbHelper.OWNERSHIP_TYPE + " = " + "'LIST'" +
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user+"'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        int count = c.getCount();
+
         if (c.getCount() == 0)
             return null;
         else {
-            for (int i = 0; i < count; i++) {
-                c.move(i);
-                list.add(c.getInt(0));
-            }
+            c.moveToFirst();
+            do{
+                 list.add(c.getInt(0));
+            }while( c.moveToNext());
             return list;
 
         }
@@ -342,11 +370,16 @@ public class OwnershipDBAccess {
 
         List<Task> list = new ArrayList<Task>();
 
-        tasksDBAccess.open();
-        for (int id : getTasksIds(user)) {
-            list.add(tasksDBAccess.retrieveTodo(id));
+        List<Integer> ids=getTasksIds(user);
+
+        if(ids!=null) {
+            tasksDBAccess.open();
+            for (int id : ids) {
+                Logger.debug("id", String.valueOf(id));
+                list.add(tasksDBAccess.retrieveTodo(id));
+            }
+            tasksDBAccess.close();
         }
-        tasksDBAccess.close();
 
         return list;
     }
@@ -360,12 +393,15 @@ public class OwnershipDBAccess {
     public List<Listw> getLists(String user) {
 
         List<Listw> list = new ArrayList<Listw>();
+        List<Integer> ids=getListsIds(user);
 
-        listsDBAccess.open();
-        for (int id : getListsIds(user)) {
-            list.add(listsDBAccess.retrieveList(id));
+        if(ids!=null) {
+            listsDBAccess.open();
+            for (int id : ids) {
+                list.add(listsDBAccess.retrieveList(id));
+            }
+            listsDBAccess.close();
         }
-        listsDBAccess.close();
 
         return list;
     }
@@ -380,7 +416,7 @@ public class OwnershipDBAccess {
 
         Cursor c;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TYPE}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + id, null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TYPE}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + id+"'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -406,19 +442,18 @@ public class OwnershipDBAccess {
 
         Cursor c;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_OWNER}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = " + list_id, null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_OWNER}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + list_id+"'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
-        int count = c.getCount();
         if (c.getCount() == 0)
             return owners;
         else {
-            for(int i=0;i<count;i++) {
-                c.move(i);
+            c.moveToFirst();
+            do{
                 owners.add(c.getString(0));
-            }
+            }while(c.moveToNext());
             return owners;
         }
 
@@ -428,7 +463,7 @@ public class OwnershipDBAccess {
 
         ContentValues values = new ContentValues();
         values.put(ProviderDbHelper.OWNERSHIP_STATE, state);
-        bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = " + id, null);
+        bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id+"'", null);
         return true;
 
     }

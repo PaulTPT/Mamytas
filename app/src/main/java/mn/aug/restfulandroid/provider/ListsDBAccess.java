@@ -24,12 +24,12 @@ public class ListsDBAccess {
 
     public void open() {
         //on ouvre la BDD en écriture
-        bdd = myHelper.getWritableDatabase();
+        bdd = myHelper.openBDD();
     }
 
     public void close() {
         //on ferme l'accès à la BDD
-        bdd.close();
+        myHelper.closeBDD();
     }
 
     public SQLiteDatabase getBDD() {
@@ -70,7 +70,7 @@ public class ListsDBAccess {
         if (ListIsInDB(list)) try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.LISTS_TITLE, list.getTitle());
-            bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = " + list.getId(), null);
+            bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = '" + list.getId()+"'", null);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -91,7 +91,7 @@ public class ListsDBAccess {
         Cursor c = null;
         try {
             c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_TITLE},
-                    ProviderDbHelper.LISTS_ID + " LIKE \"" + listID + "\"", null, null, null, null);
+                    ProviderDbHelper.LISTS_ID + " ='" + listID + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -115,7 +115,7 @@ public class ListsDBAccess {
 
         if (ListIsInDB(retrieveList(listID))) {
             try {
-                bdd.delete(ProviderDbHelper.TABLE_LISTS, ProviderDbHelper.LISTS_ID + " = " + listID, null);
+                bdd.delete(ProviderDbHelper.TABLE_LISTS, ProviderDbHelper.LISTS_ID + " = '" + listID+"'", null);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -130,7 +130,7 @@ public class ListsDBAccess {
 
         Cursor c = null;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_TITLE}, ProviderDbHelper.LISTS_ID + " LIKE \"" + list.getId() + "\"", null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_TITLE}, ProviderDbHelper.LISTS_ID + " ='" + list.getId() + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -144,7 +144,7 @@ public class ListsDBAccess {
             try {
                 ContentValues values = new ContentValues();
                 values.put(ProviderDbHelper.LISTS_STATE, state);
-                bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = " + list.getId(), null);
+                bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = '" + list.getId()+"'", null);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
