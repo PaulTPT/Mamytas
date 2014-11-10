@@ -177,5 +177,29 @@ public class RemindersDBAccess {
         return false;
     }
 
+    public String getStatus(Reminder reminder) {
+
+        if (reminderIsInDB(reminder)) {
+            Cursor c = null;
+            try {
+                c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[]{ProviderDbHelper.REMINDERS_STATE},
+                        ProviderDbHelper.REMINDERS_ID + " ='" + reminder.getId() + "'", null, null, null, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            if (c.getCount() == 0)
+                return null;
+            else {
+                c.moveToFirst();
+                return c.getString(0);
+
+
+            }
+
+        }
+        return "not_existing";
+    }
+
 
 }

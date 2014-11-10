@@ -144,5 +144,28 @@ public class CommentsDBAccess {
         return false;
     }
 
+    public String getStatus(Comment comment) {
+
+        if (commentIsInDB(comment)) {
+            Cursor c = null;
+            try {
+                c = bdd.query(ProviderDbHelper.TABLE_COMMENTS, new String[]{ProviderDbHelper.COMMENTS_STATE},
+                        ProviderDbHelper.COMMENTS_ID + " ='" + comment.getId() + "'", null, null, null, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            if (c.getCount() == 0)
+                return null;
+            else {
+                c.moveToFirst();
+                return c.getString(0);
+
+
+            }
+
+        }
+        return "not_existing";
+    }
 
 }

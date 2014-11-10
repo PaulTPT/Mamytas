@@ -67,6 +67,7 @@ public class OwnershipDBAccess {
 
             tasksDBAccess.open();
             tasksDBAccess.storeTodo(todo);
+            tasksDBAccess.setStatus((int) todo.getId(),"new");
             tasksDBAccess.close();
             return true;
         } catch (Exception e) {
@@ -461,10 +462,36 @@ public class OwnershipDBAccess {
 
     public boolean setStatus(int id, String state) {
 
-        ContentValues values = new ContentValues();
-        values.put(ProviderDbHelper.OWNERSHIP_STATE, state);
-        bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id+"'", null);
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_STATE, state);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id+"'", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
+
+    }
+
+    public String getStatus(int id) {
+
+            Cursor c = null;
+            try {
+                c = bdd.query(ProviderDbHelper.TABLE_REMINDERS, new String[]{ProviderDbHelper.REMINDERS_STATE},
+                        ProviderDbHelper.REMINDERS_ID + " ='" + id + "'", null, null, null, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            if (c.getCount() == 0)
+                return null;
+            else {
+                c.moveToFirst();
+                return c.getString(0);
+
+
+            }
 
     }
 

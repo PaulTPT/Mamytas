@@ -57,6 +57,12 @@ public class TaskProcessor {
         // results column
         // Look at ContentProvider example, and build a content provider
         // that tracks the necessary data.
+        tasksDBAccess.open();
+        List<Integer> list_ids = tasksDBAccess.retrieveAllTasks();
+        if(list_ids!=null) for (int id : list_ids) {
+            tasksDBAccess.setStatus(id, "updating");
+        }
+        tasksDBAccess.close();
 
         // (5) Call the REST method
         // Create a RESTMethod class that knows how to assemble the URL,
@@ -116,8 +122,16 @@ public class TaskProcessor {
                     }
                 } else {
                     tasksDBAccess.updateTodo(task);
+                    tasksDBAccess.setStatus((int) task.getId(),"up_to_date");
                 }
             }
+
+            List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("updating");
+            if(list_ids!=null) for (int id : list_ids) {
+                ownershipDBAccess.removeTask(id);
+            }
+
+
             tasksDBAccess.close();
             ownershipDBAccess.close();
         }

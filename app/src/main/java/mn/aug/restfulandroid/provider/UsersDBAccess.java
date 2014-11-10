@@ -167,5 +167,29 @@ public class UsersDBAccess {
 
     }
 
+    public String getStatus(String name) {
+
+        if (userIsInDB(name)) {
+            Cursor c = null;
+            try {
+                c = bdd.query(ProviderDbHelper.TABLE_USERS, new String[]{ProviderDbHelper.USERS_STATE},
+                        ProviderDbHelper.USERS_ID + " ='" + name + "'", null, null, null, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            if (c.getCount() == 0)
+                return null;
+            else {
+                c.moveToFirst();
+                return c.getString(0);
+
+
+            }
+
+        }
+        return "not_existing";
+    }
+
 
 }

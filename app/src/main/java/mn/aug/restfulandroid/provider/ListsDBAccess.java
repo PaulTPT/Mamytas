@@ -154,5 +154,29 @@ public class ListsDBAccess {
         return false;
     }
 
+    public String getStatus(Listw list) {
+
+        if (ListIsInDB(list)) {
+            Cursor c = null;
+            try {
+                c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_STATE},
+                        ProviderDbHelper.LISTS_ID + " ='" +list.getId() + "'", null, null, null, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            if (c.getCount() == 0)
+                return null;
+            else {
+                c.moveToFirst();
+                return c.getString(0);
+
+
+            }
+
+        }
+        return "not_existing";
+    }
+
 
 }

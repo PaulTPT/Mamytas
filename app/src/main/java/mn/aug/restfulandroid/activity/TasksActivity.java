@@ -98,8 +98,15 @@ public class TasksActivity extends RESTfulListActivity {
                                 android.R.layout.simple_list_item_1, titles);
                         setListAdapter(adapter);
 
-                    } else {
-                        showToast(getString(R.string.error_occurred));
+                    }  else if(resultCode==401){
+                        showToast("Your session has expired");
+                        logoutAndFinish();
+
+                    }  else if(resultCode==-1) {
+                        showToast("Server unreachable");
+                        logoutAndFinish();
+                    }else {
+                        showToast("A network error has occured");
                     }
                 } else {
                     Logger.debug(TAG, "Result is NOT for our request ID");
@@ -159,10 +166,7 @@ public class TasksActivity extends RESTfulListActivity {
         super.onOptionsItemSelected(item);
         switch (item.getItemId()) {
             case R.id.logout:
-                AuthorizationManager.getInstance(this).logout();
-                Intent login = new Intent(this, LoginActivity.class);
-                startActivity(login);
-                finish();
+                logoutAndFinish();
                 break;
             case R.id.about:
                 Intent about = new Intent(this, AboutActivity.class);
@@ -175,6 +179,14 @@ public class TasksActivity extends RESTfulListActivity {
     @Override
     protected void refresh() {
         requestId = mWunderlistServiceHelper.getTasks();
+    }
+
+    protected void logoutAndFinish(){
+        AuthorizationManager.getInstance(this).logout();
+        Intent login = new Intent(this, LoginActivity.class);
+        startActivity(login);
+        finish();
+
     }
 
 

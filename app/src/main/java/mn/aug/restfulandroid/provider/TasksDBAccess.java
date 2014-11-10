@@ -80,7 +80,7 @@ public class TasksDBAccess {
             values.put(ProviderDbHelper.TODOS_TITLE, todo.getTitle());
             values.put(ProviderDbHelper.TODOS_DUE_DATE, todo.getDue_date());
             values.put(ProviderDbHelper.TODOS_LIST_ID, todo.getList_id());
-            bdd.update(ProviderDbHelper.TABLE_TODOS, values, ProviderDbHelper.TODOS_ID + " = '" + todo.getId()+"'", null);
+            bdd.update(ProviderDbHelper.TABLE_TODOS, values, ProviderDbHelper.TODOS_ID + " = '" + todo.getId() + "'", null);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,9 +112,9 @@ public class TasksDBAccess {
         else {
             c.moveToFirst();
             String title = c.getString(0);
-            String due_date=c.getString(1);
-            Long   list_id=c.getLong(2);
-            return new Task(todoID,title,due_date,list_id);
+            String due_date = c.getString(1);
+            Long list_id = c.getLong(2);
+            return new Task(todoID, title, due_date, list_id);
         }
     }
 
@@ -128,7 +128,7 @@ public class TasksDBAccess {
 
         if (TodoIsInDB(retrieveTodo(todoID))) {
             try {
-                bdd.delete(ProviderDbHelper.TABLE_TODOS, ProviderDbHelper.TODOS_ID + " = '" + todoID+"'", null);
+                bdd.delete(ProviderDbHelper.TABLE_TODOS, ProviderDbHelper.TODOS_ID + " = '" + todoID + "'", null);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -148,7 +148,7 @@ public class TasksDBAccess {
     public boolean deleteTodosFromList(int list_ID) {
 
         try {
-            bdd.delete(ProviderDbHelper.TABLE_TODOS, ProviderDbHelper.TODOS_LIST_ID + " = '" + list_ID+"'", null);
+            bdd.delete(ProviderDbHelper.TABLE_TODOS, ProviderDbHelper.TODOS_LIST_ID + " = '" + list_ID + "'", null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -180,10 +180,10 @@ public class TasksDBAccess {
             return null;
         else {
             c.moveToFirst();
-            do{
+            do {
                 int list_id = c.getInt(0);
                 list.add(list_id);
-            }while (c.moveToNext());
+            } while (c.moveToNext());
             return list;
 
         }
@@ -195,22 +195,34 @@ public class TasksDBAccess {
 
         Cursor c = null;
         try {
-            Logger.debug("id task",String.valueOf(task.getId()));
             c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_TITLE}, ProviderDbHelper.TODOS_ID + " ='" + task.getId() + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
         }
-                return c.getCount() != 0;
+        return c.getCount() != 0;
     }
 
-    public boolean setStatus(Task task, String state) {
+    public boolean TodoIsInDB(int id) {
 
-        if (TodoIsInDB(task)) {
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_TITLE}, ProviderDbHelper.TODOS_ID + " ='" + id + "'", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return c.getCount() != 0;
+    }
+
+
+    public boolean setStatus(int id, String state) {
+
+        if (TodoIsInDB(id)) {
             try {
                 ContentValues values = new ContentValues();
                 values.put(ProviderDbHelper.TODOS_STATE, state);
-                bdd.update(ProviderDbHelper.TABLE_TODOS, values, ProviderDbHelper.TODOS_ID + " = '" + task.getId() +"'", null);
+                bdd.update(ProviderDbHelper.TABLE_TODOS, values, ProviderDbHelper.TODOS_ID + " = '" + id + "'", null);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
@@ -221,4 +233,77 @@ public class TasksDBAccess {
     }
 
 
+    public String getStatus(int id) {
+
+        if (TodoIsInDB(id)) {
+            Cursor c = null;
+            try {
+                c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_STATE},
+                        ProviderDbHelper.TODOS_ID + " ='" + id + "'", null, null, null, null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                return null;
+            }
+            if (c.getCount() == 0)
+                return null;
+            else {
+                c.moveToFirst();
+                return c.getString(0);
+
+
+            }
+
+        }
+        return "not_existing";
     }
+
+    public List<Integer> retrieveAllTasks(){
+
+        List<Integer> list = new ArrayList<Integer>();
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_ID},null, null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return list;
+        else {
+            c.moveToFirst();
+            do {
+                int list_id = c.getInt(0);
+                list.add(list_id);
+            } while (c.moveToNext());
+            return list;
+
+        }
+
+    }
+
+    public List<Integer> retrieveTasksWithState(String state){
+
+        List<Integer> list = new ArrayList<Integer>();
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_ID},
+                    ProviderDbHelper.TODOS_STATE + " ='" + state+ "'", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return null;
+        else {
+            c.moveToFirst();
+            do {
+                int list_id = c.getInt(0);
+                list.add(list_id);
+            } while (c.moveToNext());
+            return list;
+
+        }
+    }
+}
