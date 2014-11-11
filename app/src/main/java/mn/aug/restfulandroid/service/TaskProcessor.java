@@ -25,7 +25,7 @@ import mn.aug.restfulandroid.util.Logger;
 public class TaskProcessor {
 
 
-    private TaskProcessorCallback mCallback;
+    private ProcessorCallback mCallback;
     private Context mContext;
     private OwnershipDBAccess ownershipDBAccess;
     private TasksDBAccess tasksDBAccess;
@@ -39,7 +39,7 @@ public class TaskProcessor {
     }
 
 
-    void getTask(TaskProcessorCallback callback) {
+    void getTask(ProcessorCallback callback) {
 
 		/*
         Processor is a POJO
@@ -59,7 +59,7 @@ public class TaskProcessor {
         // that tracks the necessary data.
         tasksDBAccess.open();
         List<Integer> list_ids = tasksDBAccess.retrieveAllTasks();
-        if(list_ids!=null) for (int id : list_ids) {
+        if (list_ids != null) for (int id : list_ids) {
             tasksDBAccess.setStatus(id, "updating");
         }
         tasksDBAccess.close();
@@ -68,7 +68,6 @@ public class TaskProcessor {
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
 
-        @SuppressWarnings("unchecked")
         RestMethod<Tasks> getTasksMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
                 Tasks.CONTENT_URI, Method.GET, null, null);
         RestMethodResult<Tasks> result = getTasksMethod.execute();
@@ -83,6 +82,69 @@ public class TaskProcessor {
 
         if (result.getStatusCode() == 200) {
             updateDataBase(result.getResource());
+        }
+
+        // (9) Operation complete callback to Service
+
+        callback.send(result.getStatusCode());
+
+    }
+
+
+    public void postTask(ProcessorCallback callback, long task_id) {
+
+        /*
+        Processor is a POJO
+			- Processor for each resource type
+			- Processor can handle each method on the resource that is supported.
+			- Processor needs a callback (which is how the request gets back to the service)
+			- Processor uses a RESTMethod - created through a RESTMethodFactory.create(parameterized) or .createGetTask()
+
+			First iteration had a callback that updated the content provider
+			with the resources. But the eventual implementation simply block
+			for the response and do the update.
+		 */
+
+        // (4) Insert-Update the ContentProvider with a status column and
+        // results column
+        // Look at ContentProvider example, and build a content provider
+        // that tracks the necessary data.
+        tasksDBAccess.open();
+        tasksDBAccess.setStatus(task_id, "uploading");
+        tasksDBAccess.close();
+        // (5) Call the REST method
+        // Create a RESTMethod class that knows how to assemble the URL,
+        // and performs the HTTP operation.
+
+        RestMethod<Task> postTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
+                Tasks.CONTENT_URI, Method.POST, null, null);
+        RestMethodResult<Task> result = postTaskMethod.execute();
+
+				/*
+                 * (8) Insert-Update the ContentProvider status, and insert the result
+				 * on success Parsing the JSON response (on success) and inserting into
+				 * the content provider
+				 */
+
+
+        if (result.getStatusCode() == 200) {
+
+            tasksDBAccess.open();
+            ownershipDBAccess.open();
+            ownershipDBAccess.removeTask(task_id);
+            Task task = result.getResource();
+            String user = AuthorizationManager.getInstance(mContext).getUser();
+            ownershipDBAccess.addTask(user, task);
+            ArrayList<String> listOwners = ownershipDBAccess.getListOwners(task.getList_id());
+            for (String owner : listOwners) {
+                if (!owner.equals(user)) {
+                    ownershipDBAccess.addSharedTask(owner, task);
+                }
+
+                ownershipDBAccess.close();
+                tasksDBAccess.close();
+
+            }
         }
 
         // (9) Operation complete callback to Service
@@ -121,20 +183,19 @@ public class TaskProcessor {
                     }
                 } else {
                     tasksDBAccess.updateTodo(task);
-                    ownershipDBAccess.setTimer(task.getId(),user,task.getTimer());
-                    tasksDBAccess.setStatus((int) task.getId(),"up_to_date");
+                    ownershipDBAccess.setTimer(task.getId(), user, task.getTimer());
+                    tasksDBAccess.setStatus((int) task.getId(), "up_to_date");
                 }
 
-                if (!ownershipDBAccess.userOwnsTask(user,task.getId())){
+                if (!ownershipDBAccess.userOwnsTask(user, task.getId())) {
                     ownershipDBAccess.addSharedTask(user, task);
-                    ownershipDBAccess.setTimer(task.getId(),user,task.getTimer());
+                    ownershipDBAccess.setTimer(task.getId(), user, task.getTimer());
                 }
             }
 
 
-
             List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("updating");
-            if(list_ids!=null) for (int id : list_ids) {
+            if (list_ids != null) for (int id : list_ids) {
                 ownershipDBAccess.removeTask(id);
             }
 
@@ -145,4 +206,6 @@ public class TaskProcessor {
 
 
     }
+
+
 }

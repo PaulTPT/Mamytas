@@ -1,12 +1,16 @@
 package mn.aug.restfulandroid.rest.resource;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 import mn.aug.restfulandroid.util.Logger;
 
 
-public class Task implements Resource, TaskList {
+public class Task implements Resource, TaskList, Parcelable {
+
 
     private long id;
     private String title;
@@ -25,7 +29,8 @@ public class Task implements Resource, TaskList {
         Logger.debug("task", toString());
     }
 
-    public Task (long id, String title, String due_date,long list_id) {
+
+    public Task(long id, String title, String due_date, long list_id) {
         this.id = id;
         this.title = title;
         this.due_date = due_date;
@@ -33,8 +38,6 @@ public class Task implements Resource, TaskList {
 
         Logger.debug("task", toString());
     }
-
-
 
     public long getId() {
         return id;
@@ -78,12 +81,51 @@ public class Task implements Resource, TaskList {
 
     @Override
     public String toString() {
-        return "Task{" +
-                "id=" + id +
-                ", title='" + title + '\'' +
-                ", due_date='" + due_date + '\'' +
-                ", list_id=" + list_id +
-                ", timer='" + timer + '\'' +
-                '}';
+        return  "id=" + id +
+                "&title=" + title +
+                "&due_date='" + due_date +
+                "&list_id=" + list_id +
+                "&timer='" + timer ;
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+    // Parcelling part
+    public Task(Parcel in) {
+        String[] data = new String[5];
+
+        in.readStringArray(data);
+        this.id = Long.parseLong(data[0]);
+        this.title = data[1];
+        this.due_date = data[2];
+        this.list_id = Long.parseLong(data[3]);
+        this.timer = data[4];
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeStringArray(new String[]{
+                String.valueOf(this.id),
+                this.title,
+                this.due_date,
+                String.valueOf(this.list_id),
+                this.timer
+        });
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Task createFromParcel(Parcel in) {
+            return new Task(in);
+        }
+
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
+
 }

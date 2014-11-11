@@ -11,35 +11,60 @@ import java.util.List;
 
 public class RestClient {
 
-	public Response execute(Request request) {
-		HttpURLConnection conn = null;
-		Response response = null;
-		int status = -1;
-		try {
+    private static byte[] readStream(InputStream in) throws IOException {
+        byte[] buf = new byte[1024];
+        int count = 0;
+        ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
+        while ((count = in.read(buf)) != -1)
+            out.write(buf, 0, count);
+        return out.toByteArray();
+    }
 
-			URL url = request.getRequestUri().toURL();
-			conn = (HttpURLConnection) url.openConnection();
-			if (request.getHeaders() != null) {
-				for (String header : request.getHeaders().keySet()) {
-					for (String value : request.getHeaders().get(header)) {
-						conn.addRequestProperty(header, value);
-					}
-				}
-			}
+    public Response execute(Request request) {
+        HttpURLConnection conn = null;
+        Response response = null;
+        int status = -1;
+        try {
 
-			switch (request.getMethod()) {
-			case GET:
-				conn.setDoOutput(false);
-				break;
-			case POST:
-				byte[] payload = request.getBody();
-				conn.setDoOutput(true);
-				conn.setFixedLengthStreamingMode(payload.length);
-				conn.getOutputStream().write(payload);
-				status = conn.getResponseCode();
-			default:
-				break;
-			}
+            URL url = request.getRequestUri().toURL();
+            conn = (HttpURLConnection) url.openConnection();
+            if (request.getHeaders() != null) {
+                for (String header : request.getHeaders().keySet()) {
+                    for (String value : request.getHeaders().get(header)) {
+                        conn.addRequestProperty(header, value);
+                    }
+                }
+            }
+
+            byte[] payload = request.getBody();
+            switch (request.getMethod()) {
+                case GET:
+                    conn.setDoOutput(false);
+                    conn.setDoInput(true);
+                    status = conn.getResponseCode();
+                    break;
+                case POST:
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+                    conn.setFixedLengthStreamingMode(payload.length);
+                    conn.getOutputStream().write(payload);
+                    status = conn.getResponseCode();
+                    break;
+                case PUT:
+                    conn.setDoOutput(true);
+                    conn.setDoInput(true);
+                    conn.setFixedLengthStreamingMode(payload.length);
+                    conn.getOutputStream().write(payload);
+                    status = conn.getResponseCode();
+                    break;
+                case DELETE:
+                    conn.setDoOutput(false);
+                    conn.setDoInput(true);
+                    status = conn.getResponseCode();
+                    break;
+                default:
+                    break;
+            }
 
 
             BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
@@ -47,26 +72,17 @@ public class RestClient {
             response = new Response(conn.getResponseCode(), conn.getHeaderFields(), body);
 
 
-		} catch (IOException e) {
-			e.printStackTrace();
-		} finally {
-			if (conn != null)
-				conn.disconnect();
-		}
-		
-		if (response == null) {
-			response = new Response(status, new HashMap<String, List<String>>(), new byte[] {});
-		}
-		
-		return response;
-	}
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (conn != null)
+                conn.disconnect();
+        }
 
-	private static byte[] readStream(InputStream in) throws IOException {
-		byte[] buf = new byte[1024];
-		int count = 0;
-		ByteArrayOutputStream out = new ByteArrayOutputStream(1024);
-		while ((count = in.read(buf)) != -1)
-			out.write(buf, 0, count);
-		return out.toByteArray();
-	}
+        if (response == null) {
+            response = new Response(status, new HashMap<String, List<String>>(), new byte[]{});
+        }
+
+        return response;
+    }
 }

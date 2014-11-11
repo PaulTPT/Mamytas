@@ -24,7 +24,7 @@ import mn.aug.restfulandroid.util.Logger;
 public class LoginProcessor {
 
 
-    private LoginProcessorCallback mCallback;
+    private ProcessorCallback mCallback;
     private Context mContext;
     private UsersDBAccess userDBAccess;
 
@@ -36,7 +36,7 @@ public class LoginProcessor {
     }
 
 
-    void getToken(LoginProcessorCallback callback,byte[] body) {
+    void getToken(ProcessorCallback callback,byte[] body) {
 
 		/*
 		Processor is a POJO
@@ -63,7 +63,7 @@ public class LoginProcessor {
 
 
         RestMethod<Login> getTokenMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Login.CONTENT_URI, Method.PUT, null, body);
+                Login.CONTENT_URI, Method.POST, null, body);
         RestMethodResult<Login> result = getTokenMethod.execute();
 
 				/*

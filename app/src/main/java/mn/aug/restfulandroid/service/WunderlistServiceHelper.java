@@ -1,5 +1,6 @@
 package mn.aug.restfulandroid.service;
 
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
@@ -8,6 +9,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
+
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+import mn.aug.restfulandroid.rest.resource.Task;
 
 
 /**
@@ -22,7 +28,8 @@ public class WunderlistServiceHelper {
 	public static String EXTRA_RESULT_CODE = "EXTRA_RESULT_CODE";
 
 	private static final String REQUEST_ID = "REQUEST_ID";
-	private static final String tasksHashkey = "TASKS";
+	private static final String getTasksHashkey = "GET_TASKS";
+    private static final String postTaskHashkey = "POST_TASK";
     private static final String loginHashkey = "LOGIN";
 
 	private static Object lock = new Object();
@@ -50,12 +57,12 @@ public class WunderlistServiceHelper {
 	public long getTasks() {
 
 		long requestId = generateRequestID();
-		pendingRequests.put(tasksHashkey, requestId);
+		pendingRequests.put(getTasksHashkey, requestId);
 
 		ResultReceiver serviceCallback = new ResultReceiver(null){
 			@Override
 			protected void onReceiveResult(int resultCode, Bundle resultData) {
-				handleGetTasksResponse(resultCode, resultData);
+				handleResponse(resultCode, resultData, getTasksHashkey);
 			}
 		};
 
@@ -70,6 +77,35 @@ public class WunderlistServiceHelper {
 		return requestId;		
 	}
 
+    public long postTask(Task task) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(postTaskHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, postTaskHashkey);
+            }
+        };
+
+
+
+        byte[] body= task.toString().getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_POST);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TASKS);
+        intent.putExtra(WunderlistService.BODY_EXTRA, body);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
+
 
     public long login(String email,String password) {
 
@@ -79,7 +115,7 @@ public class WunderlistServiceHelper {
         ResultReceiver serviceCallback = new ResultReceiver(null){
             @Override
             protected void onReceiveResult(int resultCode, Bundle resultData) {
-                handleLoginResponse(resultCode, resultData);
+                handleResponse(resultCode, resultData, loginHashkey);
             }
         };
 
@@ -87,7 +123,7 @@ public class WunderlistServiceHelper {
         byte[] body= body_char.getBytes();
 
         Intent intent = new Intent(this.ctx, WunderlistService.class);
-        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_PUT);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_POST);
         intent.putExtra(WunderlistService.BODY_EXTRA, body);
         intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_LOGIN);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
@@ -109,14 +145,14 @@ public class WunderlistServiceHelper {
 	}
 
 
-	private void handleGetTasksResponse(int resultCode, Bundle resultData){
+	private void handleResponse(int resultCode, Bundle resultData, String hashKey){
 
 		Intent origIntent = (Intent)resultData.getParcelable(WunderlistService.ORIGINAL_INTENT_EXTRA);
 
 		if(origIntent != null){
 			long requestId = origIntent.getLongExtra(REQUEST_ID, 0);
 
-			pendingRequests.remove(tasksHashkey);
+			pendingRequests.remove(hashKey);
 
 			Intent resultBroadcast = new Intent(ACTION_REQUEST_RESULT);
 			resultBroadcast.putExtra(EXTRA_REQUEST_ID, requestId);
@@ -126,22 +162,7 @@ public class WunderlistServiceHelper {
 		}
 	}
 
-    //TODO
-    private void handleLoginResponse(int resultCode, Bundle resultData){
 
-        Intent origIntent = (Intent)resultData.getParcelable(WunderlistService.ORIGINAL_INTENT_EXTRA);
 
-        if(origIntent != null){
-            long requestId = origIntent.getLongExtra(REQUEST_ID, 0);
-
-            pendingRequests.remove(tasksHashkey);
-
-            Intent resultBroadcast = new Intent(ACTION_REQUEST_RESULT);
-            resultBroadcast.putExtra(EXTRA_REQUEST_ID, requestId);
-            resultBroadcast.putExtra(EXTRA_RESULT_CODE, resultCode);
-
-            ctx.sendBroadcast(resultBroadcast);
-        }
-    }
 
 }

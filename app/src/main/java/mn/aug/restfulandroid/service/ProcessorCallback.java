@@ -1,6 +1,6 @@
 package mn.aug.restfulandroid.service;
 
-public interface TaskProcessorCallback {
+public interface ProcessorCallback {
 	
 	void send(int resultCode);
 

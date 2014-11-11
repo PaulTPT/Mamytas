@@ -5,16 +5,23 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
+import mn.aug.restfulandroid.rest.resource.Resource;
+
 public class WunderlistService extends IntentService {
 
 	public static final String METHOD_EXTRA = "wunderlist.METHOD_EXTRA";
 
 	public static final String METHOD_GET = "GET";
-    public static final String METHOD_PUT = "GET";
+    public static final String METHOD_PUT = "PUT";
+    public static final String METHOD_POST = "POST";
 
 	public static final String RESOURCE_TYPE_EXTRA = "wunderlist.RESOURCE_TYPE_EXTRA";
 
+    public static final String RESOURCE_EXTRA = "wunderlist.RESOURCE_EXTRA";
+
     public static final String BODY_EXTRA = "wunderlist.BODY_EXTRA";
+
+    public static final String INFO_EXTRA = "wunderlist.INFO_EXTRA";
 
 
 	public static final int RESOURCE_TYPE_TASKS = 1;
@@ -43,16 +50,23 @@ public class WunderlistService extends IntentService {
         byte[] body= requestIntent.getByteArrayExtra(WunderlistService.BODY_EXTRA);
 		String method = requestIntent.getStringExtra(WunderlistService.METHOD_EXTRA);
 		int resourceType = requestIntent.getIntExtra(WunderlistService.RESOURCE_TYPE_EXTRA, -1);
+        Resource resource= (Resource) requestIntent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
 		mCallback = requestIntent.getParcelableExtra(WunderlistService.SERVICE_CALLBACK);
 
 		switch (resourceType) {
 
 		case RESOURCE_TYPE_TASKS:
 
-			if (method.equalsIgnoreCase(METHOD_GET)) {
+			if (method.equalsIgnoreCase(METHOD_GET) ) {
 				TaskProcessor processor = new TaskProcessor(getApplicationContext());
-				processor.getTask(makeTaskProcessorCallback());
-			} else {
+				processor.getTask(makeProcessorCallback());
+			}else if (method.equalsIgnoreCase(METHOD_POST) ) {
+
+                long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+
+                TaskProcessor processor = new TaskProcessor(getApplicationContext());
+                processor.postTask(makeProcessorCallback(),task_id);
+            }else{
 				mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
 			}
 			break;
@@ -60,9 +74,9 @@ public class WunderlistService extends IntentService {
             case RESOURCE_TYPE_LOGIN:
 
 
-                if (method.equalsIgnoreCase(METHOD_PUT)) {
+                if (method.equalsIgnoreCase(METHOD_POST)) {
                     LoginProcessor processor = new LoginProcessor(getApplicationContext());
-                    processor.getToken(makeLoginProcessorCallback(),body);
+                    processor.getToken(makeProcessorCallback(),body);
                 } else {
                     mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
                 }
@@ -76,8 +90,8 @@ public class WunderlistService extends IntentService {
 	}
 
 
-	private TaskProcessorCallback makeTaskProcessorCallback() {
-		TaskProcessorCallback callback = new TaskProcessorCallback() {
+	private ProcessorCallback makeProcessorCallback() {
+		ProcessorCallback callback = new ProcessorCallback() {
 
 			@Override
 			public void send(int resultCode) {
@@ -89,18 +103,6 @@ public class WunderlistService extends IntentService {
 		return callback;
 	}
 
-    private LoginProcessorCallback makeLoginProcessorCallback() {
-        LoginProcessorCallback callback = new LoginProcessorCallback() {
-
-            @Override
-            public void send(int resultCode) {
-                if (mCallback != null) {
-                    mCallback.send(resultCode, getOriginalIntentBundle());
-                }
-            }
-        };
-        return callback;
-    }
 
 	protected Bundle getOriginalIntentBundle() {
 		Bundle originalRequest = new Bundle();

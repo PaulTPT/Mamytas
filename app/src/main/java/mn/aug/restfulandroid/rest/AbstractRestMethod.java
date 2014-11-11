@@ -14,10 +14,11 @@ import mn.aug.restfulandroid.util.Logger;
 public abstract class AbstractRestMethod<T extends Resource> implements RestMethod<T> {
 
 	private static final String DEFAULT_ENCODING = "UTF-8";
+    private Request request;
 
 	public RestMethodResult<T> execute() {
 
-		Request request = buildRequest();
+		request = buildRequest();
 		if (requiresAuthorization()) {
 			RequestSigner signer = AuthorizationManager.getInstance(getContext());
 			signer.authorize(request);
@@ -44,7 +45,7 @@ public abstract class AbstractRestMethod<T extends Resource> implements RestMeth
 
 		try {
 			responseBody = new String(response.body, getCharacterEncoding(response.headers));
-            if(status==200)
+            if(status==200 && request.getMethod()!= RestMethodFactory.Method.DELETE)
 			    resource = parseResponseBody(responseBody);
 
 		} catch (Exception ex) {
