@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.activity.base.RESTfulActivity;
-import mn.aug.restfulandroid.provider.UsersDBAccess;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
@@ -31,35 +30,34 @@ public class LoginActivity extends RESTfulActivity {
 
     private AuthorizationManager mOAuthManager;
 
-	private Button mButtonLogin;
+    private Button mButtonLogin;
     private EditText mEMailText;
     private EditText mPasswordText;
-    private String name=null;
-    private String password=null;
-
+    private String name = null;
+    private String password = null;
 
 
     @Override
-	protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState) {
 
-		setContentResId(R.layout.login);
+        setContentResId(R.layout.login);
 
-		super.onCreate(savedInstanceState);
+        super.onCreate(savedInstanceState);
 
-		mOAuthManager = AuthorizationManager.getInstance(this);
-        mEMailText=(EditText) findViewById(R.id.email);
-        mPasswordText=(EditText) findViewById(R.id.password);
+        mOAuthManager = AuthorizationManager.getInstance(this);
+        mEMailText = (EditText) findViewById(R.id.email);
+        mPasswordText = (EditText) findViewById(R.id.password);
 
-		mButtonLogin = (Button) findViewById(R.id.button_login);
-		mButtonLogin.setOnClickListener(new OnClickListener() {
+        mButtonLogin = (Button) findViewById(R.id.button_login);
+        mButtonLogin.setOnClickListener(new OnClickListener() {
 
-			public void onClick(View v) {
-				mButtonLogin.setVisibility(View.INVISIBLE);
-                name=mEMailText.getText().toString();
-                password=mPasswordText.getText().toString();
-                loggin(name,password);
-			}
-		});
+            public void onClick(View v) {
+                mButtonLogin.setVisibility(View.INVISIBLE);
+                name = mEMailText.getText().toString();
+                password = mPasswordText.getText().toString();
+                loggin(name, password);
+            }
+        });
 
 
         requestReceiver = new BroadcastReceiver() {
@@ -93,8 +91,12 @@ public class LoginActivity extends RESTfulActivity {
                         startHomeActivity();
 
 
-                    } else {
+                    } else if (resultCode == 401) {
                         showToast("Login failed... Try again");
+                        mButtonLogin.setVisibility(View.VISIBLE);
+                        setRefreshing(false);
+                    } else {
+                        showToast("The connexion with the server failed");
                         mButtonLogin.setVisibility(View.VISIBLE);
                         setRefreshing(false);
                     }
@@ -105,61 +107,48 @@ public class LoginActivity extends RESTfulActivity {
             }
         };
 
-        filter= new IntentFilter(WunderlistServiceHelper.ACTION_REQUEST_RESULT);
+        filter = new IntentFilter(WunderlistServiceHelper.ACTION_REQUEST_RESULT);
 
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
 
-	}
-	private void startHomeActivity() {
-		Intent startHomeActivity = new Intent(this, TasksActivity.class);
-		startActivity(startHomeActivity);
-		finish();
-	}
+    }
 
-	/**
-	 * Authorizes app for use with Wunderlist.
-	 */
-	void loggin(String name,String password ) {
+    private void startHomeActivity() {
+        Intent startHomeActivity = new Intent(this, TasksActivity.class);
+        startActivity(startHomeActivity);
+        finish();
+    }
+
+    /**
+     * Authorizes app for use with Wunderlist.
+     */
+    void loggin(String name, String password) {
 
 
-		//Get name and password and retrieve token
-            setRefreshing(true);
-            requestId = mWunderlistServiceHelper.login(name,password);
+        //Get name and password and retrieve token
+        setRefreshing(true);
+        requestId = mWunderlistServiceHelper.login(name, password);
 
-	}
+    }
 
-	@Override
-	protected void onResume() {
-		super.onResume();
+    @Override
+    protected void onResume() {
+        super.onResume();
         this.registerReceiver(requestReceiver, filter);
-        // Check to see if we're resuming after having authenticated with
-		// Twitter
-		if (getIntent().getData() != null) {
+
+        if (mOAuthManager.loggedIn()) {
+            startHomeActivity();
+        } else {
+            mButtonLogin.setVisibility(View.VISIBLE);
+        }
+
+    }
 
 
-			if (mOAuthManager.loggedIn()) {
-				startHomeActivity();
-			} else {
-				Toast.makeText(this, "Login failed", Toast.LENGTH_SHORT).show();
-				mButtonLogin.setVisibility(View.VISIBLE);
-			}
-		} else {
-			// No Intent with a callback Uri was found, so let's just see if
-			// we've already logged in, and if so start the Home activity
-			if (mOAuthManager.loggedIn()) {
-				startHomeActivity();
-			} else {
-				mButtonLogin.setVisibility(View.VISIBLE);
-			}
-		}
-	}
-
-
-
-	@Override
-	protected void refresh() {
-		// n/a
-	}
+    @Override
+    protected void refresh() {
+        // n/a
+    }
 
 
     private void showToast(String message) {
@@ -171,7 +160,7 @@ public class LoginActivity extends RESTfulActivity {
     }
 
     @Override
-    protected void onPause(){
+    protected void onPause() {
         super.onPause();
 
         // Unregister for broadcast
@@ -183,8 +172,6 @@ public class LoginActivity extends RESTfulActivity {
             }
         }
     }
-
-
 
 
 }
