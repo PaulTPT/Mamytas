@@ -63,7 +63,7 @@ public class LoginProcessor {
 
 
         RestMethod<Login> getTokenMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Login.CONTENT_URI, Method.POST, null, body);
+                Login.CONTENT_URI, Method.POST, null, body,0);
         RestMethodResult<Login> result = getTokenMethod.execute();
 
 				/*

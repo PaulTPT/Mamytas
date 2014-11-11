@@ -13,7 +13,7 @@ import mn.aug.restfulandroid.util.Logger;
 public class Task implements Resource, TaskList, Parcelable {
 
     public static final String AUTHORITY="WUNDERLIST";
-    public static final String PATH="ID";
+    public static final String PATH="TASK";
 
     public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
             + "/" + PATH);

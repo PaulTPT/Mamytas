@@ -55,7 +55,6 @@ public class GetTasksRestMethod extends AbstractRestMethod<Tasks>{
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
         }
         return new Tasks(tasks);
 		

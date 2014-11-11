@@ -10,12 +10,14 @@ import java.util.Map;
 import mn.aug.restfulandroid.rest.resource.Login;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Tasks;
+import mn.aug.restfulandroid.rest.resource.Timers;
 
 public class RestMethodFactory {
 
     private static final int TASKS = 1;
     private static final int LOGIN = 2;
-    private static final int ID = 3;
+    private static final int TASK = 3;
+    private static final int TIMERS = 4;
     private static RestMethodFactory instance;
     private static Object lock = new Object();
     private UriMatcher uriMatcher;
@@ -26,7 +28,8 @@ public class RestMethodFactory {
         uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
         uriMatcher.addURI(Tasks.AUTHORITY, Tasks.PATH, TASKS);
         uriMatcher.addURI(Login.AUTHORITY, Login.PATH, LOGIN);
-        uriMatcher.addURI(Task.AUTHORITY, Task.PATH, LOGIN);
+        uriMatcher.addURI(Task.AUTHORITY, Task.PATH, TASK);
+        uriMatcher.addURI(Timers.AUTHORITY, Timers.PATH, TIMERS);
     }
 
     public static RestMethodFactory getInstance(Context context) {
@@ -56,13 +59,13 @@ public class RestMethodFactory {
 
                 break;
 
-            case ID:
+            case TASK:
 
                 switch (method) {
                     case PUT:
                         return new PutTaskRestMethod(mContext, headers, body, id);
                     case DELETE:
-                        return new DeleteTaskRestMethod(mContext, headers,id);
+                        return new DeleteTaskRestMethod(mContext, headers,body,id);
                     default :
                         break;
                 }
@@ -74,6 +77,17 @@ public class RestMethodFactory {
                 if (method == Method.POST) {
                     return new LoginRestMethod(mContext, headers, body);
                 }
+                break;
+
+            case TIMERS:
+
+                switch (method) {
+                    case GET:
+                        return new GetTimersRestMethod(mContext, headers,body,id);
+                    default :
+                        break;
+                }
+
                 break;
         }
 

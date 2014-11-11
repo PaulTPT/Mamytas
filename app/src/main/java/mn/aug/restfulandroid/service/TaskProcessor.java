@@ -18,7 +18,7 @@ import mn.aug.restfulandroid.util.Logger;
 /**
  * Created by Paul on 11/11/2014.
  */
-public class IdProcessor {
+public class TaskProcessor {
 
     private ProcessorCallback mCallback;
     private Context mContext;
@@ -26,7 +26,7 @@ public class IdProcessor {
     private TasksDBAccess tasksDBAccess;
 
 
-    public IdProcessor(Context context) {
+    public TaskProcessor(Context context) {
 
         mContext = context;
         ownershipDBAccess = new OwnershipDBAccess(mContext);

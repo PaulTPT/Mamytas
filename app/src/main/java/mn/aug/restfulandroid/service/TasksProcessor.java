@@ -60,7 +60,7 @@ public class TasksProcessor {
         tasksDBAccess.open();
         List<Integer> list_ids = tasksDBAccess.retrieveAllTasks();
         if (list_ids != null) for (int id : list_ids) {
-            tasksDBAccess.setStatus(id, "fetch_update");
+            tasksDBAccess.setStatus(id, "updating");
         }
         tasksDBAccess.close();
 
@@ -181,7 +181,6 @@ public class TasksProcessor {
                         }
 
                     }
-                    tasksDBAccess.setStatus((int) task.getId(), "up_to_date");
                 } else {
                     tasksDBAccess.updateTodo(task);
                     ownershipDBAccess.setTimer(task.getId(), user, task.getTimer());
@@ -195,7 +194,7 @@ public class TasksProcessor {
             }
 
 
-            List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("fetch_update");
+            List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("updating");
             if (list_ids != null) for (int id : list_ids) {
                 ownershipDBAccess.removeTask(id);
             }

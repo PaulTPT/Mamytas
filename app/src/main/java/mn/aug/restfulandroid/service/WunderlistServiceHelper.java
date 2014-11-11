@@ -33,6 +33,7 @@ public class WunderlistServiceHelper {
     private static final String loginHashkey = "LOGIN";
     private static final String putTaskHashkey = "PUT_TASK";
     private static final String deleteTaskHashkey = "DELETE_TASK";
+    private static final String getTimersHashkey = "GET_TIMERS";
 
 	private static Object lock = new Object();
 
@@ -78,6 +79,29 @@ public class WunderlistServiceHelper {
 		
 		return requestId;		
 	}
+
+    public long getTimers() {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(getTimersHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, getTimersHashkey);
+            }
+        };
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_GET);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TIMERS);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
 
     public long postTask(Task task) {
 
@@ -126,7 +150,7 @@ public class WunderlistServiceHelper {
 
         Intent intent = new Intent(this.ctx, WunderlistService.class);
         intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_PUT);
-        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_ID);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TASK);
         intent.putExtra(WunderlistService.BODY_EXTRA, body);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
         intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
@@ -156,7 +180,7 @@ public class WunderlistServiceHelper {
 
         Intent intent = new Intent(this.ctx, WunderlistService.class);
         intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_DELETE);
-        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_ID);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TASK);
         intent.putExtra(WunderlistService.BODY_EXTRA, body);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
         intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
