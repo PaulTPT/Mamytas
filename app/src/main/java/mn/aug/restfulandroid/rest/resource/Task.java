@@ -1,5 +1,6 @@
 package mn.aug.restfulandroid.rest.resource;
 
+import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -10,6 +11,12 @@ import mn.aug.restfulandroid.util.Logger;
 
 
 public class Task implements Resource, TaskList, Parcelable {
+
+    public static final String AUTHORITY="WUNDERLIST";
+    public static final String PATH="ID";
+
+    public static final Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY
+            + "/" + PATH);
 
 
     private long id;

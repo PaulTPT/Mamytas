@@ -5,8 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
-import mn.aug.restfulandroid.rest.resource.Resource;
-
 public class WunderlistService extends IntentService {
 
 	public static final String METHOD_EXTRA = "wunderlist.METHOD_EXTRA";
@@ -14,6 +12,7 @@ public class WunderlistService extends IntentService {
 	public static final String METHOD_GET = "GET";
     public static final String METHOD_PUT = "PUT";
     public static final String METHOD_POST = "POST";
+    public static final String METHOD_DELETE = "DELETE";
 
 	public static final String RESOURCE_TYPE_EXTRA = "wunderlist.RESOURCE_TYPE_EXTRA";
 
@@ -26,6 +25,7 @@ public class WunderlistService extends IntentService {
 
 	public static final int RESOURCE_TYPE_TASKS = 1;
     public static final int RESOURCE_TYPE_LOGIN = 2;
+    public static final int RESOURCE_TYPE_ID = 3;
 
 	public static final String SERVICE_CALLBACK = "wunderlist.SERVICE_CALLBACK";
 
@@ -50,7 +50,7 @@ public class WunderlistService extends IntentService {
         byte[] body= requestIntent.getByteArrayExtra(WunderlistService.BODY_EXTRA);
 		String method = requestIntent.getStringExtra(WunderlistService.METHOD_EXTRA);
 		int resourceType = requestIntent.getIntExtra(WunderlistService.RESOURCE_TYPE_EXTRA, -1);
-        Resource resource= (Resource) requestIntent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
+        //Resource resource= (Resource) requestIntent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
 		mCallback = requestIntent.getParcelableExtra(WunderlistService.SERVICE_CALLBACK);
 
 		switch (resourceType) {
@@ -58,18 +58,36 @@ public class WunderlistService extends IntentService {
 		case RESOURCE_TYPE_TASKS:
 
 			if (method.equalsIgnoreCase(METHOD_GET) ) {
-				TaskProcessor processor = new TaskProcessor(getApplicationContext());
-				processor.getTask(makeProcessorCallback());
+				TasksProcessor processor = new TasksProcessor(getApplicationContext());
+				processor.getTasks(makeProcessorCallback());
 			}else if (method.equalsIgnoreCase(METHOD_POST) ) {
 
                 long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
 
-                TaskProcessor processor = new TaskProcessor(getApplicationContext());
-                processor.postTask(makeProcessorCallback(),task_id);
+                TasksProcessor processor = new TasksProcessor(getApplicationContext());
+                processor.postTask(makeProcessorCallback(),task_id, body);
             }else{
 				mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
 			}
 			break;
+
+            case RESOURCE_TYPE_ID:
+
+                if (method.equalsIgnoreCase(METHOD_DELETE) ) {
+                    long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+
+                    IdProcessor processor = new IdProcessor(getApplicationContext());
+                    processor.deleteTask(makeProcessorCallback(), task_id);
+                }else if (method.equalsIgnoreCase(METHOD_PUT) ) {
+
+                    long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+
+                    IdProcessor processor = new IdProcessor(getApplicationContext());
+                    processor.putTask(makeProcessorCallback(), task_id, body);
+                }else{
+                    mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
+                }
+                break;
 
             case RESOURCE_TYPE_LOGIN:
 

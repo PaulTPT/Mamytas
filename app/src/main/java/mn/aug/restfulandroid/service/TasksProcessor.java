@@ -22,7 +22,7 @@ import mn.aug.restfulandroid.util.Logger;
  *
  * @author Peter Pascale
  */
-public class TaskProcessor {
+public class TasksProcessor {
 
 
     private ProcessorCallback mCallback;
@@ -31,7 +31,7 @@ public class TaskProcessor {
     private TasksDBAccess tasksDBAccess;
 
 
-    public TaskProcessor(Context context) {
+    public TasksProcessor(Context context) {
 
         mContext = context;
         ownershipDBAccess = new OwnershipDBAccess(mContext);
@@ -39,7 +39,7 @@ public class TaskProcessor {
     }
 
 
-    void getTask(ProcessorCallback callback) {
+    void getTasks(ProcessorCallback callback) {
 
 		/*
         Processor is a POJO
@@ -60,7 +60,7 @@ public class TaskProcessor {
         tasksDBAccess.open();
         List<Integer> list_ids = tasksDBAccess.retrieveAllTasks();
         if (list_ids != null) for (int id : list_ids) {
-            tasksDBAccess.setStatus(id, "updating");
+            tasksDBAccess.setStatus(id, "fetch_update");
         }
         tasksDBAccess.close();
 
@@ -69,7 +69,7 @@ public class TaskProcessor {
         // and performs the HTTP operation.
 
         RestMethod<Tasks> getTasksMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Tasks.CONTENT_URI, Method.GET, null, null);
+                Tasks.CONTENT_URI, Method.GET, null, null,0);
         RestMethodResult<Tasks> result = getTasksMethod.execute();
 
 				/*
@@ -91,7 +91,7 @@ public class TaskProcessor {
     }
 
 
-    public void postTask(ProcessorCallback callback, long task_id) {
+    public void postTask(ProcessorCallback callback, long task_id, byte[] body) {
 
         /*
         Processor is a POJO
@@ -117,7 +117,7 @@ public class TaskProcessor {
         // and performs the HTTP operation.
 
         RestMethod<Task> postTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Tasks.CONTENT_URI, Method.POST, null, null);
+                Tasks.CONTENT_URI, Method.POST, null, body,0);
         RestMethodResult<Task> result = postTaskMethod.execute();
 
 				/*
@@ -181,6 +181,7 @@ public class TaskProcessor {
                         }
 
                     }
+                    tasksDBAccess.setStatus((int) task.getId(), "up_to_date");
                 } else {
                     tasksDBAccess.updateTodo(task);
                     ownershipDBAccess.setTimer(task.getId(), user, task.getTimer());
@@ -194,7 +195,7 @@ public class TaskProcessor {
             }
 
 
-            List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("updating");
+            List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("fetch_update");
             if (list_ids != null) for (int id : list_ids) {
                 ownershipDBAccess.removeTask(id);
             }
