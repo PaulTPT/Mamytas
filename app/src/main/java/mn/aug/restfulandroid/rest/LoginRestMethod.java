@@ -21,7 +21,7 @@ public class LoginRestMethod extends AbstractRestMethod<Login>{
 
     private Context mContext;
 
-    private static final URI LOGIN_URI = URI.create("http://wunderlist.berthier.cloudbees.net/login");
+    private static final URI LOGIN_URI = URI.create("http://paultpt-wunderlist.rhcloud.com/login");
 
     private Map<String, List<String>> headers;
     private byte[] body;

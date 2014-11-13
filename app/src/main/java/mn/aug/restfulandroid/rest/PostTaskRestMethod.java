@@ -23,7 +23,7 @@ public class PostTaskRestMethod extends AbstractRestMethod<Task> {
 
     private Context mContext;
 
-    private static final URI LOGIN_URI = URI.create("http://wunderlist.berthier.cloudbees.net/login");
+    private static final URI LOGIN_URI = URI.create("http://paultpt-wunderlist.rhcloud.com/me/tasks");
 
     private Map<String, List<String>> headers;
     private byte[] body;

@@ -20,7 +20,7 @@ public class DeleteTaskRestMethod extends AbstractRestMethod<Task> {
 
     private Context mContext;
 
-    private String address="http://wunderlist.berthier.cloudbees.net/";
+    private String address="http://paultpt-wunderlist.rhcloud.com/";
 
     private static URI delete_URI;
 

@@ -22,7 +22,7 @@ public class GetTasksRestMethod extends AbstractRestMethod<Tasks>{
 	
 	private Context mContext;
 	
-	private static final URI TASKS_URI = URI.create("http://wunderlist.berthier.cloudbees.net/me/tasks");
+	private static final URI TASKS_URI = URI.create("http://paultpt-wunderlist.rhcloud.com/me/tasks");
 	
 	private Map<String, List<String>> headers;
 	

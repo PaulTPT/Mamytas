@@ -80,7 +80,7 @@ public class WunderlistServiceHelper {
 		return requestId;		
 	}
 
-    public long getTimers() {
+    public long getTimers(Task task) {
 
         long requestId = generateRequestID();
         pendingRequests.put(getTimersHashkey, requestId);
@@ -96,6 +96,7 @@ public class WunderlistServiceHelper {
         intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_GET);
         intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TIMERS);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
         intent.putExtra(REQUEST_ID, requestId);
 
         this.ctx.startService(intent);

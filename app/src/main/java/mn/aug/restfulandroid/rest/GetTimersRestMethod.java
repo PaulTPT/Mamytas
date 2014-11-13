@@ -22,7 +22,7 @@ public class GetTimersRestMethod extends AbstractRestMethod<Timers> {
 
     private Context mContext;
 
-    private String address="http://wunderlist.berthier.cloudbees.net/";
+    private String address="http://paultpt-wunderlist.rhcloud.com/";
 
     private static URI get_URI;
 
