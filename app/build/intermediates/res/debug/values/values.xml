@@ -7,8 +7,8 @@
     <color name="title_background">#FF101010</color>
     <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/strings.xml -->
     <eat-comment/>
-    <string name="app_log_tag">RESTfulAndroid</string>
-    <string name="app_name">RESTful Android</string>
+    <string name="app_log_tag">Mamytas</string>
+    <string name="app_name">Mamytas</string>
     <string name="button_login_label">Login</string>
     <string name="error_occurred">An error has occurred.</string>
     <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/styles.xml -->

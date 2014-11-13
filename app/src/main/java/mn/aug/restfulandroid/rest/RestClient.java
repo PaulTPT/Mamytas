@@ -66,9 +66,12 @@ public class RestClient {
                     break;
             }
 
+            byte[] body= new String("").getBytes();
 
-            BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
-            byte[] body = readStream(in);
+            if(status==200) {
+                BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
+                body = readStream(in);
+            }
             response = new Response(conn.getResponseCode(), conn.getHeaderFields(), body);
 
 
