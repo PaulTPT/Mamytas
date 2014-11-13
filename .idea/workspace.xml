@@ -25,15 +25,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="e05f68de-b564-44db-8b69-b2140a65ed8a" name="Default" comment="">
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/build/intermediates/model_data.bin" afterPath="$PROJECT_DIR$/build/intermediates/model_data.bin" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/DeleteTaskRestMethod.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/DeleteTaskRestMethod.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/GetTasksRestMethod.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/GetTasksRestMethod.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/GetTimersRestMethod.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/GetTimersRestMethod.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/LoginRestMethod.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/LoginRestMethod.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/PostTaskRestMethod.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/PostTaskRestMethod.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/PutTaskRestMethod.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/PutTaskRestMethod.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/WunderlistServiceHelper.java" afterPath="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/WunderlistServiceHelper.java" />
-      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
+      <change type="MODIFICATION" beforePath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" afterPath="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
     </list>
     <ignored path="restful-android.iws" />
     <ignored path=".idea/workspace.xml" />
@@ -76,6 +68,26 @@
           <provider selected="true" editor-type-id="text-editor">
             <state vertical-scroll-proportion="0.0" vertical-offset="1579" max-vertical-offset="2839">
               <caret line="169" column="0" selection-start-line="169" selection-start-column="0" selection-end-line="169" selection-end-column="0" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="AndroidManifest.xml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="816">
+              <caret line="12" column="32" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="strings.xml" pinned="false" current="true" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state vertical-scroll-proportion="0.16385542" vertical-offset="0" max-vertical-offset="415">
+              <caret line="4" column="38" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
               <folding />
             </state>
           </provider>
@@ -131,31 +143,11 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PutTaskRestMethod.java" pinned="false" current="true" current-in-tab="true">
+      <file leaf-file-name="PutTaskRestMethod.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/PutTaskRestMethod.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.34772727" vertical-offset="51" max-vertical-offset="1122">
+            <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1122">
               <caret line="23" column="66" selection-start-line="23" selection-start-column="66" selection-end-line="23" selection-end-column="66" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="TasksActivity.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/activity/TasksActivity.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1343" max-vertical-offset="3383">
-              <caret line="79" column="0" selection-start-line="79" selection-start-column="0" selection-end-line="79" selection-end-column="0" />
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file leaf-file-name="WunderlistService.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/WunderlistService.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state vertical-scroll-proportion="0.0" vertical-offset="1836" max-vertical-offset="2754">
-              <caret line="108" column="65" selection-start-line="108" selection-start-column="65" selection-end-line="108" selection-end-column="65" />
               <folding />
             </state>
           </provider>
@@ -871,7 +863,6 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/service/TwitterService.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Tweet.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TimelineProviderContract.java" />
         <option value="$PROJECT_DIR$/app/src/main/res/layout/login.xml" />
@@ -922,6 +913,7 @@
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/LoginRestMethod.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/PutTaskRestMethod.java" />
         <option value="$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/PostTaskRestMethod.java" />
+        <option value="$PROJECT_DIR$/app/src/main/res/values/strings.xml" />
       </list>
     </option>
   </component>
@@ -980,6 +972,38 @@
             <PATH_ELEMENT>
               <option name="myItemId" value="app" />
               <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Mamytas" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="values" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderTypeNode" />
+            </PATH_ELEMENT>
+          </PATH>
+          <PATH>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="Mamytas" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidViewProjectNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="app" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidModuleNode" />
+            </PATH_ELEMENT>
+            <PATH_ELEMENT>
+              <option name="myItemId" value="res" />
+              <option name="myItemType" value="com.android.tools.idea.navigator.nodes.AndroidResFolderNode" />
             </PATH_ELEMENT>
           </PATH>
           <PATH>
@@ -1385,7 +1409,7 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-8" y="-8" width="1382" height="744" extended-state="0" />
-    <editor active="true" />
+    <editor active="false" />
     <layout>
       <window_info id="Palette&#9;" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -1406,7 +1430,7 @@
       <window_info id="Commander" active="false" anchor="right" auto_hide="false" internal_type="SLIDING" type="SLIDING" visible="false" weight="0.4" sideWeight="0.5" order="0" side_tool="false" content_ui="tabs" />
       <window_info id="Maven Projects" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32980332" sideWeight="0.5" order="5" side_tool="false" content_ui="tabs" />
       <window_info id="Application Servers" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
-      <window_info id="Project" active="false" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22692889" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
+      <window_info id="Project" active="true" anchor="left" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="true" weight="0.22692889" sideWeight="0.5" order="0" side_tool="false" content_ui="combo" />
       <window_info id="Run" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.32879046" sideWeight="0.5" order="2" side_tool="false" content_ui="tabs" />
       <window_info id="Memory Monitor" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.5178876" sideWeight="0.5" order="7" side_tool="true" content_ui="tabs" />
       <window_info id="Documentation" active="false" anchor="right" auto_hide="false" internal_type="DOCKED" type="FLOATING" visible="false" weight="0.33" sideWeight="0.5" order="6" side_tool="false" content_ui="tabs" x="92" y="92" width="1182" height="544" />
@@ -1473,14 +1497,6 @@
     </breakpoint-manager>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/GetTasksRestMethod.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="561" max-vertical-offset="1258">
-          <caret line="33" column="13" selection-start-line="33" selection-start-column="13" selection-end-line="33" selection-end-column="13" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/resource/Comment.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="618" max-vertical-offset="1054">
@@ -1759,14 +1775,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
-      <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.0" vertical-offset="357" max-vertical-offset="816">
-          <caret line="12" column="40" selection-start-line="12" selection-start-column="40" selection-end-line="12" selection-end-column="40" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/provider/TasksDBAccess.java">
       <provider selected="true" editor-type-id="text-editor">
         <state vertical-scroll-proportion="0.0" vertical-offset="916" max-vertical-offset="5134">
@@ -1857,8 +1865,24 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/app/src/main/java/mn/aug/restfulandroid/rest/PutTaskRestMethod.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state vertical-scroll-proportion="0.34772727" vertical-offset="51" max-vertical-offset="1122">
+        <state vertical-scroll-proportion="0.0" vertical-offset="51" max-vertical-offset="1122">
           <caret line="23" column="66" selection-start-line="23" selection-start-column="66" selection-end-line="23" selection-end-column="66" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/AndroidManifest.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.0" vertical-offset="0" max-vertical-offset="816">
+          <caret line="12" column="32" selection-start-line="12" selection-start-column="32" selection-end-line="12" selection-end-column="32" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/app/src/main/res/values/strings.xml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state vertical-scroll-proportion="0.16385542" vertical-offset="0" max-vertical-offset="415">
+          <caret line="4" column="38" selection-start-line="4" selection-start-column="38" selection-end-line="4" selection-end-column="38" />
           <folding />
         </state>
       </provider>
