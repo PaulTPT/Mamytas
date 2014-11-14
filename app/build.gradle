@@ -1,12 +1,13 @@
 apply plugin: 'com.android.application'
 android {
-    compileSdkVersion 7
+    compileSdkVersion 19
     buildToolsVersion "21.0.2"
 
     defaultConfig {
         applicationId "mn.aug.restfulandroid"
-        minSdkVersion 7
-        targetSdkVersion 7
+        minSdkVersion 14
+        targetSdkVersion 19
+
 
         testApplicationId "mn.aug.restfulandroid"
         testInstrumentationRunner "android.test.InstrumentationTestRunner"
@@ -26,8 +27,14 @@ android {
     }
 }
 
+
 dependencies {
     compile 'com.fasterxml.jackson.core:jackson-core:2.4.3'
     compile 'com.fasterxml.jackson.core:jackson-annotations:2.4.3'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.4.3'
+    compile 'com.android.support:support-v13:19.+'
+    compile 'com.nineoldandroids:library:2.4.0'
+    compile ('com.fortysevendeg.swipelistview:swipelistview:1.0-SNAPSHOT@aar') {
+        transitive = true
+    }
 }

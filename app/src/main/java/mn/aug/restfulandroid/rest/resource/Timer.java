@@ -11,6 +11,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 public class Timer implements Resource,Parcelable {
     private String name=null;
     private String timer=null;
+    private String timer_start=null;
+
 
     /**
      * @param name
@@ -38,6 +40,15 @@ public class Timer implements Resource,Parcelable {
         this.timer = timer;
     }
 
+    public String getTimer_start() {
+        return timer_start;
+    }
+
+    public void setTimer_start(String timer_start) {
+        this.timer_start = timer_start;
+    }
+
+
     @Override
     public int describeContents() {
         return 0;
@@ -48,6 +59,7 @@ public class Timer implements Resource,Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
       dest.writeString(name);
       dest.writeString(timer);
+        dest.writeString(timer_start);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -64,6 +76,7 @@ public class Timer implements Resource,Parcelable {
     public Timer(Parcel in) {
         this.name=in.readString();
         this.timer=in.readString();
+        this.timer_start=in.readString();
     }
 
 

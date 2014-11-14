@@ -9,7 +9,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -23,7 +25,7 @@ import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
-public class TasksActivity extends RESTfulListActivity {
+public class TasksActivity extends RESTfulListActivity  {
 
     private static final String TAG = TasksActivity.class.getSimpleName();
 
@@ -33,13 +35,17 @@ public class TasksActivity extends RESTfulListActivity {
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
 
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         setContentResId(R.layout.home);
         setRefreshable(true);
         ownershipDBAccess = new OwnershipDBAccess(this);
+
         super.onCreate(savedInstanceState);
+
     }
 
     @Override
@@ -102,11 +108,8 @@ public class TasksActivity extends RESTfulListActivity {
                         showToast("Your session has expired");
                         logoutAndFinish();
 
-                    }  else if(resultCode==-1) {
-                        showToast("Server unreachable");
+                        showToast("The connexion with the server failed");
                         logoutAndFinish();
-                    }else {
-                        showToast("A network error has occured");
                     }
                 } else {
                     Logger.debug(TAG, "Result is NOT for our request ID");
@@ -187,6 +190,13 @@ public class TasksActivity extends RESTfulListActivity {
         startActivity(login);
         finish();
 
+    }
+
+
+    @Override
+    protected void onListItemClick(ListView l, View v, int position, long id) {
+        String item = (String) getListAdapter().getItem(position);
+       // Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
     }
 
 

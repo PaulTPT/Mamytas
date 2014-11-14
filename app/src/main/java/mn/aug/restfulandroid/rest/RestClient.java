@@ -77,7 +77,6 @@ public class RestClient {
 
         } catch (IOException e) {
             e.printStackTrace();
-            status=-1;
         } finally {
             if (conn != null)
                 conn.disconnect();

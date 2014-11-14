@@ -70,6 +70,7 @@ public class OwnershipDBAccess {
             tasksDBAccess.setStatus(todo.getId(), "new");
             tasksDBAccess.close();
             setTimer(todo.getId(), name, todo.getTimer());
+            setTimer_Start(todo.getId(), name, todo.getTimer_start());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -101,6 +102,7 @@ public class OwnershipDBAccess {
             tasksDBAccess.storeTodo(todo);
             tasksDBAccess.close();
             setTimer(todo.getId(), name, todo.getTimer());
+            setTimer_Start(todo.getId(), name, todo.getTimer_start());
             return todo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -125,6 +127,7 @@ public class OwnershipDBAccess {
             values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, todo.getId());
             bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
             setTimer(todo.getId(), name, "0");
+            setTimer_Start(todo.getId(), name, null);
             return todo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -522,6 +525,39 @@ public class OwnershipDBAccess {
         try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.OWNERSHIP_TIMER, timer);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner + "'", null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
+    }
+
+    public String getTimer_Start(long id, String owner){
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TIMER_START},
+                    ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner+"'", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return null;
+        else {
+            c.moveToFirst();
+            return c.getString(0);
+        }
+
+    }
+
+    public boolean setTimer_Start(long id, String owner, String timer_start) {
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TIMER_START, timer_start);
             bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner + "'", null);
         } catch (Exception e) {
             e.printStackTrace();
