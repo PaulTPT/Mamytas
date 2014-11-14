@@ -9,7 +9,11 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.ArrayList;
@@ -97,6 +101,25 @@ public class TasksActivity extends RESTfulListActivity {
                         ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
                                 android.R.layout.simple_list_item_1, titles);
                         setListAdapter(adapter);
+
+                        ListView lv = getListView();
+
+                        // listening to single list item on click
+                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                            public void onItemClick(AdapterView<?> parent, View view,
+                                                    int position, long id) {
+
+                                // selected item
+                                String task_name = ((TextView) view).getText().toString();
+
+                                // Launching new Activity on selecting single List Item
+                                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
+                                // sending data to new activity
+                                i.putExtra("task_name", task_name);
+                                startActivity(i);
+
+                            }
+                        });
 
                     }  else if(resultCode==401){
                         showToast("Your session has expired");

@@ -33,7 +33,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".activity.TasksActivity" />
+        <activity android:name=".activity.TaskActivity" />
         <activity android:name=".activity.AboutActivity" />
+
 
         <service android:name=".service.WunderlistService" />
 
