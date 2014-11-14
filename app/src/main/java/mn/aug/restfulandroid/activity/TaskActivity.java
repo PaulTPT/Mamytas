@@ -17,9 +17,9 @@ public class TaskActivity extends Activity{
 
         Intent i = getIntent();
         // getting attached intent data
-        String task_name = i.getStringExtra("task_name");
+        Long task_id = i.getLongExtra("task_id",0);
         // displaying selected product name
-        txtProduct.setText(task_name);
+        txtProduct.setText(String.valueOf(task_id));
 
     }
 }

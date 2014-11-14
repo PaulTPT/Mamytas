@@ -864,7 +864,7 @@ containing a value of this type.
         public static final int refresh=0x7f02005d;
     }
     public static final class id {
-        public static final int about=0x7f08004a;
+        public static final int about=0x7f08004b;
         public static final int action_bar=0x7f080022;
         public static final int action_bar_activity_content=0x7f080000;
         public static final int action_bar_container=0x7f080021;
@@ -881,7 +881,7 @@ containing a value of this type.
         public static final int always=0x7f080013;
         public static final int beginning=0x7f08000f;
         public static final int both=0x7f08001a;
-        public static final int button_login=0x7f080045;
+        public static final int button_login=0x7f080046;
         public static final int checkbox=0x7f080033;
         public static final int choice=0x7f08001d;
         public static final int collapseActionView=0x7f080014;
@@ -891,10 +891,11 @@ containing a value of this type.
         public static final int dismiss=0x7f08001e;
         public static final int dropdown=0x7f080019;
         public static final int edit_query=0x7f080036;
-        public static final int email=0x7f080046;
+        public static final int email=0x7f080047;
         public static final int end=0x7f080010;
         public static final int expand_activities_button=0x7f08002c;
         public static final int expanded_menu=0x7f080032;
+        public static final int firstLine=0x7f080045;
         public static final int home=0x7f080003;
         public static final int homeAsUp=0x7f08000a;
         public static final int icon=0x7f080030;
@@ -904,12 +905,12 @@ containing a value of this type.
         public static final int license_content=0x7f080042;
         public static final int listMode=0x7f080006;
         public static final int list_item=0x7f08002f;
-        public static final int logout=0x7f080049;
+        public static final int logout=0x7f08004a;
         public static final int middle=0x7f080011;
         public static final int never=0x7f080016;
         public static final int none=0x7f080012;
         public static final int normal=0x7f080007;
-        public static final int password=0x7f080047;
+        public static final int password=0x7f080048;
         public static final int progress_circular=0x7f080004;
         public static final int progress_horizontal=0x7f080005;
         public static final int radio=0x7f080035;
@@ -933,7 +934,7 @@ containing a value of this type.
         public static final int split_action_bar=0x7f080024;
         public static final int submit_area=0x7f08003f;
         public static final int tabMode=0x7f080008;
-        public static final int taskName=0x7f080048;
+        public static final int taskName=0x7f080049;
         public static final int title=0x7f080031;
         public static final int top_action_bar=0x7f080026;
         public static final int up=0x7f080027;
@@ -969,10 +970,11 @@ containing a value of this type.
         public static final int abc_search_view=0x7f030016;
         public static final int about=0x7f030017;
         public static final int action_bar=0x7f030018;
-        public static final int home=0x7f030019;
-        public static final int login=0x7f03001a;
-        public static final int support_simple_spinner_dropdown_item=0x7f03001b;
-        public static final int tache_view=0x7f03001c;
+        public static final int adapter=0x7f030019;
+        public static final int home=0x7f03001a;
+        public static final int login=0x7f03001b;
+        public static final int support_simple_spinner_dropdown_item=0x7f03001c;
+        public static final int tache_view=0x7f03001d;
     }
     public static final class menu {
         public static final int menu=0x7f0c0000;

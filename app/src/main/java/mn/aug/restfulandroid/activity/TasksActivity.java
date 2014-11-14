@@ -12,12 +12,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
-import android.widget.AdapterView;
-
-import android.widget.TextView;
 import android.widget.Toast;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import mn.aug.restfulandroid.R;
@@ -95,36 +91,10 @@ public class TasksActivity extends RESTfulListActivity  {
                         String user = AuthorizationManager.getInstance(context).getUser();
                         ownershipDBAccess.open();
                         List<Task> todos = ownershipDBAccess.getTodos(user);
-                        ArrayList<String> todos_titles = new ArrayList<String>();
-                        for (Task task : todos) {
-                            Logger.debug("taskTitle", task.getTitle());
-                            todos_titles.add(task.getTitle());
-                        }
-                        String[] titles = new String[todos_titles.size()];
-                        titles = todos_titles.toArray(titles);
+                        ownershipDBAccess.close();
 
-                        ArrayAdapter<String> adapter = new ArrayAdapter<String>(context,
-                                android.R.layout.simple_list_item_1, titles);
+                        ArrayAdapter<Task> adapter = new MyArrayAdapter(context, android.R.layout.simple_list_item_1, todos);
                         setListAdapter(adapter);
-
-                        ListView lv = getListView();
-
-                        // listening to single list item on click
-                        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                            public void onItemClick(AdapterView<?> parent, View view,
-                                                    int position, long id) {
-
-                                // selected item
-                                String task_name = ((TextView) view).getText().toString();
-
-                                // Launching new Activity on selecting single List Item
-                                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
-                                // sending data to new activity
-                                i.putExtra("task_name", task_name);
-                                startActivity(i);
-
-                            }
-                        });
 
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
@@ -217,8 +187,12 @@ public class TasksActivity extends RESTfulListActivity  {
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
-        String item = (String) getListAdapter().getItem(position);
-       // Toast.makeText(this, item + " selected", Toast.LENGTH_LONG).show();
+        Task item = (Task) getListAdapter().getItem(position);
+        // Launching new Activity on selecting single List Item
+        Intent i = new Intent(getApplicationContext(), TaskActivity.class);
+        // sending data to new activity
+        i.putExtra("task_id", item.getId());
+        startActivity(i);
     }
 
 
