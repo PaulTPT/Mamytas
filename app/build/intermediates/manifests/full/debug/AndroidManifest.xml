@@ -35,6 +35,7 @@
             </intent-filter>
         </activity>
         <activity android:name="mn.aug.restfulandroid.activity.TasksActivity" />
+        <activity android:name="mn.aug.restfulandroid.activity.TaskActivity" />
         <activity android:name="mn.aug.restfulandroid.activity.AboutActivity" />
 
         <service android:name="mn.aug.restfulandroid.service.WunderlistService" />

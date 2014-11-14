@@ -864,7 +864,7 @@ containing a value of this type.
         public static final int refresh=0x7f02005d;
     }
     public static final class id {
-        public static final int about=0x7f080049;
+        public static final int about=0x7f08004a;
         public static final int action_bar=0x7f080022;
         public static final int action_bar_activity_content=0x7f080000;
         public static final int action_bar_container=0x7f080021;
@@ -904,7 +904,7 @@ containing a value of this type.
         public static final int license_content=0x7f080042;
         public static final int listMode=0x7f080006;
         public static final int list_item=0x7f08002f;
-        public static final int logout=0x7f080048;
+        public static final int logout=0x7f080049;
         public static final int middle=0x7f080011;
         public static final int never=0x7f080016;
         public static final int none=0x7f080012;
@@ -933,6 +933,7 @@ containing a value of this type.
         public static final int split_action_bar=0x7f080024;
         public static final int submit_area=0x7f08003f;
         public static final int tabMode=0x7f080008;
+        public static final int taskName=0x7f080048;
         public static final int title=0x7f080031;
         public static final int top_action_bar=0x7f080026;
         public static final int up=0x7f080027;
@@ -971,6 +972,7 @@ containing a value of this type.
         public static final int home=0x7f030019;
         public static final int login=0x7f03001a;
         public static final int support_simple_spinner_dropdown_item=0x7f03001b;
+        public static final int tache_view=0x7f03001c;
     }
     public static final class menu {
         public static final int menu=0x7f0c0000;

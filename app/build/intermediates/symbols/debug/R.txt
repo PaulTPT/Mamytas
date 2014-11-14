@@ -246,7 +246,7 @@ int drawable ic_action_undo 0x7f02005a
 int drawable ic_launcher 0x7f02005b
 int drawable progress 0x7f02005c
 int drawable refresh 0x7f02005d
-int id about 0x7f080049
+int id about 0x7f08004a
 int id action_bar 0x7f080022
 int id action_bar_activity_content 0x7f080000
 int id action_bar_container 0x7f080021
@@ -286,7 +286,7 @@ int id left 0x7f08001b
 int id license_content 0x7f080042
 int id listMode 0x7f080006
 int id list_item 0x7f08002f
-int id logout 0x7f080048
+int id logout 0x7f080049
 int id middle 0x7f080011
 int id never 0x7f080016
 int id none 0x7f080012
@@ -315,6 +315,7 @@ int id showTitle 0x7f08000d
 int id split_action_bar 0x7f080024
 int id submit_area 0x7f08003f
 int id tabMode 0x7f080008
+int id taskName 0x7f080048
 int id title 0x7f080031
 int id top_action_bar 0x7f080026
 int id up 0x7f080027
@@ -349,6 +350,7 @@ int layout action_bar 0x7f030018
 int layout home 0x7f030019
 int layout login 0x7f03001a
 int layout support_simple_spinner_dropdown_item 0x7f03001b
+int layout tache_view 0x7f03001c
 int menu menu 0x7f0c0000
 int string abc_action_bar_home_description 0x7f0a0000
 int string abc_action_bar_up_description 0x7f0a0001

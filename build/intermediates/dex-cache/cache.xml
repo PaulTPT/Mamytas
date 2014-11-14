@@ -2,17 +2,47 @@
 <pre-dex-items>
 
     <item
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\jackson-core-2.4.3-be36770268bc2f16b3a31b6eca92d8ef1b52bdcd.jar"
+        jar="C:\Users\Paul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.4.3\4cb3dbb0c2f75b51aa7543c53252989785a0c609\jackson-core-2.4.3.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="4cb3dbb0c2f75b51aa7543c53252989785a0c609"/>
+    <item
         dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\jackson-databind-2.4.3-07794ac808e3575e769e4a6838800a43ced72381.jar"
         jar="C:\Users\Paul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-databind\2.4.3\feff63199be7b8f495c2f3e2096dcb6bd5e5b0b3\jackson-databind-2.4.3.jar"
         jumboMode="false"
         revision="21.0.2"
         sha1="feff63199be7b8f495c2f3e2096dcb6bd5e5b0b3"/>
     <item
-        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\jackson-core-2.4.3-be36770268bc2f16b3a31b6eca92d8ef1b52bdcd.jar"
-        jar="C:\Users\Paul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-core\2.4.3\4cb3dbb0c2f75b51aa7543c53252989785a0c609\jackson-core-2.4.3.jar"
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\classes-21a3e258d16c2b9933abe6438a42892cfd14997c.jar"
+        jar="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\exploded-aar\com.fortysevendeg.swipelistview\swipelistview\1.0-SNAPSHOT\classes.jar"
         jumboMode="false"
         revision="21.0.2"
-        sha1="4cb3dbb0c2f75b51aa7543c53252989785a0c609"/>
+        sha1="aca2cf1eb07a0a658257d3dc3e18926484861e0d"/>
+    <item
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\library-2.4.0-a020080b8fff00f200bf469aba6afcbf2b6a7f27.jar"
+        jar="C:\Users\Paul\.gradle\caches\modules-2\files-2.1\com.nineoldandroids\library\2.4.0\e9b63380f3a242dbdbf103a2355ad7e43bad17cb\library-2.4.0.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="e9b63380f3a242dbdbf103a2355ad7e43bad17cb"/>
+    <item
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\support-v13-19.1.0-1194947ded82bc17d6a317c52b9e44319c035833.jar"
+        jar="C:\Users\Paul\sdk\extras\android\m2repository\com\android\support\support-v13\19.1.0\support-v13-19.1.0.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="6b852a232f642c75a7fdfc7212b841b8c8f8959c"/>
+    <item
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\classes-5bd9fbf2d866ec1d2b14b4162d20234fad453e3a.jar"
+        jar="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\exploded-aar\com.android.support\appcompat-v7\19.0.1\classes.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="f71a6822470c9eb659d4f4a6cb57b780b35f058b"/>
+    <item
+        dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\support-v4-19.1.0-11015fb629765b2aba1048e0e3d03696a8d2b291.jar"
+        jar="C:\Users\Paul\sdk\extras\android\m2repository\com\android\support\support-v4\19.1.0\support-v4-19.1.0.jar"
+        jumboMode="false"
+        revision="21.0.2"
+        sha1="85f201b380937e61a9dce6ca90ccf6872abbfb67"/>
     <item
         dex="C:\Users\Paul\AndroidStudioProjects\Mamytas\app\build\intermediates\pre-dexed\debug\jackson-annotations-2.4.3-812b1cd8e432c97b798f16ceb2b79b34a1c72746.jar"
         jar="C:\Users\Paul\.gradle\caches\modules-2\files-2.1\com.fasterxml.jackson.core\jackson-annotations\2.4.3\a30ec6f59b6d31b2df06fa73925fda2fc7e84486\jackson-annotations-2.4.3.jar"
