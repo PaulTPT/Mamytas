@@ -4,6 +4,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Paul on 10/11/2014.
@@ -19,9 +20,10 @@ public class Timer implements Resource,Parcelable {
      * @param timer
      */
     @JsonCreator
-    public Timer(String name, String timer) {
+    public Timer(@JsonProperty("name") String name,@JsonProperty("timer") String timer,@JsonProperty("timer_start") String timer_start) {
         this.name = name;
-        this.timer = timer;
+        this.timer = timer_start;this.timer = timer_start;
+
     }
 
     public String getName() {

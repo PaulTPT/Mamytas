@@ -2,20 +2,13 @@ package mn.aug.restfulandroid.service;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.RestMethod;
 import mn.aug.restfulandroid.rest.RestMethodFactory;
 import mn.aug.restfulandroid.rest.RestMethodFactory.Method;
 import mn.aug.restfulandroid.rest.RestMethodResult;
-import mn.aug.restfulandroid.rest.resource.Task;
-import mn.aug.restfulandroid.rest.resource.Tasks;
 import mn.aug.restfulandroid.rest.resource.Timers;
-import mn.aug.restfulandroid.security.AuthorizationManager;
-import mn.aug.restfulandroid.util.Logger;
 
 /**
  * The TaskProcessor is a POJO for processing timeline requests.
@@ -40,7 +33,7 @@ public class TimersProcessor {
     }
 
 
-    void getTimers(ProcessorCallback callback) {
+    void getTimers(ProcessorCallback callback,Long task_id) {
 
 		/*
         Processor is a POJO
@@ -65,7 +58,7 @@ public class TimersProcessor {
         // and performs the HTTP operation.
 
         RestMethod<Timers> getTimersMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Tasks.CONTENT_URI, Method.GET, null, null,0);
+                Timers.CONTENT_URI, Method.GET, null, null,task_id);
         RestMethodResult<Timers> result = getTimersMethod.execute();
 
 				/*
@@ -76,7 +69,6 @@ public class TimersProcessor {
 
 
         // (9) Operation complete callback to Service
-
         callback.send(result.getStatusCode(),result.getResource());
 
     }

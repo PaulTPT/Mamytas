@@ -1,6 +1,7 @@
 package mn.aug.restfulandroid.rest.resource;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Paul on 09/11/2014.
@@ -15,7 +16,7 @@ public class Listw implements Resource,TaskList {
     }
 
     @JsonCreator
-    public Listw(long id, String title) {
+    public Listw(@JsonProperty("id") long id,@JsonProperty("title") String title) {
         super();
         this.id = id;
         this.title = title;

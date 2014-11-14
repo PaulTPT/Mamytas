@@ -15,7 +15,7 @@ public class Comment implements Resource {
     String text = "null";
 
     @JsonCreator
-    public Comment(int id, int task_id, String text) {
+    public Comment(@JsonProperty("id") int id,@JsonProperty("task_id") int task_id,@JsonProperty("text") String text) {
         super();
         this.task_id = task_id;
         this.id = id;

@@ -1,16 +1,11 @@
 package mn.aug.restfulandroid.rest.resource;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
 import android.net.Uri;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -28,7 +23,7 @@ public class Timers implements Resource,Parcelable {
 
     private List<Timer> timers;
 
-    @JsonCreator
+
     public Timers(List<Timer> timers) {
         this.timers=timers;
     }
@@ -48,7 +43,7 @@ public class Timers implements Resource,Parcelable {
     @Override
     public void writeToParcel(Parcel dest, int flags) {
 
-        dest.writeList(timers);
+        dest.writeTypedList(timers);
 
     }
 
@@ -64,7 +59,8 @@ public class Timers implements Resource,Parcelable {
 
     // Parcelling part
     public Timers(Parcel in) {
-        in.readList(this.timers,Timers.class.getClassLoader());
+        timers =new ArrayList<Timer>();
+        in.readTypedList(this.timers,Timer.CREATOR);
 
     }
 

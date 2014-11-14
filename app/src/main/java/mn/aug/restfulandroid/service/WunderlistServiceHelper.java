@@ -1,19 +1,16 @@
 package mn.aug.restfulandroid.service;
 
-import java.io.File;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.ResultReceiver;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
 
 import mn.aug.restfulandroid.rest.resource.Task;
+import mn.aug.restfulandroid.rest.resource.Timers;
 
 
 /**
@@ -80,7 +77,7 @@ public class WunderlistServiceHelper {
 		return requestId;		
 	}
 
-    public long getTimers(Task task) {
+    public long getTimers(Long task_id) {
 
         long requestId = generateRequestID();
         pendingRequests.put(getTimersHashkey, requestId);
@@ -96,7 +93,7 @@ public class WunderlistServiceHelper {
         intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_GET);
         intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TIMERS);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
-        intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
+        intent.putExtra(WunderlistService.INFO_EXTRA,task_id);
         intent.putExtra(REQUEST_ID, requestId);
 
         this.ctx.startService(intent);
@@ -237,12 +234,14 @@ public class WunderlistServiceHelper {
 
 		if(origIntent != null){
 			long requestId = origIntent.getLongExtra(REQUEST_ID, 0);
+            Timers timers = origIntent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
 
 			pendingRequests.remove(hashKey);
 
 			Intent resultBroadcast = new Intent(ACTION_REQUEST_RESULT);
 			resultBroadcast.putExtra(EXTRA_REQUEST_ID, requestId);
 			resultBroadcast.putExtra(EXTRA_RESULT_CODE, resultCode);
+            resultBroadcast.putExtra(WunderlistService.RESOURCE_EXTRA, timers);
 
 			ctx.sendBroadcast(resultBroadcast);
 		}

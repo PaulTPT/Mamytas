@@ -20,7 +20,9 @@ import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.activity.base.RESTfulListActivity;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.rest.resource.Task;
+import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.security.AuthorizationManager;
+import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
@@ -72,6 +74,8 @@ public class TasksActivity extends RESTfulListActivity  {
                 long resultRequestId = intent
                         .getLongExtra(WunderlistServiceHelper.EXTRA_REQUEST_ID, 0);
 
+                Timers timers=(Timers) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
+
                 Logger.debug(TAG, "Received intent " + intent.getAction() + ", request ID "
                         + resultRequestId);
 
@@ -98,9 +102,6 @@ public class TasksActivity extends RESTfulListActivity  {
 
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
-                        logoutAndFinish();
-
-                        showToast("The connexion with the server failed");
                         logoutAndFinish();
                     }
                 } else {

@@ -1,8 +1,7 @@
 package mn.aug.restfulandroid.rest.resource;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-
-import mn.aug.restfulandroid.R;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created by Paul on 09/11/2014.
@@ -18,7 +17,7 @@ public class Reminder implements Resource
 
 
         @JsonCreator
-        public Reminder(int id, int task_id, String date, String owner) {
+        public Reminder(@JsonProperty("id") int id,@JsonProperty("task_id") int task_id,@JsonProperty("date") String date,@JsonProperty("owner") String owner) {
             super();
             this.id = id;
             this.task_id = task_id;

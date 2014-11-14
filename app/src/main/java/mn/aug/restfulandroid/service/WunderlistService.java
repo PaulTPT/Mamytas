@@ -105,8 +105,9 @@ public class WunderlistService extends IntentService {
             case RESOURCE_TYPE_TIMERS:
 
                 if (method.equalsIgnoreCase(METHOD_GET) ) {
+                    long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
                     TimersProcessor processor = new TimersProcessor(getApplicationContext());
-                    processor.getTimers(makeProcessorCallback());
+                    processor.getTimers(makeProcessorCallback(),task_id);
                 }else{
                     mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
                 }

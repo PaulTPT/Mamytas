@@ -49,7 +49,7 @@ public class GetTimersRestMethod extends AbstractRestMethod<Timers> {
     @Override
     protected Timers parseResponseBody(String responseBody) throws Exception {
 
-        Timers timers=null;
+         List<Timer> timers=null;
 
         if (responseBody!= null && responseBody.length()>0) {
             try {
@@ -65,7 +65,7 @@ public class GetTimersRestMethod extends AbstractRestMethod<Timers> {
             }
         }
 
-        return timers;
+        return new Timers(timers);
 
     }
 

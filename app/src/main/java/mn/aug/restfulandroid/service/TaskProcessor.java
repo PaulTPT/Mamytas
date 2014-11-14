@@ -2,18 +2,12 @@ package mn.aug.restfulandroid.service;
 
 import android.content.Context;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.RestMethod;
 import mn.aug.restfulandroid.rest.RestMethodFactory;
 import mn.aug.restfulandroid.rest.RestMethodResult;
 import mn.aug.restfulandroid.rest.resource.Task;
-import mn.aug.restfulandroid.rest.resource.Tasks;
-import mn.aug.restfulandroid.security.AuthorizationManager;
-import mn.aug.restfulandroid.util.Logger;
 
 /**
  * Created by Paul on 11/11/2014.
@@ -60,7 +54,7 @@ public class TaskProcessor {
         // and performs the HTTP operation.
 
         RestMethod<Task> putTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Tasks.CONTENT_URI, RestMethodFactory.Method.PUT, null, body, task_id);
+                Task.CONTENT_URI, RestMethodFactory.Method.PUT, null, body, task_id);
         RestMethodResult<Task> result = putTaskMethod.execute();
 
 				/*
@@ -111,7 +105,7 @@ public class TaskProcessor {
         // and performs the HTTP operation.
 
         RestMethod<Task> deleteTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Tasks.CONTENT_URI, RestMethodFactory.Method.PUT, null,null,task_id);
+                Task.CONTENT_URI, RestMethodFactory.Method.PUT, null,null,task_id);
         RestMethodResult<Task> result = deleteTaskMethod.execute();
 
 				/*
