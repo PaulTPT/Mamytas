@@ -2,7 +2,8 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/black" >
+    android:background="#ffe2e2e2"
+    android:textColor="#000">
 
     <TextView
         android:layout_width="wrap_content"
@@ -13,7 +14,8 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
         android:layout_margin="10dp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:textColor="#000" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -26,9 +28,8 @@
         android:layout_alignParentEnd="true"
         android:layout_alignBottom="@+id/taskName"
         android:layout_marginRight="10dp"
-        android:layout_alignParentStart="false"
         android:layout_marginLeft="10dp"
-        android:background="#549E39"
+        android:background="@drawable/button_play"
         android:paddingLeft="5dp"
         android:paddingRight="5dp"
         android:textColor="#fff"
@@ -46,7 +47,8 @@
         android:layout_toStartOf="@+id/startWork"
         android:layout_alignBottom="@+id/startWork"
         android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp" />
+        android:layout_marginBottom="4dp"
+        android:textColor="#000" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -56,21 +58,24 @@
         android:layout_alignParentStart="true"
         android:layout_marginTop="5dp"
         android:layout_marginBottom="15dp"
-        android:id="@+id/relativeLayout">
+        android:id="@+id/relativeLayout"
+        android:paddingRight="10dp"
+        android:textColor="#000">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceLarge"
             android:text="Total :"
-            android:id="@+id/totalTitle"
+            android:id="@+id/workUserName"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="10dp"
             android:layout_marginTop="4dp"
             android:layout_marginBottom="4dp"
-            android:layout_marginRight="10dp" />
+            android:layout_marginRight="10dp"
+            android:textColor="#000" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -78,29 +83,32 @@
             android:textAppearance="?android:attr/textAppearanceMedium"
             android:text="45 min"
             android:id="@+id/totalTimeSpent"
-            android:layout_alignBottom="@+id/totalTitle"
-            android:layout_toRightOf="@+id/totalTitle"
-            android:layout_toEndOf="@+id/totalTitle" />
+            android:layout_alignBottom="@+id/workUserName"
+            android:layout_toRightOf="@+id/workUserName"
+            android:layout_toEndOf="@+id/workUserName"
+            android:textColor="#000"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="du 14/11/2014 à 12h31"
-            android:id="@+id/totalStartDate"
+            android:id="@+id/totalWorkFirstDate"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textColor="#000"/>
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
             android:text="au 14/11/2014 à 16h21"
-            android:id="@+id/totalEndDate"
-            android:layout_below="@+id/totalStartDate"
+            android:id="@+id/totalWorkLastDate"
+            android:layout_below="@+id/totalWorkFirstDate"
             android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true" />
+            android:layout_alignParentEnd="true"
+            android:textColor="#000"/>
     </RelativeLayout>
 
     <TextView
@@ -113,7 +121,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="15dp" />
+        android:layout_marginBottom="15dp"
+        android:textColor="#000"/>
 
     <ListView
         android:layout_width="wrap_content"
@@ -122,7 +131,8 @@
         android:layout_below="@+id/worksListTitle"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:clickable="false" />
+        android:clickable="false"
+        android:textColor="#000"/>
 
 
 </RelativeLayout>

@@ -11,15 +11,22 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View.OnClickListener;
+import android.view.View;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.resource.Task;
-import mn.aug.restfulandroid.rest.resource.Timer;
 import mn.aug.restfulandroid.rest.resource.Timers;
+import mn.aug.restfulandroid.rest.resource.Timer;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
@@ -33,6 +40,7 @@ public class TaskActivity extends ListActivity {
 
     private Long requestId;
     private BroadcastReceiver requestReceiver;
+    private Button startStopWork;
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
 
@@ -55,9 +63,20 @@ public class TaskActivity extends ListActivity {
         // displaying selected product name
         tasksDBAccess.open();
         Logger.debug("task_id",String.valueOf(task_id));
-        Task todo = tasksDBAccess.retrieveTodo(task_id);
+        Task tache = tasksDBAccess.retrieveTodo(task_id);
         tasksDBAccess.close();
 
+        TextView txtProduct = (TextView) findViewById(R.id.taskName);
+        txtProduct.setText(tache.getTitle());
+
+        startStopWork = (Button)findViewById(R.id.startWork);
+        startStopWork.setOnClickListener(play);
+
+		/*
+		 * 1. Register for broadcast from WunderlistServiceHelper
+		 * 2. See if we've already made a request. a. If so, check the status.
+		 * b. If not, make the request (already coded below).
+		 */
         requestId = mWunderlistServiceHelper.getTimers(task_id);
         IntentFilter filter = new IntentFilter(WunderlistServiceHelper.ACTION_REQUEST_RESULT);
         requestReceiver = new BroadcastReceiver() {
@@ -79,21 +98,42 @@ public class TaskActivity extends ListActivity {
                         Logger.debug(TAG, "Updating UI with new data");
                         Timers timers = (Timers) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
                         List<Timer> timersList = timers.getTimers();
+                        Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
                         String user = AuthorizationManager.getInstance(context).getUser();
 
-                        Logger.debug(TAG, "On a bien reçu " + timers.getTimers().size() + " timers de la tâche " + resultRequestId);
-
-                        ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, android.R.layout.simple_list_item_1, timersList);
+                        ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_item, timersList);
                         setListAdapter(adapter);
 
+                        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date parsedTimeStamp = null, firstDate = null, lastDate = null;
+                        int totalWorkTime = 0;
+                        for (Timer timer : timersList){
+                            if (timer.getTimer() != null && !timer.getTimer().isEmpty()) totalWorkTime += Integer.valueOf(timer.getTimer());
+                            try {
+                                parsedTimeStamp = dateTimeFormat.parse("2014-08-22 15:02");
+                            } catch (ParseException e) {e.printStackTrace();}
+                            if (parsedTimeStamp != null){
+                                if (firstDate == null) firstDate = (Date) parsedTimeStamp.clone();
+                                else if(parsedTimeStamp.getTime() < firstDate.getTime()) firstDate = (Date) parsedTimeStamp.clone();
+                                if (lastDate == null) lastDate = (Date) parsedTimeStamp.clone();
+                                else if(parsedTimeStamp.getTime() > lastDate.getTime()) lastDate = (Date) parsedTimeStamp.clone();
+                            }
+                        }
 
+                        TextView totalStartDate = (TextView) findViewById(R.id.totalWorkFirstDate);
+                        TextView totalEndDate = (TextView) findViewById(R.id.totalWorkLastDate);
+                        if (firstDate != null){
+                            if (firstDate.getTime() != lastDate.getTime()){
+                                totalStartDate.setText("du "+String.valueOf(dateFormat.format(lastDate.getTime())));
+                                totalEndDate.setText("au "+String.valueOf(dateFormat.format(firstDate.getTime())));
+                            }else
+                                totalStartDate.setText("le "+String.valueOf(dateFormat.format(lastDate.getTime())));
+                        }
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
                         logoutAndFinish();
-                    }else{
-                    showToast("Connexion to the server failed");
-                    logoutAndFinish();
-                }
+                    }
                 } else {
                     Logger.debug(TAG, "Result is NOT for our request ID");
                 }
@@ -150,6 +190,21 @@ public class TaskActivity extends ListActivity {
         return false;
     }
 
+    // Listener du bouton de la megafonction.
+    private OnClickListener play = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TextView startStopBtn = (TextView) findViewById(R.id.startWork);
+
+            if (startStopWork.getText().toString().equals("Start")){
+                startStopBtn.setText("Stop");
+                startStopBtn.setBackground(getResources().getDrawable(R.drawable.button_stop));
+            }else{
+                startStopBtn.setText("Start");
+                startStopBtn.setBackground(getResources().getDrawable(R.drawable.button_play));
+            }
+        }
+    };
 
     protected void logoutAndFinish(){
         AuthorizationManager.getInstance(this).logout();

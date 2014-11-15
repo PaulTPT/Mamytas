@@ -1,7 +1,14 @@
 *.class
 
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
+app/build
+build/
+.idea/
+local.properties
+
+
 
 # Package Files #
 *.jar

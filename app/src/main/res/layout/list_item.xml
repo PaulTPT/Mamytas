@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:paddingLeft="10dp"
+    android:paddingRight="10dp"
+    android:paddingTop="5dp"
+    android:paddingBottom="5dp"
+    android:textColor="#000"
+    android:background="#ffe2e2e2">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Bob:"
+        android:id="@+id/workUserName"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginRight="10dp"
+        android:layout_weight="40"
+        android:textColor="#000"
+        android:textStyle="bold" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="45 min"
+        android:id="@+id/workTimeSpent"
+        android:layout_alignBottom="@+id/workUserName"
+        android:layout_toRightOf="@+id/workUserName"
+        android:layout_weight="8.80"
+        android:layout_toEndOf="@+id/workUserName"
+        android:textColor="#000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="le 14/11/2014 à 12h31"
+        android:id="@+id/workFirstDate"
+        android:textColor="#000"
+        android:layout_alignBaseline="@+id/workUserName"
+        android:layout_alignBottom="@+id/workUserName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:textStyle="italic" />
+
+</LinearLayout>
