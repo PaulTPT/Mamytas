@@ -1,6 +1,6 @@
 package mn.aug.restfulandroid.activity.base;
 
-import android.app.ListActivity;
+import android.app.Activity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
@@ -10,7 +10,7 @@ import android.widget.ProgressBar;
 
 import mn.aug.restfulandroid.R;
 
-public abstract class RESTfulListActivity extends ListActivity {
+public abstract class RESTfulListActivity extends Activity {
 
 	private Button mRefreshButton;
 	private ProgressBar mRefreshProgressIndicator;

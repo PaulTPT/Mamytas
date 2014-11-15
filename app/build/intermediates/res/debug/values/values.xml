@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment/>
     <attr format="reference" name="actionBarDivider"/>
     <attr format="reference" name="actionBarItemBackground"/>
@@ -74,7 +74,7 @@
     <color name="abc_search_url_text_normal">#7fa87f</color>
     <color name="abc_search_url_text_pressed">@android:color/black</color>
     <color name="abc_search_url_text_selected">@android:color/black</color>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/colors.xml -->
+    <!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/src/main/res/values/colors.xml -->
     <eat-comment/>
     <color name="background">#FF303030</color>
     <color name="selected">#FF2A7997</color>
@@ -96,7 +96,7 @@
     <declare-styleable name="SwipeListView"><attr format="boolean" name="swipeOpenOnLongPress"/><attr format="integer" name="swipeAnimationTime"/><attr format="dimension" name="swipeOffsetLeft"/><attr format="dimension" name="swipeOffsetRight"/><attr format="boolean" name="swipeCloseAllItemsWhenMoveList"/><attr format="reference" name="swipeFrontView"/><attr format="reference" name="swipeBackView"/><attr format="enum" name="swipeMode"><enum name="none" value="0"/><enum name="both" value="1"/><enum name="right" value="2"/><enum name="left" value="3"/></attr><attr format="enum" name="swipeActionLeft"><enum name="reveal" value="0"/><enum name="dismiss" value="1"/><enum name="choice" value="2"/></attr><attr format="enum" name="swipeActionRight"><enum name="reveal" value="0"/><enum name="dismiss" value="1"/><enum name="choice" value="2"/></attr><attr format="reference" name="swipeDrawableChecked"/><attr format="reference" name="swipeDrawableUnchecked"/></declare-styleable>
     <declare-styleable name="Theme"><attr format="reference" name="actionDropDownStyle"/><attr format="dimension" name="dropdownListPreferredItemHeight"/><attr format="reference" name="popupMenuStyle"/><attr format="dimension" name="panelMenuListWidth"/><attr format="reference" name="panelMenuListTheme"/><attr format="reference" name="listChoiceBackgroundIndicator"/></declare-styleable>
     <declare-styleable name="View"><attr format="dimension" name="paddingStart"/><attr format="dimension" name="paddingEnd"/><attr name="android:focusable"/></declare-styleable>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment/>
     <dimen name="abc_action_bar_default_height">48dip</dimen>
     <dimen name="abc_action_bar_icon_vertical_padding">8dip</dimen>
@@ -135,14 +135,45 @@
     <string name="abc_searchview_description_voice">Voice search</string>
     <string name="abc_shareactionprovider_share_with">Share with</string>
     <string name="abc_shareactionprovider_share_with_application">Share with %s</string>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/strings.xml -->
+    <!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/src/main/res/values/strings.xml -->
     <eat-comment/>
     <string name="app_log_tag">Mamytas</string>
     <string name="app_name">Mamytas</string>
     <string name="button_login_label">Login</string>
     <string name="error_occurred">An error has occurred.</string>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/src/main/res/values/styles.xml -->
     <eat-comment/>
+    <style name="MyListBackContent">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/background_back</item>
+        <item name="android:gravity">right</item>
+    </style>
+    <style name="MyListButtonAction">
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:layout_width">80dp</item>
+        <item name="android:layout_height">30dp</item>
+
+    </style>
+    <style name="MyListFrontContent">
+        <item name="android:layout_width">fill_parent</item>
+        <item name="android:layout_height">fill_parent</item>
+        <item name="android:background">@drawable/background_front</item>
+        <item name="android:padding">8dp</item>
+    </style>
+    <style name="MyListImage">
+        <item name="android:layout_width">64dp</item>
+        <item name="android:layout_height">64dp</item>
+        <item name="android:scaleGravity">fill</item>
+        <item name="android:layout_marginRight">8dp</item>
+    </style>
+    <style name="MyListTitle">
+        <item name="android:paddingBottom">8dp</item>
+        <item name="android:textSize">17sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
+    </style>
     <style name="ProgressBar">
         <item name="android:indeterminateOnly">true</item>
         <item name="android:indeterminateDrawable">@drawable/progress</item>
@@ -157,7 +188,7 @@
         <item name="android:windowTitleSize">40dip</item>
         <item name="android:windowTitleBackgroundStyle">@style/TitlebarBackgroundStyle</item>
     </style>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="TextAppearance.AppCompat.Base.CompactMenu.Dialog" parent="android:TextAppearance.Medium">
         <item name="android:textColor">@android:color/primary_text_light</item>
@@ -481,12 +512,12 @@
         <item name="listChoiceBackgroundIndicator">@drawable/abc_list_selector_holo_dark</item>
     </style>
     <style name="Theme.Base.Light" parent="android:Theme.Light"/>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/values/styles.xml -->
+    <!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/src/main/res/values/styles.xml -->
     <eat-comment/>
     <style name="TitlebarBackgroundStyle">
         <item name="android:background">@color/background</item>
     </style>
-    <!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
+    <!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/build/intermediates/exploded-aar/com.android.support/appcompat-v7/19.0.1/res/values/values.xml -->
     <eat-comment/>
     <style name="Widget.AppCompat.ActionBar" parent="Widget.AppCompat.Base.ActionBar"/>
     <style name="Widget.AppCompat.ActionBar.Solid" parent="Widget.AppCompat.Base.ActionBar.Solid"/>

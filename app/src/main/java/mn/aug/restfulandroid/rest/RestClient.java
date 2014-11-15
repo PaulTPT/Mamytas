@@ -9,6 +9,8 @@ import java.net.URL;
 import java.util.HashMap;
 import java.util.List;
 
+import mn.aug.restfulandroid.util.Logger;
+
 public class RestClient {
 
     private static byte[] readStream(InputStream in) throws IOException {
@@ -71,6 +73,7 @@ public class RestClient {
             if(status==200) {
                 BufferedInputStream in = new BufferedInputStream(conn.getInputStream());
                 body = readStream(in);
+                Logger.debug("body",new String(body));
             }
             response = new Response(conn.getResponseCode(), conn.getHeaderFields(), body);
 

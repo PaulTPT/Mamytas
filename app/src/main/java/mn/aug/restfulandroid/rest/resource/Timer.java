@@ -22,7 +22,8 @@ public class Timer implements Resource,Parcelable {
     @JsonCreator
     public Timer(@JsonProperty("name") String name,@JsonProperty("timer") String timer,@JsonProperty("timer_start") String timer_start) {
         this.name = name;
-        this.timer = timer_start;this.timer = timer_start;
+        this.timer = timer;
+        this.timer_start = timer_start;
 
     }
 
@@ -61,7 +62,7 @@ public class Timer implements Resource,Parcelable {
     public void writeToParcel(Parcel dest, int flags) {
       dest.writeString(name);
       dest.writeString(timer);
-        dest.writeString(timer_start);
+      dest.writeString(timer_start);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {

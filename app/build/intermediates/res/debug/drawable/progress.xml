@@ -2,4 +2,4 @@
 <animated-rotate xmlns:android="http://schemas.android.com/apk/res/android"
     android:drawable="@drawable/refresh"
     android:pivotX="50%"
-    android:pivotY="50%" /><!-- From: file:/C:/Users/Paul/AndroidStudioProjects/Mamytas/app/src/main/res/drawable/progress.xml -->
+    android:pivotY="50%" /><!-- From: file:/E:/Documents/School/PolyMtl/Java/INF6405_ProjetAndroid_app/app/src/main/res/drawable/progress.xml -->
