@@ -111,7 +111,7 @@ public class TaskActivity extends ListActivity {
                         for (Timer timer : timersList){
                             if (timer.getTimer() != null && !timer.getTimer().isEmpty()) totalWorkTime += Integer.valueOf(timer.getTimer());
                             try {
-                                parsedTimeStamp = dateTimeFormat.parse("2014-08-22 15:02");
+                                parsedTimeStamp = dateTimeFormat.parse(timer.getTimer_start());
                             } catch (ParseException e) {e.printStackTrace();}
                             if (parsedTimeStamp != null){
                                 if (firstDate == null) firstDate = (Date) parsedTimeStamp.clone();
@@ -121,14 +121,18 @@ public class TaskActivity extends ListActivity {
                             }
                         }
 
-                        TextView totalStartDate = (TextView) findViewById(R.id.totalWorkFirstDate);
-                        TextView totalEndDate = (TextView) findViewById(R.id.totalWorkLastDate);
+                        TextView totalTimeSpent = (TextView) findViewById(R.id.totalTimeSpent);
+                        totalTimeSpent.setText(totalWorkTime+" min");
+                        TextView totalWorkFirstDate = (TextView) findViewById(R.id.totalWorkFirstDate);
+                        TextView totalWorkLastDate = (TextView) findViewById(R.id.totalWorkLastDate);
                         if (firstDate != null){
                             if (firstDate.getTime() != lastDate.getTime()){
-                                totalStartDate.setText("du "+String.valueOf(dateFormat.format(lastDate.getTime())));
-                                totalEndDate.setText("au "+String.valueOf(dateFormat.format(firstDate.getTime())));
-                            }else
-                                totalStartDate.setText("le "+String.valueOf(dateFormat.format(lastDate.getTime())));
+                                totalWorkFirstDate.setText("du " + String.valueOf(dateFormat.format(firstDate.getTime())));
+                                totalWorkLastDate.setText("au " + String.valueOf(dateFormat.format(lastDate.getTime())));
+                            }else {
+                                totalWorkLastDate.setText("le " + String.valueOf(dateFormat.format(lastDate.getTime())));
+                                totalWorkFirstDate.setText("");
+                            }
                         }
                     }  else if(resultCode==401){
                         showToast("Your session has expired");

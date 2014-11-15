@@ -13,9 +13,13 @@
         android:id="@+id/taskName"
         android:layout_alignParentTop="true"
         android:layout_alignParentLeft="true"
-        android:layout_margin="10dp"
         android:textStyle="bold"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:padding="3dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginTop="7dp"
+        android:layout_marginRight="10dp"
+        android:layout_marginBottom="7dp" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -29,9 +33,10 @@
         android:layout_alignBottom="@+id/taskName"
         android:layout_marginRight="10dp"
         android:layout_marginLeft="10dp"
+        android:gravity="center_vertical"
         android:background="@drawable/button_play"
-        android:paddingLeft="5dp"
-        android:paddingRight="5dp"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
         android:textColor="#fff"
         android:shadowColor="#333"
         android:singleLine="false" />
@@ -41,14 +46,13 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="00:16:24"
+        android:gravity="center_vertical|right"
         android:id="@+id/newWorkTimer"
-        android:layout_alignTop="@+id/startWork"
         android:layout_toLeftOf="@+id/startWork"
         android:layout_toStartOf="@+id/startWork"
-        android:layout_alignBottom="@+id/startWork"
-        android:layout_marginTop="4dp"
-        android:layout_marginBottom="4dp"
-        android:textColor="#000" />
+        android:textColor="#000"
+        android:layout_alignTop="@+id/startWork"
+        android:layout_alignBottom="@+id/startWork" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -56,8 +60,7 @@
         android:layout_below="@+id/taskName"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_marginTop="5dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginBottom="10dp"
         android:id="@+id/relativeLayout"
         android:paddingRight="10dp"
         android:textColor="#000">
@@ -72,8 +75,7 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="10dp"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="4dp"
+            android:layout_marginTop="8dp"
             android:layout_marginRight="10dp"
             android:textColor="#000" />
 
@@ -92,7 +94,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="du 14/11/2014 à 12h31"
+            android:text="du 14/11/2014"
             android:id="@+id/totalWorkFirstDate"
             android:layout_alignParentTop="true"
             android:layout_alignParentRight="true"
@@ -103,7 +105,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceSmall"
-            android:text="au 14/11/2014 à 16h21"
+            android:text="au 14/11/2014"
             android:id="@+id/totalWorkLastDate"
             android:layout_below="@+id/totalWorkFirstDate"
             android:layout_alignParentRight="true"
@@ -121,8 +123,8 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginLeft="10dp"
-        android:layout_marginBottom="15dp"
-        android:textColor="#000"/>
+        android:textColor="#000"
+        android:layout_marginBottom="5dp" />
 
     <ListView
         android:layout_width="wrap_content"

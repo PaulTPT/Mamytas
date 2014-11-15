@@ -1,6 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    >
@@ -18,9 +17,10 @@
         swipe:swipeMode="both"
         />
 
-    <LinearLayout android:id="@+id/undobar" style="@style/UndoBar">
+    <LinearLayout android:id="@+id/undobar" style="@style/UndoBar"
+        android:layout_below="@+id/example_swipe_lv_list">
         <TextView android:id="@+id/undobar_message" style="@style/UndoBarMessage" />
         <Button android:id="@+id/undobar_button" style="@style/UndoBarButton" />
     </LinearLayout>
 
-</LinearLayout>
+</RelativeLayout>
