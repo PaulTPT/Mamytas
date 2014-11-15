@@ -1,6 +1,5 @@
 package mn.aug.restfulandroid.activity;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -12,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -99,7 +97,7 @@ public class TaskActivity extends ListActivity {
 
                         Logger.debug(TAG, "On a bien reçu " + timers.getTimers().size() + " timers de la tâche " + resultRequestId);
 
-                        ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, android.R.layout.simple_list_item_1, timersList);
+                        ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_item, timersList);
                         setListAdapter(adapter);
 
                         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
@@ -109,7 +107,7 @@ public class TaskActivity extends ListActivity {
                         } catch (ParseException e) {e.printStackTrace();}
                         Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
                         timestamp.getTime();
-                        TextView totalStartDate = (TextView) findViewById(R.id.totalStartDate);
+                        TextView totalStartDate = (TextView) findViewById(R.id.workDate);
                         TextView totalEndDate = (TextView) findViewById(R.id.totalEndDate);
                         totalStartDate.setText("du "+String.valueOf(timestamp.getTime()));
                         totalEndDate.setText("au "+String.valueOf(dateFormat.format(timestamp)));
