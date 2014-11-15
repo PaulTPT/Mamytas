@@ -11,8 +11,11 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.view.View.OnClickListener;
+import android.view.View;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -37,6 +40,7 @@ public class TaskActivity extends ListActivity {
 
     private Long requestId;
     private BroadcastReceiver requestReceiver;
+    private Button startStopWork;
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
 
@@ -65,6 +69,8 @@ public class TaskActivity extends ListActivity {
         TextView txtProduct = (TextView) findViewById(R.id.taskName);
         txtProduct.setText(tache.getTitle());
 
+        startStopWork = (Button)findViewById(R.id.startWork);
+        startStopWork.setOnClickListener(play);
 
 		/*
 		 * 1. Register for broadcast from WunderlistServiceHelper
@@ -184,6 +190,21 @@ public class TaskActivity extends ListActivity {
         return false;
     }
 
+    // Listener du bouton de la megafonction.
+    private OnClickListener play = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            TextView startStopBtn = (TextView) findViewById(R.id.startWork);
+
+            if (startStopWork.getText().toString().equals("Start")){
+                startStopBtn.setText("Stop");
+                startStopBtn.setBackground(getResources().getDrawable(R.drawable.button_stop));
+            }else{
+                startStopBtn.setText("Start");
+                startStopBtn.setBackground(getResources().getDrawable(R.drawable.button_play));
+            }
+        }
+    };
 
     protected void logoutAndFinish(){
         AuthorizationManager.getInstance(this).logout();
