@@ -180,7 +180,7 @@ public class TaskActivity extends ListActivity {
 
 
 
-    // Listener du bouton de la megafonction.
+    // Listener du bouton StartStop
     private OnClickListener play = new OnClickListener() {
         @Override
         public void onClick(View v) {
