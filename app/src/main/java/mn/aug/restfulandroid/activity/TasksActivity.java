@@ -6,7 +6,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
-import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -110,10 +109,7 @@ public class TasksActivity extends RESTfulListActivity  {
 
             @Override
             public void onClickBackView(int position) {
-                Log.d("swipe", String.format("onClickBackView %d", position));
-
-                swipelistview.closeAnimate(position);//when you touch back view it will close
-            }
+                       }
 
             @Override
             public void onDismiss(int[] reverseSortedPositions) {

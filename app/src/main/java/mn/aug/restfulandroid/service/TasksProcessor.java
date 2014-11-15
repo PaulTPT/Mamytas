@@ -183,14 +183,11 @@ public class TasksProcessor {
                     }
                 } else {
                     tasksDBAccess.updateTodo(task);
-                    ownershipDBAccess.setTimer(task.getId(), user, task.getTimer());
-                    tasksDBAccess.setStatus((int) task.getId(), "up_to_date");
+                     tasksDBAccess.setStatus((int) task.getId(), "up_to_date");
                 }
 
                 if (!ownershipDBAccess.userOwnsTask(user, task.getId())) {
-                    ownershipDBAccess.addSharedTask(user, task);
-                    ownershipDBAccess.setTimer(task.getId(), user, task.getTimer());
-                }
+                    ownershipDBAccess.addSharedTask(user, task); }
             }
 
 

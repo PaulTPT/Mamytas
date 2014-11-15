@@ -69,8 +69,6 @@ public class OwnershipDBAccess {
             tasksDBAccess.storeTodo(todo);
             tasksDBAccess.setStatus(todo.getId(), "new");
             tasksDBAccess.close();
-            setTimer(todo.getId(), name, todo.getTimer());
-            setTimer_Start(todo.getId(), name, todo.getTimer_start());
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -97,12 +95,10 @@ public class OwnershipDBAccess {
 
             values = new ContentValues();
             values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, id);
-            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id+"'", null);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id + "'", null);
             tasksDBAccess.open();
             tasksDBAccess.storeTodo(todo);
             tasksDBAccess.close();
-            setTimer(todo.getId(), name, todo.getTimer());
-            setTimer_Start(todo.getId(), name, todo.getTimer_start());
             return todo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -126,8 +122,6 @@ public class OwnershipDBAccess {
             values.put(ProviderDbHelper.OWNERSHIP_OWNER, name);
             values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, todo.getId());
             bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
-            setTimer(todo.getId(), name, "0");
-            setTimer_Start(todo.getId(), name, null);
             return todo;
         } catch (Exception e) {
             e.printStackTrace();
@@ -155,7 +149,7 @@ public class OwnershipDBAccess {
 
             values = new ContentValues();
             values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, id);
-            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id+"'", null);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id + "'", null);
             listsDBAccess.open();
             listsDBAccess.storeList(list);
             listsDBAccess.close();
@@ -207,7 +201,7 @@ public class OwnershipDBAccess {
     public boolean removeTask(long todoID) {
 
         try {
-            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + todoID+"'", null);
+            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + todoID + "'", null);
             tasksDBAccess.open();
             tasksDBAccess.deleteTodo(todoID);
             tasksDBAccess.close();
@@ -234,7 +228,7 @@ public class OwnershipDBAccess {
 
         try {
             for (int id : list) {
-                bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + id+"'", null);
+                bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + id + "'", null);
             }
             return true;
 
@@ -252,11 +246,11 @@ public class OwnershipDBAccess {
      * @param user   The user which wants to delete the list
      * @return Whether it was successful
      */
-    public boolean removeListFromUser(String user,long listID) {
+    public boolean removeListFromUser(String user, long listID) {
 
         try {
-            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + listID +"'"+
-                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user+"'", null);
+            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + listID + "'" +
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user + "'", null);
 
             Cursor c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_ID}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + listID + "'", null, null, null, null);
 
@@ -290,7 +284,7 @@ public class OwnershipDBAccess {
 
         try {
             c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID}, ProviderDbHelper.OWNERSHIP_TYPE + " = " + "'TASKS'" +
-                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user+"'", null, null, null, null);
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -299,9 +293,9 @@ public class OwnershipDBAccess {
             return null;
         else {
             c.moveToFirst();
-            do{
+            do {
                 list.add(c.getLong(0));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
             return list;
 
         }
@@ -322,7 +316,7 @@ public class OwnershipDBAccess {
 
         try {
             c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID}, ProviderDbHelper.OWNERSHIP_TYPE + " = " + "'LIST'" +
-                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user+"'", null, null, null, null);
+                    " AND " + ProviderDbHelper.OWNERSHIP_OWNER + " = '" + user + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -332,9 +326,9 @@ public class OwnershipDBAccess {
             return null;
         else {
             c.moveToFirst();
-            do{
-                 list.add(c.getLong(0));
-            }while( c.moveToNext());
+            do {
+                list.add(c.getLong(0));
+            } while (c.moveToNext());
             return list;
 
         }
@@ -377,9 +371,9 @@ public class OwnershipDBAccess {
 
         List<Task> list = new ArrayList<Task>();
 
-        List<Long> ids=getTasksIds(user);
+        List<Long> ids = getTasksIds(user);
 
-        if(ids!=null) {
+        if (ids != null) {
             tasksDBAccess.open();
             for (long id : ids) {
                 Logger.debug("id", String.valueOf(id));
@@ -400,9 +394,9 @@ public class OwnershipDBAccess {
     public List<Listw> getLists(String user) {
 
         List<Listw> list = new ArrayList<Listw>();
-        List<Long> ids=getListsIds(user);
+        List<Long> ids = getListsIds(user);
 
-        if(ids!=null) {
+        if (ids != null) {
             listsDBAccess.open();
             for (long id : ids) {
                 list.add(listsDBAccess.retrieveList(id));
@@ -423,7 +417,7 @@ public class OwnershipDBAccess {
 
         Cursor c;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TYPE}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + id+"'", null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TYPE}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + id + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -449,7 +443,7 @@ public class OwnershipDBAccess {
 
         Cursor c;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_OWNER}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + list_id+"'", null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_OWNER}, ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " = '" + list_id + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -458,9 +452,9 @@ public class OwnershipDBAccess {
             return owners;
         else {
             c.moveToFirst();
-            do{
+            do {
                 owners.add(c.getString(0));
-            }while(c.moveToNext());
+            } while (c.moveToNext());
             return owners;
         }
 
@@ -471,7 +465,7 @@ public class OwnershipDBAccess {
         try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.OWNERSHIP_STATE, state);
-            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id+"'", null);
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP, values, ProviderDbHelper.OWNERSHIP_ID + " = '" + id + "'", null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -482,31 +476,31 @@ public class OwnershipDBAccess {
 
     public String getStatus(long id) {
 
-            Cursor c = null;
-            try {
-                c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_STATE},
-                        ProviderDbHelper.OWNERSHIP_ID + " ='" + id + "'", null, null, null, null);
-            } catch (Exception e) {
-                e.printStackTrace();
-                return null;
-            }
-            if (c.getCount() == 0)
-                return null;
-            else {
-                c.moveToFirst();
-                return c.getString(0);
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_STATE},
+                    ProviderDbHelper.OWNERSHIP_ID + " ='" + id + "'", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return null;
+        else {
+            c.moveToFirst();
+            return c.getString(0);
 
 
-            }
+        }
 
     }
 
-    public String getTimer(long id, String owner){
+    public String getTimer(long id, String owner) {
 
         Cursor c = null;
         try {
             c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TIMER},
-                    ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner+"'", null, null, null, null);
+                    ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -534,12 +528,12 @@ public class OwnershipDBAccess {
 
     }
 
-    public String getTimer_Start(long id, String owner){
+    public String getTimer_Start(long id, String owner) {
 
         Cursor c = null;
         try {
             c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_TIMER_START},
-                    ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner+"'", null, null, null, null);
+                    ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + id + "' AND " + ProviderDbHelper.OWNERSHIP_OWNER + " ='" + owner + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
@@ -567,5 +561,6 @@ public class OwnershipDBAccess {
 
     }
 
+ //TODO timers
 
 }

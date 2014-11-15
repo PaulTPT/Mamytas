@@ -13,6 +13,8 @@ public class Timer implements Resource,Parcelable {
     private String name=null;
     private String timer=null;
     private String timer_start=null;
+    private Long ownership_id=null;
+    private Long task_id=null;
 
 
     /**
@@ -20,10 +22,12 @@ public class Timer implements Resource,Parcelable {
      * @param timer
      */
     @JsonCreator
-    public Timer(@JsonProperty("name") String name,@JsonProperty("timer") String timer,@JsonProperty("timer_start") String timer_start) {
+    public Timer(@JsonProperty("name") String name,@JsonProperty("timer") String timer,@JsonProperty("timer_start") String timer_start,@JsonProperty("ownership_id") Long ownership_id,@JsonProperty("task_id") Long task_id) {
         this.name = name;
         this.timer = timer;
         this.timer_start = timer_start;
+        this.ownership_id=ownership_id;
+        this.task_id=task_id;
 
     }
 
@@ -51,6 +55,26 @@ public class Timer implements Resource,Parcelable {
         this.timer_start = timer_start;
     }
 
+    public Long getOwnership_id() {
+        return ownership_id;
+    }
+
+    public void setOwnership_id(Long ownership_id) {
+        this.ownership_id= ownership_id;
+    }
+
+    public Long getTask_id() {
+        return task_id;
+    }
+
+    public void setTask_id(Long task_id) {
+        this.task_id= task_id;
+    }
+
+
+
+
+
 
     @Override
     public int describeContents() {
@@ -63,6 +87,8 @@ public class Timer implements Resource,Parcelable {
       dest.writeString(name);
       dest.writeString(timer);
       dest.writeString(timer_start);
+      dest.writeLong(ownership_id);
+      dest.writeLong(task_id);
     }
 
     public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
@@ -80,6 +106,8 @@ public class Timer implements Resource,Parcelable {
         this.name=in.readString();
         this.timer=in.readString();
         this.timer_start=in.readString();
+        this.ownership_id=in.readLong();
+        this.task_id=in.readLong();
     }
 
 
