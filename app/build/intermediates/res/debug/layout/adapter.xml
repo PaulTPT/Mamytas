@@ -6,29 +6,9 @@
     <LinearLayout
         android:id="@+id/back"
         android:tag="back"
+        android:orientation="horizontal"
         style="@style/MyListBackContent"
         >
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/swipe_button1"
-            style="@style/MyListButtonAction"
-            android:text="Button 1"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/swipe_button2"
-            style="@style/MyListButtonAction"
-            android:text="Button 2"/>
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/swipe_button3"
-            style="@style/MyListButtonAction"
-            android:text="Button 3"/>
 
     </LinearLayout>
     <RelativeLayout

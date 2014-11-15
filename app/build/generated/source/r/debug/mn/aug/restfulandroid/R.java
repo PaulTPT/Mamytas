@@ -868,7 +868,7 @@ containing a value of this type.
         public static final int refresh=0x7f020061;
     }
     public static final class id {
-        public static final int about=0x7f080051;
+        public static final int about=0x7f080056;
         public static final int action_bar=0x7f080022;
         public static final int action_bar_activity_content=0x7f080000;
         public static final int action_bar_container=0x7f080021;
@@ -886,7 +886,7 @@ containing a value of this type.
         public static final int back=0x7f080045;
         public static final int beginning=0x7f08000f;
         public static final int both=0x7f08001a;
-        public static final int button_login=0x7f08004c;
+        public static final int button_login=0x7f080049;
         public static final int checkbox=0x7f080033;
         public static final int choice=0x7f08001d;
         public static final int collapseActionView=0x7f080014;
@@ -896,12 +896,12 @@ containing a value of this type.
         public static final int dismiss=0x7f08001e;
         public static final int dropdown=0x7f080019;
         public static final int edit_query=0x7f080036;
-        public static final int email=0x7f08004d;
+        public static final int email=0x7f08004a;
         public static final int end=0x7f080010;
-        public static final int example_swipe_lv_list=0x7f08004b;
+        public static final int example_swipe_lv_list=0x7f080048;
         public static final int expand_activities_button=0x7f08002c;
         public static final int expanded_menu=0x7f080032;
-        public static final int front=0x7f080049;
+        public static final int front=0x7f080046;
         public static final int home=0x7f080003;
         public static final int homeAsUp=0x7f08000a;
         public static final int icon=0x7f080030;
@@ -911,17 +911,19 @@ containing a value of this type.
         public static final int license_content=0x7f080042;
         public static final int listMode=0x7f080006;
         public static final int list_item=0x7f08002f;
-        public static final int logout=0x7f080050;
+        public static final int logout=0x7f080055;
         public static final int middle=0x7f080011;
-        public static final int name=0x7f08004a;
+        public static final int name=0x7f080047;
         public static final int never=0x7f080016;
+        public static final int newWorkTimer=0x7f08004e;
         public static final int none=0x7f080012;
         public static final int normal=0x7f080007;
-        public static final int password=0x7f08004e;
+        public static final int password=0x7f08004b;
         public static final int progress_circular=0x7f080004;
         public static final int progress_horizontal=0x7f080005;
         public static final int radio=0x7f080035;
         public static final int refresh_button=0x7f080043;
+        public static final int relativeLayout=0x7f08004f;
         public static final int reveal=0x7f08001f;
         public static final int right=0x7f08001c;
         public static final int search_badge=0x7f080038;
@@ -939,17 +941,20 @@ containing a value of this type.
         public static final int showHome=0x7f08000c;
         public static final int showTitle=0x7f08000d;
         public static final int split_action_bar=0x7f080024;
+        public static final int startWork=0x7f08004d;
         public static final int submit_area=0x7f08003f;
-        public static final int swipe_button1=0x7f080046;
-        public static final int swipe_button2=0x7f080047;
-        public static final int swipe_button3=0x7f080048;
         public static final int tabMode=0x7f080008;
-        public static final int taskName=0x7f08004f;
+        public static final int taskName=0x7f08004c;
         public static final int title=0x7f080031;
         public static final int top_action_bar=0x7f080026;
+        public static final int totalEndDate=0x7f080053;
+        public static final int totalStartDate=0x7f080052;
+        public static final int totalTimeSpent=0x7f080051;
+        public static final int totalTitle=0x7f080050;
         public static final int up=0x7f080027;
         public static final int useLogo=0x7f08000e;
         public static final int withText=0x7f080017;
+        public static final int worksListTitle=0x7f080054;
     }
     public static final class integer {
         public static final int abc_max_action_buttons=0x7f090000;

@@ -43,6 +43,7 @@ public class TasksActivity extends RESTfulListActivity  {
    private  MyArrayAdapter adapter;
    private  List<Task> tasks;
    private DisplayMetrics metrics;
+   private Context context=this;
 
 
 
@@ -57,14 +58,10 @@ public class TasksActivity extends RESTfulListActivity  {
 
         //These are the swipe listview settings. you can change these
         //setting as your requrement
-        swipelistview.setSwipeMode(SwipeListView.SWIPE_MODE_LEFT); // there are five swiping modes
-        swipelistview.setSwipeActionLeft(SwipeListView.SWIPE_ACTION_REVEAL); //there are four swipe actions
+        swipelistview.setSwipeMode(SwipeListView.SWIPE_MODE_RIGHT); // there are five swiping modes
         swipelistview.setSwipeActionRight(SwipeListView.SWIPE_ACTION_REVEAL);
-        Logger.debug("pixels",String.valueOf(metrics.widthPixels));
-        swipelistview.setOffsetLeft(convertDpToPixel(300f)); // left side offset
-        swipelistview.setOffsetRight(convertDpToPixel(0f)); // right side offset
         swipelistview.setAnimationTime(50); // animarion time
-        swipelistview.setSwipeOpenOnLongPress(true); // enable or disable SwipeOpenOnLongPress
+        swipelistview.setSwipeOpenOnLongPress(false); // enable or disable SwipeOpenOnLongPress
 
         tasks=new ArrayList<Task>();
         adapter=new MyArrayAdapter(this,R.layout.adapter,tasks);
@@ -73,6 +70,9 @@ public class TasksActivity extends RESTfulListActivity  {
         swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
             @Override
             public void onOpened(int position, boolean toRight) {
+                tasks.remove(position);
+                adapter=new MyArrayAdapter(context,R.layout.adapter,tasks);
+                swipelistview.setAdapter(adapter);
             }
 
             @Override
@@ -89,12 +89,12 @@ public class TasksActivity extends RESTfulListActivity  {
 
             @Override
             public void onStartOpen(int position, int action, boolean right) {
-                Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
+               // Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
             }
 
             @Override
             public void onStartClose(int position, boolean right) {
-                Log.d("swipe", String.format("onStartClose %d", position));
+                //Log.d("swipe", String.format("onStartClose %d", position));
             }
 
             @Override

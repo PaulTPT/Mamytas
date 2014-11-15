@@ -11,7 +11,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.ArrayAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import java.util.List;
@@ -19,8 +18,8 @@ import java.util.List;
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.resource.Task;
-import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.rest.resource.Timer;
+import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;

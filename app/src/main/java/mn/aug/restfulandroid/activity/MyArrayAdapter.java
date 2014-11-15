@@ -10,9 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -48,9 +46,6 @@ public class MyArrayAdapter extends ArrayAdapter<Task> {
             holder = new RowHolder();
 
             holder.name = (TextView)row.findViewById(R.id.name);
-            holder.button1=(Button)row.findViewById(R.id.swipe_button1);
-            holder.button2=(Button)row.findViewById(R.id.swipe_button2);
-            holder.button3=(Button)row.findViewById(R.id.swipe_button3);
             row.setTag(holder);
         }
         else
@@ -60,32 +55,6 @@ public class MyArrayAdapter extends ArrayAdapter<Task> {
 
         holder.name.setText(todos.get(position).getTitle());
 
-        holder.button1.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "Button 1 Clicked", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.button2.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "Button 2 Clicked",Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        holder.button3.setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                // TODO Auto-generated method stub
-                Toast.makeText(context, "Button 3 Clicked",Toast.LENGTH_SHORT).show();
-            }
-        });
 
         return row;
     }
@@ -94,9 +63,6 @@ public class MyArrayAdapter extends ArrayAdapter<Task> {
     static class RowHolder{
 
         TextView name;
-        Button button1;
-        Button button2;
-        Button button3;
     }
 
 }
