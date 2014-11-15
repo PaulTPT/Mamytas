@@ -1,6 +1,5 @@
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:swipe="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
    >
@@ -18,9 +17,28 @@
         swipe:swipeMode="both"
         />
 
-    <LinearLayout android:id="@+id/undobar" style="@style/UndoBar">
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="50sp"
+        android:layout_height="50sp"
+        android:text="+"
+        android:id="@+id/newTask"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="30dp"
+        android:layout_marginBottom="30dp"
+        android:gravity="center_horizontal|center_vertical"
+        android:textSize="35sp"
+        android:textColor="#fff"
+        android:background="@drawable/button_add" />
+
+
+    <LinearLayout android:id="@+id/undobar" style="@style/UndoBar"
+        android:layout_below="@+id/example_swipe_lv_list"
+        android:layout_marginBottom="30dp">
         <TextView android:id="@+id/undobar_message" style="@style/UndoBarMessage" />
         <Button android:id="@+id/undobar_button" style="@style/UndoBarButton" />
     </LinearLayout>
 
-</LinearLayout>
+
+</RelativeLayout>
