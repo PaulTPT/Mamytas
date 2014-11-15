@@ -276,9 +276,20 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
     @Override
     public void onUndo(Parcelable token) {
         Task task= (Task) token;
-        tasks.add(task.getPosition(),task);
-        adapter=new MyArrayAdapter(context,R.layout.adapter,tasks);
-        swipelistview.setAdapter(adapter);
+        if (task!=null) {
+            tasks.add(task.getPosition(), task);
+            adapter = new MyArrayAdapter(context, R.layout.adapter, tasks);
+            swipelistview.setAdapter(adapter);
+        }
 
+    }
+
+    @Override
+    public void undoDisabled(Parcelable token) {
+        Task task= (Task) token;
+        if (task!=null){
+            Logger.debug("Undo","undo disabled");
+            mWunderlistServiceHelper.deleteTask(task);
+        }
     }
 }

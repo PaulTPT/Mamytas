@@ -105,7 +105,7 @@ public class TaskProcessor {
         // and performs the HTTP operation.
 
         RestMethod<Task> deleteTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Task.CONTENT_URI, RestMethodFactory.Method.PUT, null,null,task_id);
+                Task.CONTENT_URI, RestMethodFactory.Method.DELETE, null,null,task_id);
         RestMethodResult<Task> result = deleteTaskMethod.execute();
 
 				/*

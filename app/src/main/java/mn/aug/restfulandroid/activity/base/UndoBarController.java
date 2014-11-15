@@ -41,11 +41,12 @@ public class UndoBarController {
     private UndoListener mUndoListener;
 
     // State objects
-    private Parcelable mUndoToken;
-    private CharSequence mUndoMessage;
+    private Parcelable mUndoToken=null;
+    private CharSequence mUndoMessage="";
 
     public interface UndoListener {
         void onUndo(Parcelable token);
+        void undoDisabled(Parcelable token);
     }
 
     public UndoBarController(View undoBarView, UndoListener undoListener) {
@@ -62,6 +63,7 @@ public class UndoBarController {
                         mUndoListener.onUndo(mUndoToken);
                     }
                 });
+
 
         hideUndoBar(true);
     }
@@ -112,6 +114,7 @@ public class UndoBarController {
                         }
                     });
         }
+        mUndoListener.undoDisabled(mUndoToken);
     }
 
     public void onSaveInstanceState(Bundle outState) {
