@@ -121,7 +121,8 @@
         android:id="@android:id/list"
         android:layout_below="@+id/worksListTitle"
         android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true" />
+        android:layout_alignParentStart="true"
+        android:clickable="false" />
 
 
 </RelativeLayout>

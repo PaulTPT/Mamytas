@@ -98,8 +98,8 @@ public class TaskActivity extends ListActivity {
                         ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, android.R.layout.simple_list_item_1, timersList);
                         setListAdapter(adapter);
 
-                        TextView txtProduct = (TextView) findViewById(R.id.taskName);
-                        txtProduct.setText(timers.getTimers().get(0).getName());
+                        //TextView txtProduct = (TextView) findViewById(R.id.taskName);
+                        //txtProduct.setText(timers.getTimers().get(0).getName());
 
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
