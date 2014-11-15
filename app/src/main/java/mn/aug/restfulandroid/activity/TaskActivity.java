@@ -9,13 +9,12 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
-import android.view.MenuItem;
+import android.view.View;
+import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.view.View.OnClickListener;
-import android.view.View;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -25,8 +24,8 @@ import java.util.List;
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.resource.Task;
-import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.rest.resource.Timer;
+import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
@@ -175,20 +174,7 @@ public class TaskActivity extends ListActivity {
         return true;
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.logout:
-                logoutAndFinish();
-                break;
-            case R.id.about:
-                Intent about = new Intent(this, AboutActivity.class);
-                startActivity(about);
-                break;
-        }
-        return false;
-    }
+
 
     // Listener du bouton de la megafonction.
     private OnClickListener play = new OnClickListener() {

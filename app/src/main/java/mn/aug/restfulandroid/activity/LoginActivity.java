@@ -1,5 +1,6 @@
 package mn.aug.restfulandroid.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -13,12 +14,11 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import mn.aug.restfulandroid.R;
-import mn.aug.restfulandroid.activity.base.RESTfulActivity;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
-public class LoginActivity extends RESTfulActivity {
+public class LoginActivity extends Activity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private Long requestId;
@@ -40,7 +40,7 @@ public class LoginActivity extends RESTfulActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        setContentResId(R.layout.login);
+        setContentView(R.layout.login);
 
         super.onCreate(savedInstanceState);
 
@@ -75,7 +75,6 @@ public class LoginActivity extends RESTfulActivity {
 
                     Logger.debug(TAG, "Result is for our request ID");
 
-                    setRefreshing(false);
 
                     int resultCode = intent.getIntExtra(WunderlistServiceHelper.EXTRA_RESULT_CODE, 0);
 
@@ -87,18 +86,18 @@ public class LoginActivity extends RESTfulActivity {
                         showToast("Login Succesfull !");
 
 
-                        setRefreshing(false);
+
                         startHomeActivity();
 
 
                     } else if (resultCode == 401) {
                         showToast("Login failed... Try again");
                         mButtonLogin.setVisibility(View.VISIBLE);
-                        setRefreshing(false);
+
                     } else {
                         showToast("The connexion with the server failed");
                         mButtonLogin.setVisibility(View.VISIBLE);
-                        setRefreshing(false);
+
                     }
                 } else {
                     Logger.debug(TAG, "Result is NOT for our request ID");
@@ -126,7 +125,7 @@ public class LoginActivity extends RESTfulActivity {
 
 
         //Get name and password and retrieve token
-        setRefreshing(true);
+
         requestId = mWunderlistServiceHelper.login(name, password);
 
     }
@@ -142,12 +141,6 @@ public class LoginActivity extends RESTfulActivity {
             mButtonLogin.setVisibility(View.VISIBLE);
         }
 
-    }
-
-
-    @Override
-    protected void refresh() {
-        // n/a
     }
 
 

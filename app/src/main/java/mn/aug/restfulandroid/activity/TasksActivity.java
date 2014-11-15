@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import mn.aug.restfulandroid.R;
-import mn.aug.restfulandroid.activity.base.RESTfulListActivity;
+import mn.aug.restfulandroid.activity.base.RESTfulActivity;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Timers;
@@ -28,7 +28,7 @@ import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
-public class TasksActivity extends RESTfulListActivity  {
+public class TasksActivity extends RESTfulActivity {
 
     private static final String TAG = TasksActivity.class.getSimpleName();
 
@@ -41,7 +41,6 @@ public class TasksActivity extends RESTfulListActivity  {
    private  SwipeListView swipelistview;
    private  MyArrayAdapter adapter;
    private  List<Task> tasks;
-   private DisplayMetrics metrics;
    private Context context=this;
 
 
@@ -49,9 +48,7 @@ public class TasksActivity extends RESTfulListActivity  {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentResId(R.layout.home);
-        setRefreshable(true);
         super.onCreate(savedInstanceState);
-        metrics = getResources().getDisplayMetrics();
         ownershipDBAccess = new OwnershipDBAccess(this);
         swipelistview=(SwipeListView)findViewById(R.id.example_swipe_lv_list);
 
@@ -123,6 +120,30 @@ public class TasksActivity extends RESTfulListActivity  {
     }
 
     @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        setRefreshingItem(menu.findItem(R.id.refresh));
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        super.onOptionsItemSelected(item);
+        switch (item.getItemId()) {
+            case R.id.logout:
+                logoutAndFinish();
+                break;
+            case R.id.refresh:
+                startRefreshing();
+                refresh();
+                break;
+        }
+        return false;
+    }
+
+    @Override
     protected void onResume() {
         super.onResume();
 
@@ -156,14 +177,12 @@ public class TasksActivity extends RESTfulListActivity  {
 
                     Logger.debug(TAG, "Result is for our request ID");
 
-                    setRefreshing(false);
-
-                    int resultCode = intent.getIntExtra(WunderlistServiceHelper.EXTRA_RESULT_CODE, 0);
+                                        int resultCode = intent.getIntExtra(WunderlistServiceHelper.EXTRA_RESULT_CODE, 0);
 
                     Logger.debug(TAG, "Result code = " + resultCode);
 
                     if (resultCode == 200) {
-
+                        stopRefreshing();
                         Logger.debug(TAG, "Updating UI with new data");
                         String user = AuthorizationManager.getInstance(context).getUser();
                         ownershipDBAccess.open();
@@ -172,6 +191,7 @@ public class TasksActivity extends RESTfulListActivity  {
                         tasks.clear();
                         tasks.addAll(todos);
                         adapter.notifyDataSetChanged();
+
 
 
                     }  else if(resultCode==401){
@@ -192,12 +212,7 @@ public class TasksActivity extends RESTfulListActivity  {
         this.registerReceiver(requestReceiver, filter);
 
         if (requestId == null) {
-            setRefreshing(true);
-            requestId = mWunderlistServiceHelper.getTasks();
-        } else if (mWunderlistServiceHelper.isRequestPending(requestId)) {
-            setRefreshing(true);
-        } else {
-            setRefreshing(false);
+           requestId = mWunderlistServiceHelper.getTasks();
         }
 
     }
@@ -226,28 +241,7 @@ public class TasksActivity extends RESTfulListActivity  {
         }
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.logout:
-                logoutAndFinish();
-                break;
-            case R.id.about:
-                Intent about = new Intent(this, AboutActivity.class);
-                startActivity(about);
-                break;
-        }
-        return false;
-    }
 
     @Override
     protected void refresh() {
@@ -263,6 +257,7 @@ public class TasksActivity extends RESTfulListActivity  {
     }
 
     public int convertDpToPixel(float dp) {
+        DisplayMetrics metrics = getResources().getDisplayMetrics();
         float px = dp * (metrics.densityDpi / 160f);
         return (int) px;
     }
