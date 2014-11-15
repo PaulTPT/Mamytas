@@ -11,7 +11,118 @@
         android:text="Nom de la Tache"
         android:id="@+id/taskName"
         android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true" />
+        android:layout_alignParentLeft="true"
+        android:layout_margin="10dp"
+        android:textStyle="bold" />
+
+    <Button
+        style="?android:attr/buttonStyleSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Start"
+        android:id="@+id/startWork"
+        android:layout_alignTop="@+id/taskName"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignBottom="@+id/taskName"
+        android:layout_marginRight="10dp"
+        android:layout_alignParentStart="false"
+        android:layout_marginLeft="10dp"
+        android:background="#549E39"
+        android:paddingLeft="5dp"
+        android:paddingRight="5dp"
+        android:textColor="#fff"
+        android:shadowColor="#333"
+        android:singleLine="false" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceSmall"
+        android:text="00:16:24"
+        android:id="@+id/newWorkTimer"
+        android:layout_alignTop="@+id/startWork"
+        android:layout_toLeftOf="@+id/startWork"
+        android:layout_toStartOf="@+id/startWork"
+        android:layout_alignBottom="@+id/startWork"
+        android:layout_marginTop="4dp"
+        android:layout_marginBottom="4dp" />
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/taskName"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="5dp"
+        android:layout_marginBottom="15dp"
+        android:id="@+id/relativeLayout">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceLarge"
+            android:text="Total :"
+            android:id="@+id/totalTitle"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:layout_marginTop="4dp"
+            android:layout_marginBottom="4dp"
+            android:layout_marginRight="10dp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceMedium"
+            android:text="45 min"
+            android:id="@+id/totalTimeSpent"
+            android:layout_alignBottom="@+id/totalTitle"
+            android:layout_toRightOf="@+id/totalTitle"
+            android:layout_toEndOf="@+id/totalTitle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="du 14/11/2014 à 12h31"
+            android:id="@+id/totalStartDate"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="au 14/11/2014 à 16h21"
+            android:id="@+id/totalEndDate"
+            android:layout_below="@+id/totalStartDate"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true" />
+    </RelativeLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+        android:text="Travaux réalisés :"
+        android:id="@+id/worksListTitle"
+        android:layout_below="@+id/relativeLayout"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="15dp" />
+
+    <ListView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@android:id/list"
+        android:layout_below="@+id/worksListTitle"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:clickable="false" />
 
 
 </RelativeLayout>
