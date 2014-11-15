@@ -59,8 +59,8 @@ public class UndoBarController {
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        hideUndoBar(false);
                         mUndoListener.onUndo(mUndoToken);
+                        hideUndoBar(false);
                     }
                 });
 
@@ -139,4 +139,8 @@ public class UndoBarController {
             hideUndoBar(false);
         }
     };
+
+    public void clearUndoToken(){
+        mUndoToken=null;
+    }
 }

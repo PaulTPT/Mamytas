@@ -13,7 +13,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
@@ -293,6 +292,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
             tasks.add(task.getPosition(), task);
             adapter = new MyArrayAdapter(context, R.layout.adapter, tasks);
             swipelistview.setAdapter(adapter);
+            mUndoBarController.clearUndoToken();
         }
 
     }
