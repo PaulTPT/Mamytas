@@ -18,7 +18,7 @@ import mn.aug.restfulandroid.activity.base.RESTfulActivity;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.util.Logger;
 
-public class TaskEditor extends RESTfulActivity {
+public class TaskEditor extends Activity {
 
     EditText taskDueDate;
     EditText taskName;
@@ -27,16 +27,7 @@ public class TaskEditor extends RESTfulActivity {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_task);
-    }
 
-    @Override
-    protected void refresh() {
-        
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
         Intent i = getIntent();
 
         // Edit Text
@@ -70,43 +61,4 @@ public class TaskEditor extends RESTfulActivity {
             toast.show();
         }
     }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        super.onCreateOptionsMenu(menu);
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.menu, menu);
-        setRefreshingItem(menu.findItem(R.id.refresh));
-        return true;
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        super.onOptionsItemSelected(item);
-        switch (item.getItemId()) {
-            case R.id.logout:
-                logoutAndFinish();
-                break;
-            case R.id.refresh:
-                startRefreshing();
-                refresh();
-                break;
-        }
-        return false;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    protected void logoutAndFinish(){
-        AuthorizationManager.getInstance(this).logout();
-        Intent login = new Intent(this, LoginActivity.class);
-        startActivity(login);
-        finish();
-
-    }
-
-
 }
