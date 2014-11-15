@@ -5,15 +5,18 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.ArrayAdapter;
-import android.widget.ListView;
 import android.widget.Toast;
 
+import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
+import com.fortysevendeg.swipelistview.SwipeListView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import mn.aug.restfulandroid.R;
@@ -36,16 +39,90 @@ public class TasksActivity extends RESTfulListActivity  {
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
 
+   private  SwipeListView swipelistview;
+   private  MyArrayAdapter adapter;
+   private  List<Task> tasks;
+   private DisplayMetrics metrics;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-
         setContentResId(R.layout.home);
         setRefreshable(true);
-        ownershipDBAccess = new OwnershipDBAccess(this);
-
         super.onCreate(savedInstanceState);
+        metrics = getResources().getDisplayMetrics();
+        ownershipDBAccess = new OwnershipDBAccess(this);
+        swipelistview=(SwipeListView)findViewById(R.id.example_swipe_lv_list);
+
+        //These are the swipe listview settings. you can change these
+        //setting as your requrement
+        swipelistview.setSwipeMode(SwipeListView.SWIPE_MODE_LEFT); // there are five swiping modes
+        swipelistview.setSwipeActionLeft(SwipeListView.SWIPE_ACTION_REVEAL); //there are four swipe actions
+        swipelistview.setSwipeActionRight(SwipeListView.SWIPE_ACTION_REVEAL);
+        Logger.debug("pixels",String.valueOf(metrics.widthPixels));
+        swipelistview.setOffsetLeft(convertDpToPixel(300f)); // left side offset
+        swipelistview.setOffsetRight(convertDpToPixel(0f)); // right side offset
+        swipelistview.setAnimationTime(50); // animarion time
+        swipelistview.setSwipeOpenOnLongPress(true); // enable or disable SwipeOpenOnLongPress
+
+        tasks=new ArrayList<Task>();
+        adapter=new MyArrayAdapter(this,R.layout.adapter,tasks);
+        swipelistview.setAdapter(adapter);
+
+        swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
+            @Override
+            public void onOpened(int position, boolean toRight) {
+            }
+
+            @Override
+            public void onClosed(int position, boolean fromRight) {
+            }
+
+            @Override
+            public void onListChanged() {
+            }
+
+            @Override
+            public void onMove(int position, float x) {
+            }
+
+            @Override
+            public void onStartOpen(int position, int action, boolean right) {
+                Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
+            }
+
+            @Override
+            public void onStartClose(int position, boolean right) {
+                Log.d("swipe", String.format("onStartClose %d", position));
+            }
+
+            @Override
+            public void onClickFrontView(int position) {
+                Task item = (Task) adapter.getItem(position);
+                // Launching new Activity on selecting single List Item
+                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
+                // sending data to new activity
+                i.putExtra("task_id", item.getId());
+                startActivity(i);
+
+            }
+
+            @Override
+            public void onClickBackView(int position) {
+                Log.d("swipe", String.format("onClickBackView %d", position));
+
+                swipelistview.closeAnimate(position);//when you touch back view it will close
+            }
+
+            @Override
+            public void onDismiss(int[] reverseSortedPositions) {
+
+            }
+
+        });
+
+
 
     }
 
@@ -94,14 +171,18 @@ public class TasksActivity extends RESTfulListActivity  {
                         Logger.debug(TAG, "Updating UI with new data");
                         String user = AuthorizationManager.getInstance(context).getUser();
                         ownershipDBAccess.open();
-                        List<Task> todos = ownershipDBAccess.getTodos(user);
+                        List<Task> todos= ownershipDBAccess.getTodos(user);
                         ownershipDBAccess.close();
+                        tasks.clear();
+                        tasks.addAll(todos);
+                        adapter.notifyDataSetChanged();
 
-                        ArrayAdapter<Task> adapter = new MyArrayAdapter(context, android.R.layout.simple_list_item_1, todos);
-                        setListAdapter(adapter);
 
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
+                        logoutAndFinish();
+                    }else{
+                        showToast("Connexion to the server failed");
                         logoutAndFinish();
                     }
                 } else {
@@ -185,16 +266,13 @@ public class TasksActivity extends RESTfulListActivity  {
 
     }
 
-
-    @Override
-    protected void onListItemClick(ListView l, View v, int position, long id) {
-        Task item = (Task) getListAdapter().getItem(position);
-        // Launching new Activity on selecting single List Item
-        Intent i = new Intent(getApplicationContext(), TaskActivity.class);
-        // sending data to new activity
-        i.putExtra("task_id", item.getId());
-        startActivity(i);
+    public int convertDpToPixel(float dp) {
+        float px = dp * (metrics.densityDpi / 160f);
+        return (int) px;
     }
+
+
+
 
 
 }

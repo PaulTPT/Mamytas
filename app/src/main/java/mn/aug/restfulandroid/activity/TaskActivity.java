@@ -60,10 +60,7 @@ public class TaskActivity extends Activity{
         Task todo = tasksDBAccess.retrieveTodo(task_id);
         tasksDBAccess.close();
 
-        TextView txtProduct = (TextView) findViewById(R.id.taskName);
-        txtProduct.setText(todo.getTitle());
-
-		/*
+     		/*
 		 * 1. Register for broadcast from WunderlistServiceHelper
 		 *
 		 * 2. See if we've already made a request. a. If so, check the status.
@@ -98,10 +95,10 @@ public class TaskActivity extends Activity{
                         Timers timers=(Timers) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
                         String user = AuthorizationManager.getInstance(context).getUser();
 
-                        Logger.debug("timers2",timers.toString());
+                        Logger.debug("timer_value",timers.getTimers().get(0).getTimer());
                         TextView txtProduct = (TextView) findViewById(R.id.taskName);
 
-                        txtProduct.setText(timers.getTimers().get(0).getName());
+                        txtProduct.setText(timers.getTimers().get(0).getTimer());
 
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
