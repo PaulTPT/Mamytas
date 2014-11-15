@@ -16,6 +16,10 @@ import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 
 import mn.aug.restfulandroid.R;
@@ -58,11 +62,11 @@ public class TaskActivity extends ListActivity {
         // displaying selected product name
         tasksDBAccess.open();
         Logger.debug("task_id",String.valueOf(task_id));
-        Task todo = tasksDBAccess.retrieveTodo(task_id);
+        Task tache = tasksDBAccess.retrieveTodo(task_id);
         tasksDBAccess.close();
 
         TextView txtProduct = (TextView) findViewById(R.id.taskName);
-        txtProduct.setText(todo.getTitle());
+        txtProduct.setText(tache.getTitle());
 
 
 		/*
@@ -98,8 +102,17 @@ public class TaskActivity extends ListActivity {
                         ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, android.R.layout.simple_list_item_1, timersList);
                         setListAdapter(adapter);
 
-                        //TextView txtProduct = (TextView) findViewById(R.id.taskName);
-                        //txtProduct.setText(timers.getTimers().get(0).getName());
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                        Date parsedTimeStamp = null;
+                        try {
+                            parsedTimeStamp = dateFormat.parse("2014-08-22 15:02");
+                        } catch (ParseException e) {e.printStackTrace();}
+                        Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
+                        timestamp.getTime();
+                        TextView totalStartDate = (TextView) findViewById(R.id.totalStartDate);
+                        TextView totalEndDate = (TextView) findViewById(R.id.totalEndDate);
+                        totalStartDate.setText("du "+String.valueOf(timestamp.getTime()));
+                        totalEndDate.setText("au "+String.valueOf(dateFormat.format(timestamp)));
 
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
