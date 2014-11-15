@@ -1,6 +1,8 @@
 package mn.aug.restfulandroid.rest.resource;
 
 import android.net.Uri;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -8,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import mn.aug.restfulandroid.util.Logger;
 
 
-public class Task implements Resource, TaskList {
+public class Task implements Resource, TaskList, Parcelable {
 
     public static final String AUTHORITY="WUNDERLIST";
     public static final String PATH="TASK";
@@ -21,6 +23,7 @@ public class Task implements Resource, TaskList {
     private String title;
     private String due_date;
     private long list_id;
+    private int position=0;
 
     @JsonCreator
     public Task(@JsonProperty("id") long id, @JsonProperty("title") String title, @JsonProperty("due_date") String due_date, @JsonProperty("list_id") long list_id) {
@@ -66,6 +69,13 @@ public class Task implements Resource, TaskList {
         this.list_id = list_id;
     }
 
+    public int getPosition() {
+        return position;
+    }
+
+    public void setPosition(int position) {
+        this.position = position;
+    }
 
     @Override
     public String toString() {
@@ -73,6 +83,42 @@ public class Task implements Resource, TaskList {
                 "&title=" + title +
                 "&due_date='" + due_date +
                 "&list_id=" + list_id ;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeLong(id);
+        dest.writeString(title);
+        dest.writeString(due_date);
+        dest.writeLong(list_id);
+        dest.writeInt(position);
+
+    }
+
+    public static final Parcelable.Creator CREATOR = new Parcelable.Creator() {
+        public Task createFromParcel(Parcel in) {
+            return new Task(in);
+        }
+
+        public Task[] newArray(int size) {
+            return new Task[size];
+        }
+    };
+
+    // Parcelling part
+    public Task(Parcel in) {
+        this.id=in.readLong();
+        this.title=in.readString();
+        this.due_date=in.readString();
+        this.list_id=in.readLong();
+        this.position=in.readInt();
+
     }
 
 

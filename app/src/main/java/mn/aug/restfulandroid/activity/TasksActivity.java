@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.Menu;
@@ -23,6 +24,7 @@ import java.util.List;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.activity.base.RESTfulActivity;
+import mn.aug.restfulandroid.activity.base.UndoBarController;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Timers;
@@ -31,11 +33,12 @@ import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
-public class TasksActivity extends RESTfulActivity {
+public class TasksActivity extends RESTfulActivity implements UndoBarController.UndoListener {
 
     private static final String TAG = TasksActivity.class.getSimpleName();
-
     private Button newTask;
+
+    private UndoBarController mUndoBarController;
     private Long requestId;
     private BroadcastReceiver requestReceiver;
 
@@ -53,6 +56,7 @@ public class TasksActivity extends RESTfulActivity {
     protected void onCreate(Bundle savedInstanceState) {
         setContentResId(R.layout.home);
         super.onCreate(savedInstanceState);
+        mUndoBarController = new UndoBarController(findViewById(R.id.undobar), this);
         ownershipDBAccess = new OwnershipDBAccess(this);
         swipelistview=(SwipeListView)findViewById(R.id.example_swipe_lv_list);
 
@@ -70,9 +74,16 @@ public class TasksActivity extends RESTfulActivity {
         swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
             @Override
             public void onOpened(int position, boolean toRight) {
+                Task task=tasks.get(position);
+                task.setPosition(position);
+                mUndoBarController.showUndoBar(
+                        false,
+                        "Task deleted",
+                        task);
                 tasks.remove(position);
                 adapter=new MyArrayAdapter(context,R.layout.adapter,tasks);
                 swipelistview.setAdapter(adapter);
+
             }
 
             @Override
@@ -200,9 +211,9 @@ public class TasksActivity extends RESTfulActivity {
                         ownershipDBAccess.open();
                         List<Task> todos= ownershipDBAccess.getTodos(user);
                         ownershipDBAccess.close();
-                        tasks.clear();
-                        tasks.addAll(todos);
-                        adapter.notifyDataSetChanged();
+                        tasks=todos;
+                        adapter=new MyArrayAdapter(context,R.layout.adapter,tasks);
+                        swipelistview.setAdapter(adapter);
 
 
 
@@ -275,7 +286,23 @@ public class TasksActivity extends RESTfulActivity {
     }
 
 
+    @Override
+    public void onUndo(Parcelable token) {
+        Task task= (Task) token;
+        if (task!=null) {
+            tasks.add(task.getPosition(), task);
+            adapter = new MyArrayAdapter(context, R.layout.adapter, tasks);
+            swipelistview.setAdapter(adapter);
+        }
 
+    }
 
-
+    @Override
+    public void undoDisabled(Parcelable token) {
+        Task task= (Task) token;
+        if (task!=null){
+            Logger.debug("Undo","undo disabled");
+            mWunderlistServiceHelper.deleteTask(task);
+        }
+    }
 }

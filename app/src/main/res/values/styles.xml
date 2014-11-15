@@ -1,9 +1,6 @@
 <resources>
 
-    <style name="RESTfulAndroidTheme" parent="@style/Theme.AppCompat.Light">
-    </style>
-
-    <style name="TitlebarBackgroundStyle">
+      <style name="TitlebarBackgroundStyle">
         <item name="android:background">@color/background</item>
     </style>
 

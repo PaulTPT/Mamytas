@@ -4,7 +4,6 @@ import android.app.ActionBar;
 import android.app.Activity;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.Window;
 
 import mn.aug.restfulandroid.R;
 
@@ -15,14 +14,14 @@ public abstract class RESTfulActivity extends Activity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        requestWindowFeature(Window.FEATURE_ACTION_BAR);
+
         setContentView(mContentResId);
         super.onCreate(savedInstanceState);
 
         ActionBar actionBar = getActionBar();
         actionBar.setTitle("Mamytas");
-        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME
-                | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+      //  actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME
+               //| ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.show();
 
     }

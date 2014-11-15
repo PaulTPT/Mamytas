@@ -41,11 +41,13 @@ public class RestClient {
             byte[] payload = request.getBody();
             switch (request.getMethod()) {
                 case GET:
+                    conn.setRequestMethod("GET");
                     conn.setDoOutput(false);
                     conn.setDoInput(true);
                     status = conn.getResponseCode();
                     break;
                 case POST:
+                    conn.setRequestMethod("POST");
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
                     conn.setFixedLengthStreamingMode(payload.length);
@@ -53,6 +55,7 @@ public class RestClient {
                     status = conn.getResponseCode();
                     break;
                 case PUT:
+                    conn.setRequestMethod("PUT");
                     conn.setDoOutput(true);
                     conn.setDoInput(true);
                     conn.setFixedLengthStreamingMode(payload.length);
@@ -60,6 +63,7 @@ public class RestClient {
                     status = conn.getResponseCode();
                     break;
                 case DELETE:
+                    conn.setRequestMethod("DELETE");
                     conn.setDoOutput(false);
                     conn.setDoInput(true);
                     status = conn.getResponseCode();

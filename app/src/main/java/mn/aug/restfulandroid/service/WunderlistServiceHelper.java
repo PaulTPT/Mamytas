@@ -179,7 +179,6 @@ public class WunderlistServiceHelper {
         Intent intent = new Intent(this.ctx, WunderlistService.class);
         intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_DELETE);
         intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TASK);
-        intent.putExtra(WunderlistService.BODY_EXTRA, body);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
         intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
         intent.putExtra(REQUEST_ID, requestId);
