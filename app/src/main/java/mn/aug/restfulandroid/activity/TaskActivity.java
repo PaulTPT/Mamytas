@@ -1,6 +1,7 @@
 package mn.aug.restfulandroid.activity;
 
 import android.app.Activity;
+import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -10,19 +11,24 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import java.util.List;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Timers;
+import mn.aug.restfulandroid.rest.resource.Timer;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
-public class TaskActivity extends Activity{
+public class TaskActivity extends ListActivity {
 
     private static final String TAG = TaskActivity.class.getSimpleName();
 
@@ -35,17 +41,12 @@ public class TaskActivity extends Activity{
 
     long task_id;
 
-
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.tache_view);
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
-
-
-
     }
-
 
     @Override
     protected void onResume() {
@@ -53,7 +54,7 @@ public class TaskActivity extends Activity{
         Intent i = getIntent();
         // getting attached intent data
         task_id = i.getLongExtra("task_id",0);
-        requestId = mWunderlistServiceHelper.getTimers(task_id);
+
         // displaying selected product name
         tasksDBAccess.open();
         Logger.debug("task_id",String.valueOf(task_id));
@@ -63,26 +64,20 @@ public class TaskActivity extends Activity{
         TextView txtProduct = (TextView) findViewById(R.id.taskName);
         txtProduct.setText(todo.getTitle());
 
+
 		/*
 		 * 1. Register for broadcast from WunderlistServiceHelper
-		 *
 		 * 2. See if we've already made a request. a. If so, check the status.
 		 * b. If not, make the request (already coded below).
 		 */
-
+        requestId = mWunderlistServiceHelper.getTimers(task_id);
         IntentFilter filter = new IntentFilter(WunderlistServiceHelper.ACTION_REQUEST_RESULT);
         requestReceiver = new BroadcastReceiver() {
-
             @Override
             public void onReceive(Context context, Intent intent) {
+                long resultRequestId = intent.getLongExtra(WunderlistServiceHelper.EXTRA_REQUEST_ID, 0);
 
-                long resultRequestId = intent
-                        .getLongExtra(WunderlistServiceHelper.EXTRA_REQUEST_ID, 0);
-
-
-
-                Logger.debug(TAG, "Received intent " + intent.getAction() + ", request ID "
-                        + resultRequestId);
+                Logger.debug(TAG, "Received intent " + intent.getAction() + ", request ID " + resultRequestId);
 
                 if (resultRequestId == requestId) {
 
@@ -93,14 +88,17 @@ public class TaskActivity extends Activity{
                     Logger.debug(TAG, "Result code = " + resultCode);
 
                     if (resultCode == 200) {
-
                         Logger.debug(TAG, "Updating UI with new data");
-                        Timers timers=(Timers) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
+                        Timers timers = (Timers) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
+                        List<Timer> timersList = timers.getTimers();
                         String user = AuthorizationManager.getInstance(context).getUser();
 
-                        Logger.debug("timers2",timers.toString());
-                        TextView txtProduct = (TextView) findViewById(R.id.taskName);
+                        Logger.debug(TAG, "On a bien reçu " + timers.getTimers().size() + " timers de la tâche " + resultRequestId);
 
+                        ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, android.R.layout.simple_list_item_1, timersList);
+                        setListAdapter(adapter);
+
+                        TextView txtProduct = (TextView) findViewById(R.id.taskName);
                         txtProduct.setText(timers.getTimers().get(0).getName());
 
                     }  else if(resultCode==401){
@@ -113,17 +111,10 @@ public class TaskActivity extends Activity{
 
             }
         };
-
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
         this.registerReceiver(requestReceiver, filter);
-
-        if (requestId == null) {
-            requestId = mWunderlistServiceHelper.getTimers(task_id);
-        }
-
-
+        if (requestId == null) requestId = mWunderlistServiceHelper.getTimers(task_id); // Si la requestId n'existe plus c'est un fail on relance.
     }
-
 
     @Override
     protected void onPause() {
@@ -138,7 +129,6 @@ public class TaskActivity extends Activity{
             }
         }
     }
-
 
     private void showToast(String message) {
         if (!isFinishing()) {
@@ -179,7 +169,5 @@ public class TaskActivity extends Activity{
         finish();
 
     }
-
-
 
 }
