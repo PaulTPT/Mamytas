@@ -11,6 +11,9 @@ import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
@@ -33,6 +36,8 @@ import mn.aug.restfulandroid.util.Logger;
 public class TasksActivity extends RESTfulActivity implements UndoBarController.UndoListener {
 
     private static final String TAG = TasksActivity.class.getSimpleName();
+    private Button newTask;
+
     private UndoBarController mUndoBarController;
     private Long requestId;
     private BroadcastReceiver requestReceiver;
@@ -125,8 +130,16 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
         });
 
-
-
+        // view products click event
+        newTask = (Button) findViewById(R.id.newTask);
+        newTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Launching create new task activity
+                Intent i = new Intent(getApplicationContext(), TaskEditor.class);
+                startActivity(i);
+            }
+        });
     }
 
     @Override
