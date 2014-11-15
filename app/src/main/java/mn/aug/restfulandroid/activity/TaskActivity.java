@@ -14,7 +14,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.sql.Timestamp;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -93,25 +92,38 @@ public class TaskActivity extends ListActivity {
                         Logger.debug(TAG, "Updating UI with new data");
                         Timers timers = (Timers) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
                         List<Timer> timersList = timers.getTimers();
+                        Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
                         String user = AuthorizationManager.getInstance(context).getUser();
-
-                        Logger.debug(TAG, "On a bien reçu " + timers.getTimers().size() + " timers de la tâche " + resultRequestId);
 
                         ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_item, timersList);
                         setListAdapter(adapter);
 
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                        Date parsedTimeStamp = null;
-                        try {
-                            parsedTimeStamp = dateFormat.parse("2014-08-22 15:02");
-                        } catch (ParseException e) {e.printStackTrace();}
-                        Timestamp timestamp = new Timestamp(parsedTimeStamp.getTime());
-                        timestamp.getTime();
-                        TextView totalStartDate = (TextView) findViewById(R.id.workDate);
-                        TextView totalEndDate = (TextView) findViewById(R.id.totalEndDate);
-                        totalStartDate.setText("du "+String.valueOf(timestamp.getTime()));
-                        totalEndDate.setText("au "+String.valueOf(dateFormat.format(timestamp)));
+                        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                        Date parsedTimeStamp = null, firstDate = null, lastDate = null;
+                        int totalWorkTime = 0;
+                        for (Timer timer : timersList){
+                            if (timer.getTimer() != null && !timer.getTimer().isEmpty()) totalWorkTime += Integer.valueOf(timer.getTimer());
+                            try {
+                                parsedTimeStamp = dateTimeFormat.parse("2014-08-22 15:02");
+                            } catch (ParseException e) {e.printStackTrace();}
+                            if (parsedTimeStamp != null){
+                                if (firstDate == null) firstDate = (Date) parsedTimeStamp.clone();
+                                else if(parsedTimeStamp.getTime() < firstDate.getTime()) firstDate = (Date) parsedTimeStamp.clone();
+                                if (lastDate == null) lastDate = (Date) parsedTimeStamp.clone();
+                                else if(parsedTimeStamp.getTime() > lastDate.getTime()) lastDate = (Date) parsedTimeStamp.clone();
+                            }
+                        }
 
+                        TextView totalStartDate = (TextView) findViewById(R.id.totalWorkFirstDate);
+                        TextView totalEndDate = (TextView) findViewById(R.id.totalWorkLastDate);
+                        if (firstDate != null){
+                            if (firstDate.getTime() != lastDate.getTime()){
+                                totalStartDate.setText("du "+String.valueOf(dateFormat.format(lastDate.getTime())));
+                                totalEndDate.setText("au "+String.valueOf(dateFormat.format(firstDate.getTime())));
+                            }else
+                                totalStartDate.setText("le "+String.valueOf(dateFormat.format(lastDate.getTime())));
+                        }
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
                         logoutAndFinish();

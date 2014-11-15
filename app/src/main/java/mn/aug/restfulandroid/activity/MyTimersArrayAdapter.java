@@ -11,7 +11,6 @@ import java.util.List;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.rest.resource.Timer;
-import mn.aug.restfulandroid.util.Logger;
 
 public class MyTimersArrayAdapter extends ArrayAdapter<Timer> {
     private final Context context;
@@ -33,10 +32,10 @@ public class MyTimersArrayAdapter extends ArrayAdapter<Timer> {
         View rowView = inflater.inflate(layout, parent, false);
         TextView workUserName = (TextView) rowView.findViewById(R.id.workUserName);
         TextView workTimeSpent = (TextView) rowView.findViewById(R.id.workTimeSpent);
-        TextView workDate = (TextView) rowView.findViewById(R.id.workDate);
+        TextView workDate = (TextView) rowView.findViewById(R.id.workFirstDate);
         workUserName.setText(timerList.get(position).getName()+": ");
-        workTimeSpent.setText(timerList.get(position).getTimer()+"min");
-        workDate.setText("le "+timerList.get(position).getTimer_start());
+        workTimeSpent.setText(timerList.get(position).getTimer() + "min");
+        workDate.setText("le " + timerList.get(position).getTimer_start());
         return rowView;
     }
 }

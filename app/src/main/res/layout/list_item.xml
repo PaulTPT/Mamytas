@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:paddingLeft="10dp"
@@ -20,6 +21,7 @@
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_marginRight="10dp"
+        android:layout_weight="40"
         android:textColor="#000"
         android:textStyle="bold" />
 
@@ -31,6 +33,7 @@
         android:id="@+id/workTimeSpent"
         android:layout_alignBottom="@+id/workUserName"
         android:layout_toRightOf="@+id/workUserName"
+        android:layout_weight="8.80"
         android:layout_toEndOf="@+id/workUserName"
         android:textColor="#000" />
 
@@ -39,7 +42,7 @@
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:text="le 14/11/2014 à 12h31"
-        android:id="@+id/workDate"
+        android:id="@+id/workFirstDate"
         android:textColor="#000"
         android:layout_alignBaseline="@+id/workUserName"
         android:layout_alignBottom="@+id/workUserName"
@@ -47,4 +50,4 @@
         android:layout_alignParentEnd="true"
         android:textStyle="italic" />
 
-</RelativeLayout>
+</LinearLayout>
