@@ -344,7 +344,11 @@ public class OwnershipDBAccess {
      */
     public boolean userOwnsTask(String user, long id) {
         List<Long> list = getTasksIds(user);
-        return list.contains(id);
+        if (list!= null) {
+            return list.contains(id);
+        }else{
+            return  false;
+        }
 
     }
 
