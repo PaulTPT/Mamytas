@@ -57,7 +57,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentResId(R.layout.home);
+        setContentResId(R.layout.list_tasks);
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         list_id= i.getLongExtra(Listw.LIST_ID_EXTRA,0L);
@@ -74,7 +74,8 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         swipelistview.setSwipeOpenOnLongPress(false); // enable or disable SwipeOpenOnLongPress
 
         tasks=new ArrayList<Task>();
-        adapter=new MyArrayAdapterTask(this,R.layout.adapter,tasks);
+
+        adapter=new MyArrayAdapterTask(this,R.layout.list_task_item,tasks);
         swipelistview.setAdapter(adapter);
 
         swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
@@ -87,7 +88,8 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                         "Tâche supprimée",
                         task);
                 tasks.remove(position);
-                adapter=new MyArrayAdapterTask(context,R.layout.adapter,tasks);
+
+                adapter=new MyArrayAdapterTask(context,R.layout.list_task_item,tasks);
                 swipelistview.setAdapter(adapter);
 
             }
@@ -220,7 +222,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                         Logger.debug("list id :",String.valueOf(list_id));
                         tasksDBAccess.close();
                         tasks=todos;
-                        adapter=new MyArrayAdapterTask(context,R.layout.adapter,tasks);
+                        adapter=new MyArrayAdapterTask(context,R.layout.list_task_item,tasks);
                         swipelistview.setAdapter(adapter);
                         requestId=0L;
 
@@ -300,7 +302,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         Task task= (Task) token;
         if (task!=null) {
             tasks.add(task.getPosition(), task);
-            adapter = new MyArrayAdapterTask(context, R.layout.adapter, tasks);
+            adapter = new MyArrayAdapterTask(context, R.layout.list_task_item, tasks);
             swipelistview.setAdapter(adapter);
             mUndoBarController.clearUndoToken();
         }

@@ -18,7 +18,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -30,6 +29,7 @@ import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
+import mn.aug.restfulandroid.util.DateHelper;
 import mn.aug.restfulandroid.util.Logger;
 
 public class TaskActivity extends ListActivity {
@@ -68,6 +68,8 @@ public class TaskActivity extends ListActivity {
         tache = tasksDBAccess.retrieveTodo(task_id);
         tasksDBAccess.close();
 
+        TextView dueDate = (TextView) findViewById(R.id.dueDate);
+        dueDate.setText(tache.getDue_date());
         TextView txtProduct = (TextView) findViewById(R.id.taskName);
         txtProduct.setText(tache.getTitle());
 
@@ -118,18 +120,16 @@ public class TaskActivity extends ListActivity {
                             Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
                             String user = AuthorizationManager.getInstance(context).getUser();
 
-                            ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_item, timersList);
+                            ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_timer_item, timersList);
                             setListAdapter(adapter);
 
-                            SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                             Date parsedTimeStamp = null, firstDate = null, lastDate = null;
                             int totalWorkTime = 0;
                             for (Timer timer : timersList){
                                 if (timer.getTimer() != null && !timer.getTimer().isEmpty()) totalWorkTime += Integer.valueOf(timer.getTimer());
                                 if (timer.getTimer_start() != null) {
                                     try {
-                                        parsedTimeStamp = dateTimeFormat.parse(timer.getTimer_start());
+                                        parsedTimeStamp = DateHelper.dateTimeFormat.parse(timer.getTimer_start());
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
@@ -152,10 +152,10 @@ public class TaskActivity extends ListActivity {
                             TextView totalWorkLastDate = (TextView) findViewById(R.id.totalWorkLastDate);
                             if (firstDate != null){
                                 if (firstDate.getTime() != lastDate.getTime()){
-                                    totalWorkFirstDate.setText("du " + String.valueOf(dateFormat.format(firstDate.getTime())));
-                                    totalWorkLastDate.setText("au " + String.valueOf(dateFormat.format(lastDate.getTime())));
+                                    totalWorkFirstDate.setText("du " + DateHelper.dateFormat.format(firstDate.getTime()));
+                                    totalWorkLastDate.setText("au " + DateHelper.dateFormat.format(lastDate.getTime()));
                                 }else {
-                                    totalWorkLastDate.setText("le " + String.valueOf(dateFormat.format(lastDate.getTime())));
+                                    totalWorkLastDate.setText("le " + DateHelper.dateFormat.format(lastDate.getTime()));
                                     totalWorkFirstDate.setText("");
                                 }
                             }
@@ -189,6 +189,7 @@ public class TaskActivity extends ListActivity {
             }
         }
     }
+
 
     private void showToast(String message) {
         if (!isFinishing()) {
