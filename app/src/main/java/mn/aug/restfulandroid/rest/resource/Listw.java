@@ -7,8 +7,6 @@ import android.os.Parcelable;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-import mn.aug.restfulandroid.util.Logger;
-
 /**
  * Created by Paul on 09/11/2014.
  */
@@ -37,7 +35,10 @@ public class Listw implements Resource,TaskList,Parcelable {
         super();
         this.id = id;
         this.title = title;
-        Logger.debug("list",toString());
+    }
+
+    public Listw(String title) {
+        this.title = title;
     }
 
 

@@ -37,7 +37,6 @@ public class Task implements Resource, TaskList, Parcelable {
     }
 
     public Task(String title,String due_date, long list_id) {
-        this.id = id;
         this.title = title;
         this.due_date = due_date;
         this.list_id = list_id;
