@@ -38,8 +38,21 @@ android:orientation="vertical" >
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dip"
     android:layout_marginRight="10dip"
-    android:hint="yyyy-mm-dd hh:mm"
+    android:hint="yyyy-mm-dd"
     android:singleLine="true"
+    android:onClick="showDatePickerDialog"
+    android:textSize="17dip"
+    android:inputType="datetime"/>
+
+<!-- Input Price -->
+<EditText android:id="@+id/inputTaskDueDateTime"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="10dip"
+    android:layout_marginRight="10dip"
+    android:hint="hh:mm"
+    android:singleLine="true"
+    android:onClick="showTimePickerDialog"
     android:textSize="17dip"
     android:inputType="datetime"/>
 
