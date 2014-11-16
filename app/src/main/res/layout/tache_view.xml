@@ -19,8 +19,8 @@
         android:layout_marginLeft="10dp"
         android:layout_marginTop="7dp"
         android:layout_marginBottom="7dp"
-        android:layout_toLeftOf="@+id/newWorkTimer"
-        android:layout_toStartOf="@+id/newWorkTimer" />
+        android:layout_toStartOf="@+id/startWork"
+        android:layout_toLeftOf="@+id/startWork" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
@@ -46,12 +46,11 @@
         android:textAppearance="?android:attr/textAppearanceSmall"
         android:gravity="center_vertical|right"
         android:id="@+id/newWorkTimer"
-        android:layout_toLeftOf="@+id/startWork"
-        android:layout_toStartOf="@+id/startWork"
+        android:layout_below="@+id/startWork"
         android:textColor="#000"
-        android:layout_marginLeft="3dp"
-        android:layout_alignTop="@+id/startWork"
-        android:layout_alignBottom="@+id/startWork" />
+        android:layout_marginRight="10dp"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
 
     <RelativeLayout
         android:layout_width="fill_parent"
@@ -62,33 +61,72 @@
         android:layout_marginBottom="10dp"
         android:id="@+id/relativeLayout"
         android:paddingRight="10dp"
+        android:paddingLeft="10dp"
         android:textColor="#000">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textAppearance="?android:attr/textAppearanceLarge"
-            android:text="Total :"
-            android:id="@+id/workUserName"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Echéance : "
+            android:id="@+id/dueDateTitle"
             android:layout_alignParentTop="true"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_marginLeft="10dp"
-            android:layout_marginTop="8dp"
-            android:layout_marginRight="10dp"
-            android:textColor="#000" />
+            android:textColor="#000"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="10/11/2014"
+            android:id="@+id/dueDate"
+            android:textColor="#000"
+            android:layout_alignParentTop="true"
+            android:layout_toRightOf="@+id/dueDateTitle"
+            android:layout_toEndOf="@+id/dueDateTitle" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textAppearance="?android:attr/textAppearanceSmall"
+            android:text="Temps cumulé: "
+            android:id="@+id/totalWorkTitle"
+            android:layout_below="@+id/dueDateTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#000"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="00 min"
+            android:id="@+id/totalTimeSpent"
+            android:textColor="#000"
+            android:layout_below="@+id/dueDateTitle"
+            android:layout_toEndOf="@+id/totalWorkTitle"
+            android:layout_toRightOf="@+id/totalWorkTitle" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:id="@+id/relativeLayout2"
+        android:layout_below="@+id/relativeLayout"
+        android:paddingRight="10dp"
+        android:paddingLeft="10dp"
+        android:textColor="#000">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textAppearance="?android:attr/textAppearanceMedium"
-            android:text="00 min"
-            android:id="@+id/totalTimeSpent"
-            android:layout_alignBottom="@+id/workUserName"
-            android:layout_toRightOf="@+id/workUserName"
-            android:layout_toEndOf="@+id/workUserName"
-            android:textColor="#000"/>
-
+            android:text="Travaux réalisés :"
+            android:id="@+id/worksListTitle"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:textColor="#000"
+            android:layout_marginBottom="5dp" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,7 +137,6 @@
             android:layout_alignParentRight="true"
             android:layout_alignParentEnd="true"
             android:textColor="#000"/>
-
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -112,24 +149,11 @@
             android:textColor="#000"/>
     </RelativeLayout>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Travaux réalisés :"
-        android:id="@+id/worksListTitle"
-        android:layout_below="@+id/relativeLayout"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="10dp"
-        android:textColor="#000"
-        android:layout_marginBottom="5dp" />
-
     <ListView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@android:id/list"
-        android:layout_below="@+id/worksListTitle"
+        android:layout_below="@+id/relativeLayout2"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:clickable="false"
