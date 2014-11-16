@@ -39,7 +39,7 @@ public class TaskActivity extends ListActivity {
 
     private TasksDBAccess tasksDBAccess=new TasksDBAccess(this);
 
-    private Long requestId;
+    private Long requestId=0L;
     private BroadcastReceiver requestReceiver;
     private Button startStopWork, btnEditTask;
     private Chronometer newWorkTimer;
@@ -161,6 +161,7 @@ public class TaskActivity extends ListActivity {
                                 }
                             }
                         }else showToast("Vous n'avez pas encore travaillé sur cette tâche");
+                        requestId=0L;
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
                         logoutAndFinish();
@@ -173,7 +174,7 @@ public class TaskActivity extends ListActivity {
         };
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
         this.registerReceiver(requestReceiver, filter);
-        if (requestId == null) requestId = mWunderlistServiceHelper.getTimers(task_id); // Si la requestId n'existe plus c'est un fail on relance.
+        if (requestId == 0L) requestId = mWunderlistServiceHelper.getTimers(task_id); // Si la requestId n'existe plus c'est un fail on relance.
     }
 
     @Override

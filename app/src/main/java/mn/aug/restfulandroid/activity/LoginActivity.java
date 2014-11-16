@@ -1,12 +1,13 @@
 package mn.aug.restfulandroid.activity;
 
-import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -14,11 +15,12 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import mn.aug.restfulandroid.R;
+import mn.aug.restfulandroid.activity.base.RESTfulActivity;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
-public class LoginActivity extends Activity {
+public class LoginActivity extends RESTfulActivity {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
     private Long requestId;
@@ -40,8 +42,7 @@ public class LoginActivity extends Activity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
-        setContentView(R.layout.login);
-
+        setContentResId(R.layout.login);
         super.onCreate(savedInstanceState);
 
         mOAuthManager = AuthorizationManager.getInstance(this);
@@ -58,6 +59,7 @@ public class LoginActivity extends Activity {
                 loggin(name, password);
             }
         });
+
 
 
         requestReceiver = new BroadcastReceiver() {
@@ -81,7 +83,7 @@ public class LoginActivity extends Activity {
                     Logger.debug(TAG, "Result code = " + resultCode);
 
                     if (resultCode == 200) {
-
+                        stopRefreshing();
                         Logger.debug(TAG, "Loggin Succesfull");
                         showToast("Login Succesfull !");
 
@@ -112,6 +114,21 @@ public class LoginActivity extends Activity {
 
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        super.onCreateOptionsMenu(menu);
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.menu, menu);
+        menu.findItem(R.id.logout).setVisible(false);
+        setRefreshingItem(menu.findItem(R.id.refresh));
+        return true;
+    }
+
+    @Override
+    protected void refresh() {
+
+    }
+
     private void startHomeActivity() {
         Intent startHomeActivity = new Intent(this, TasksActivity.class);
         startActivity(startHomeActivity);
@@ -127,6 +144,7 @@ public class LoginActivity extends Activity {
         //Get name and password and retrieve token
 
         requestId = mWunderlistServiceHelper.login(name, password);
+        startRefreshing();
 
     }
 
@@ -165,6 +183,9 @@ public class LoginActivity extends Activity {
             }
         }
     }
+
+
+
 
 
 }

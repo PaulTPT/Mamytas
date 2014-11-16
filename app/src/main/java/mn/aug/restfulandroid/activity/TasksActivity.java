@@ -235,6 +235,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
         if (requestId == 0) {
            requestId = mWunderlistServiceHelper.getTasks();
+            startRefreshing();
         }
 
     }
