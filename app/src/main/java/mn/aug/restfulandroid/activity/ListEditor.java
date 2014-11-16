@@ -11,8 +11,9 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import mn.aug.restfulandroid.R;
+import mn.aug.restfulandroid.provider.ListsDBAccess;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
-import mn.aug.restfulandroid.provider.TasksDBAccess;
+import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
@@ -26,17 +27,17 @@ public class ListEditor extends Activity {
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
-    private TasksDBAccess tasksDBAccess;
+    private ListsDBAccess listsDBAccess;
     private Context context;
     private Boolean edit=false;
-    private Task list =null;
+    private Listw list =null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_list);
         ownershipDBAccess = new OwnershipDBAccess(this);
-        tasksDBAccess = new TasksDBAccess(this);
+        listsDBAccess = new ListsDBAccess(this);
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
         this.context=this;
         Intent i = getIntent();
@@ -47,9 +48,9 @@ public class ListEditor extends Activity {
         btnCreateTask = (Button) findViewById(R.id.btnCreateTask);
 
         if(list_id!=0){
-            tasksDBAccess.open();
-            list = tasksDBAccess.retrieveTodo(list_id);
-            tasksDBAccess.close();
+            listsDBAccess.open();
+            list = listsDBAccess.retrieveList(list_id);
+            listsDBAccess.close();
             listName.setText(list.getTitle());
             btnCreateTask.setText("Editer la liste");
             toastVerb = "Editing";
@@ -68,15 +69,15 @@ public class ListEditor extends Activity {
                 showToast(toastVerb+" task " + listName.getText().toString());
                 if(!edit) {
                     ownershipDBAccess.open();
-                    list = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(listName.getText().toString(), "", 0));
+                    list = ownershipDBAccess.addListGetId(AuthorizationManager.getInstance(context).getUser(), new Listw(listName.getText().toString()));
                     ownershipDBAccess.close();
-                    mWunderlistServiceHelper.postTask(list);
+                    mWunderlistServiceHelper.postList(list);
                 }else{
                     list.setTitle(listName.getText().toString());
-                    tasksDBAccess.open();
-                    tasksDBAccess.updateTodo(list);
-                    tasksDBAccess.close();
-                    mWunderlistServiceHelper.putTask(list);
+                    listsDBAccess.open();
+                    listsDBAccess.updateList(list);
+                    listsDBAccess.close();
+                    mWunderlistServiceHelper.putList(list);
                 }
                 finish();
             }

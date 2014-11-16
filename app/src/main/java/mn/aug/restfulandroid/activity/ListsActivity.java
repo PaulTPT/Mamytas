@@ -135,8 +135,8 @@ public class ListsActivity extends RESTfulActivity implements UndoBarController.
             @Override
             public void onClick(View view) {
                 // Launching create new list activity
-                //Intent i = new Intent(getApplicationContext(), ListEditor.class);
-                //startActivity(i);
+                Intent i = new Intent(getApplicationContext(), ListEditor.class);
+                startActivity(i);
             }
         });
     }
@@ -168,11 +168,6 @@ public class ListsActivity extends RESTfulActivity implements UndoBarController.
     @Override
     protected void onResume() {
         super.onResume();
-
-/*		String name = getNameFromContentProvider();
-        if (name != null) {
-			showNameToast(name);
-		}*/
 
 		/*
 		 * 1. Register for broadcast from WunderlistServiceHelper
