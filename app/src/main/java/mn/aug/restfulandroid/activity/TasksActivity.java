@@ -53,7 +53,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentResId(R.layout.home);
+        setContentResId(R.layout.list_tasks);
         super.onCreate(savedInstanceState);
         mUndoBarController = new UndoBarController(findViewById(R.id.undobar), this);
         ownershipDBAccess = new OwnershipDBAccess(this);
