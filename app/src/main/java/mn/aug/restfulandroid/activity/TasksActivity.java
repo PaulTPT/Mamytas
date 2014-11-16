@@ -67,7 +67,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         swipelistview.setSwipeOpenOnLongPress(false); // enable or disable SwipeOpenOnLongPress
 
         tasks=new ArrayList<Task>();
-        adapter=new MyArrayAdapter(this,R.layout.adapter,tasks);
+        adapter=new MyArrayAdapter(this,R.layout.list_task_item,tasks);
         swipelistview.setAdapter(adapter);
 
         swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
@@ -80,7 +80,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                         "Task deleted",
                         task);
                 tasks.remove(position);
-                adapter=new MyArrayAdapter(context,R.layout.adapter,tasks);
+                adapter=new MyArrayAdapter(context,R.layout.list_task_item,tasks);
                 swipelistview.setAdapter(adapter);
 
             }
@@ -211,7 +211,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                         List<Task> todos= ownershipDBAccess.getTodos(user);
                         ownershipDBAccess.close();
                         tasks=todos;
-                        adapter=new MyArrayAdapter(context,R.layout.adapter,tasks);
+                        adapter=new MyArrayAdapter(context,R.layout.list_task_item,tasks);
                         swipelistview.setAdapter(adapter);
                         requestId=0L;
 
@@ -291,7 +291,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         Task task= (Task) token;
         if (task!=null) {
             tasks.add(task.getPosition(), task);
-            adapter = new MyArrayAdapter(context, R.layout.adapter, tasks);
+            adapter = new MyArrayAdapter(context, R.layout.list_task_item, tasks);
             swipelistview.setAdapter(adapter);
             mUndoBarController.clearUndoToken();
         }
