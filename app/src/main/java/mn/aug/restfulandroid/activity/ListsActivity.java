@@ -53,7 +53,7 @@ public class ListsActivity extends RESTfulActivity implements UndoBarController.
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentResId(R.layout.home);
+        setContentResId(R.layout.list_projects);
         super.onCreate(savedInstanceState);
         mUndoBarController = new UndoBarController(findViewById(R.id.undobar), this);
         ownershipDBAccess = new OwnershipDBAccess(this);
@@ -67,7 +67,7 @@ public class ListsActivity extends RESTfulActivity implements UndoBarController.
         swipelistview.setSwipeOpenOnLongPress(false); // enable or disable SwipeOpenOnLongPress
 
         lists=new ArrayList<Listw>();
-        adapter=new MyArrayAdapterList(this,R.layout.adapter,lists);
+        adapter=new MyArrayAdapterList(this,R.layout.list_project_item,lists);
         swipelistview.setAdapter(adapter);
 
         swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
@@ -80,7 +80,7 @@ public class ListsActivity extends RESTfulActivity implements UndoBarController.
                         "Liste supprimée",
                         list);
                 lists.remove(position);
-                adapter=new MyArrayAdapterList(context,R.layout.adapter,lists);
+                adapter=new MyArrayAdapterList(context,R.layout.list_project_item,lists);
                 swipelistview.setAdapter(adapter);
 
             }
@@ -211,7 +211,7 @@ public class ListsActivity extends RESTfulActivity implements UndoBarController.
                         List<Listw> new_lists= ownershipDBAccess.getLists(user);
                         ownershipDBAccess.close();
                         lists=new_lists;
-                        adapter=new MyArrayAdapterList(context,R.layout.adapter,lists);
+                        adapter=new MyArrayAdapterList(context,R.layout.list_project_item,lists);
                         swipelistview.setAdapter(adapter);
                         requestId=0L;
 
@@ -291,7 +291,7 @@ public class ListsActivity extends RESTfulActivity implements UndoBarController.
         Listw list= (Listw) token;
         if (list!=null) {
             lists.add(list.getPosition(), list);
-            adapter = new MyArrayAdapterList(context, R.layout.adapter, lists);
+            adapter = new MyArrayAdapterList(context, R.layout.list_project_item, lists);
             swipelistview.setAdapter(adapter);
             mUndoBarController.clearUndoToken();
         }
