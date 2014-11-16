@@ -11,6 +11,7 @@ public abstract class RESTfulActivity extends Activity {
 
     private int mContentResId;
     private MenuItem refreshingItem;
+    private boolean refreshing =false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -32,19 +33,28 @@ public abstract class RESTfulActivity extends Activity {
     }
 
     protected void startRefreshing() {
-        refreshingItem.setActionView(R.layout.progress_bar);
-        refreshingItem.expandActionView();
+        refreshing=true;
+        if(refreshingItem!=null) {
+            refreshingItem.setActionView(R.layout.progress_bar);
+            refreshingItem.expandActionView();
+        }
 
     }
 
     protected void stopRefreshing() {
-        refreshingItem.collapseActionView();
-        refreshingItem.setActionView(null);
+        refreshing=false;
+        if(refreshingItem!=null) {
+            refreshingItem.collapseActionView();
+            refreshingItem.setActionView(null);
+        }
 
     }
 
     protected void setRefreshingItem(MenuItem item){
+
         this.refreshingItem=item;
+        if(refreshing)
+            startRefreshing();
     }
 
 }
