@@ -33,7 +33,7 @@ android:orientation="vertical" >
     android:textSize="17dip"/>
 
 <!-- Input Price -->
-<DatePicker android:id="@+id/inputTaskDueDate"
+<EditText android:id="@+id/inputTaskDueDate"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:layout_marginLeft="10dip"

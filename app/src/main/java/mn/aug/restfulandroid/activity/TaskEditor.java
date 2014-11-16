@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.Button;
-import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Toast;
 
@@ -21,7 +20,7 @@ import mn.aug.restfulandroid.util.Logger;
 
 public class TaskEditor extends Activity {
 
-    private  DatePicker taskDueDate;
+    private  EditText taskDueDate;
     private  EditText taskName;
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
@@ -43,14 +42,14 @@ public class TaskEditor extends Activity {
 
         // Edit Text
         taskName = (EditText) findViewById(R.id.inputTaskName);
-        taskDueDate = (DatePicker) findViewById(R.id.inputTaskDueDate);
+        taskDueDate = (EditText) findViewById(R.id.inputTaskDueDate);
 
         if(task_id!=0){
             tasksDBAccess.open();
             task= tasksDBAccess.retrieveTodo(task_id);
             tasksDBAccess.close();
             taskName.setText(task.getTitle());
-            //taskDueDate.setText(task.getDue_date());
+            taskDueDate.setText(task.getDue_date());
             edit=true;
         }
 
@@ -63,16 +62,16 @@ public class TaskEditor extends Activity {
         btnCreateTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.debug("show", "Creating Product "+taskName.getText().toString()+" with due date: "+taskDueDate.toString());
-                showToast("Creating Product "+taskName.getText().toString()+" with due date: "+taskDueDate.toString());
+                Logger.debug("show", "Creating Product "+taskName.getText().toString()+" with due date: "+taskDueDate.getText().toString());
+                showToast("Creating Product "+taskName.getText().toString()+" with due date: "+taskDueDate.getText().toString());
                 if(!edit) {
                     ownershipDBAccess.open();
-                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), taskDueDate.toString(), 0));
+                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), taskDueDate.getText().toString(), 0));
                     ownershipDBAccess.close();
                     mWunderlistServiceHelper.postTask(task);
                 }else{
                     task.setTitle(taskName.getText().toString());
-                    task.setDue_date(taskDueDate.toString());
+                    task.setDue_date(taskDueDate.getText().toString());
                     tasksDBAccess.open();
                     tasksDBAccess.updateTodo(task);
                     tasksDBAccess.close();
