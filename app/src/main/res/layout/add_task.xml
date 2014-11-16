@@ -7,36 +7,40 @@ android:orientation="vertical" >
 <!-- Name Label -->
 <TextView android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:text="Nom de votre tâche"
-    android:paddingLeft="10dip"
-    android:paddingRight="10dip"
-    android:paddingTop="10dip"
+    android:text="Nom de votre tâche :"
+    android:layout_marginTop="20dip"
+    android:layout_marginLeft="10dip"
+    android:layout_marginRight="10dip"
     android:textSize="17dip"/>
 
 <!-- Input Name -->
 <EditText android:id="@+id/inputTaskName"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dip"
-    android:layout_marginBottom="15dip"
+    android:hint="... ... ..."
+    android:layout_marginLeft="10dip"
+    android:layout_marginRight="10dip"
+    android:textSize="17dip"
     android:singleLine="true"/>
 
 <!-- Price Label -->
 <TextView android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:text="Echéance:"
-    android:paddingLeft="10dip"
-    android:paddingRight="10dip"
-    android:paddingTop="10dip"
+    android:text="Echéance :"
+    android:layout_marginTop="20dip"
+    android:layout_marginLeft="10dip"
+    android:layout_marginRight="10dip"
     android:textSize="17dip"/>
 
 <!-- Input Price -->
 <EditText android:id="@+id/inputTaskDueDate"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="5dip"
-    android:layout_marginBottom="15dip"
+    android:layout_marginLeft="10dip"
+    android:layout_marginRight="10dip"
+    android:hint="yyyy-mm-dd hh:mm"
     android:singleLine="true"
+    android:textSize="17dip"
     android:inputType="datetime"/>
 
 <!-- Button Create Product -->
@@ -44,8 +48,13 @@ android:orientation="vertical" >
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:background="@drawable/button_login"
+    android:layout_marginTop="20dip"
+    android:layout_marginLeft="10dip"
+    android:layout_marginRight="10dip"
+    android:padding="10dip"
     android:textColor="#fff"
-
-    android:text="Create Product"/>
+    android:textSize="17dip"
+    android:text="Create Product"
+    android:gravity="center_vertical|center_horizontal" />
 
 </LinearLayout>

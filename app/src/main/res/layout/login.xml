@@ -1,10 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@android:color/white"
- >
+    android:background="#fff">
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPersonName"
+        android:hint="Login"
+        android:textSize="17dip"
+        android:id="@+id/email"
+        android:layout_margin="40dp" />
+
+    <EditText
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="textPassword"
+        android:id="@+id/password"
+        android:textSize="17dip"
+        android:layout_marginLeft="40dp"
+        android:layout_marginRight="40dp"
+        android:hint="Password"
+        android:layout_below="@+id/email" />
 
     <Button
         android:id="@+id/button_login"
@@ -13,29 +30,24 @@
         android:layout_centerInParent="true"
         android:background="@drawable/button_login"
         android:padding="20dp"
+        android:textSize="17dip"
         android:text="@string/button_login_label"
         android:textColor="@android:color/white"
-        android:textStyle="bold"/>
+        android:textStyle="bold"
+        android:layout_marginLeft="40dp" />
 
-    <EditText
-        android:layout_width="wrap_content"
+    <TextView
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:inputType="textPersonName"
-        android:text="Name"
-        android:ems="10"
-        android:id="@+id/email"
-        android:layout_centerHorizontal="true"
-        android:textSize="30sp" />
+        android:text="By Antoine &amp; Paul"
+        android:id="@+id/textView"
+        android:textSize="17dip"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:textStyle="italic"
+        android:gravity="right"
+        android:layout_margin="40dp" />
 
-    <EditText
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:inputType="textPassword"
-        android:ems="10"
-        android:id="@+id/password"
-        android:layout_below="@+id/email"
-        android:layout_alignLeft="@+id/email"
-        android:text="password"
-        android:textSize="30sp" />
 
 </RelativeLayout>

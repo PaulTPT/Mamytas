@@ -97,42 +97,53 @@ public class TaskActivity extends ListActivity {
                         Logger.debug(TAG, "Updating UI with new data");
                         Timers timers = (Timers) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
                         List<Timer> timersList = timers.getTimers();
-                        Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
-                        String user = AuthorizationManager.getInstance(context).getUser();
 
-                        ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_item, timersList);
-                        setListAdapter(adapter);
+                        if (timersList != null && !timersList.isEmpty()){
+                            Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
+                            String user = AuthorizationManager.getInstance(context).getUser();
 
-                        SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
-                        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                        Date parsedTimeStamp = null, firstDate = null, lastDate = null;
-                        int totalWorkTime = 0;
-                        for (Timer timer : timersList){
-                            if (timer.getTimer() != null && !timer.getTimer().isEmpty()) totalWorkTime += Integer.valueOf(timer.getTimer());
-                            try {
-                                parsedTimeStamp = dateTimeFormat.parse(timer.getTimer_start());
-                            } catch (ParseException e) {e.printStackTrace();}
-                            if (parsedTimeStamp != null){
-                                if (firstDate == null) firstDate = (Date) parsedTimeStamp.clone();
-                                else if(parsedTimeStamp.getTime() < firstDate.getTime()) firstDate = (Date) parsedTimeStamp.clone();
-                                if (lastDate == null) lastDate = (Date) parsedTimeStamp.clone();
-                                else if(parsedTimeStamp.getTime() > lastDate.getTime()) lastDate = (Date) parsedTimeStamp.clone();
+                            ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_item, timersList);
+                            setListAdapter(adapter);
+
+                            SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                            Date parsedTimeStamp = null, firstDate = null, lastDate = null;
+                            int totalWorkTime = 0;
+                            for (Timer timer : timersList){
+                                if (timer.getTimer() != null && !timer.getTimer().isEmpty()) totalWorkTime += Integer.valueOf(timer.getTimer());
+                                if (timer.getTimer_start() != null) {
+                                    try {
+                                        parsedTimeStamp = dateTimeFormat.parse(timer.getTimer_start());
+                                    } catch (ParseException e) {
+                                        e.printStackTrace();
+                                    }
+                                    if (parsedTimeStamp != null) {
+                                        if (firstDate == null)
+                                            firstDate = (Date) parsedTimeStamp.clone();
+                                        else if (parsedTimeStamp.getTime() < firstDate.getTime())
+                                            firstDate = (Date) parsedTimeStamp.clone();
+                                        if (lastDate == null)
+                                            lastDate = (Date) parsedTimeStamp.clone();
+                                        else if (parsedTimeStamp.getTime() > lastDate.getTime())
+                                            lastDate = (Date) parsedTimeStamp.clone();
+                                    }
+                                }
                             }
-                        }
 
-                        TextView totalTimeSpent = (TextView) findViewById(R.id.totalTimeSpent);
-                        totalTimeSpent.setText(totalWorkTime+" min");
-                        TextView totalWorkFirstDate = (TextView) findViewById(R.id.totalWorkFirstDate);
-                        TextView totalWorkLastDate = (TextView) findViewById(R.id.totalWorkLastDate);
-                        if (firstDate != null){
-                            if (firstDate.getTime() != lastDate.getTime()){
-                                totalWorkFirstDate.setText("du " + String.valueOf(dateFormat.format(firstDate.getTime())));
-                                totalWorkLastDate.setText("au " + String.valueOf(dateFormat.format(lastDate.getTime())));
-                            }else {
-                                totalWorkLastDate.setText("le " + String.valueOf(dateFormat.format(lastDate.getTime())));
-                                totalWorkFirstDate.setText("");
+                            TextView totalTimeSpent = (TextView) findViewById(R.id.totalTimeSpent);
+                            totalTimeSpent.setText(totalWorkTime+" min");
+                            TextView totalWorkFirstDate = (TextView) findViewById(R.id.totalWorkFirstDate);
+                            TextView totalWorkLastDate = (TextView) findViewById(R.id.totalWorkLastDate);
+                            if (firstDate != null){
+                                if (firstDate.getTime() != lastDate.getTime()){
+                                    totalWorkFirstDate.setText("du " + String.valueOf(dateFormat.format(firstDate.getTime())));
+                                    totalWorkLastDate.setText("au " + String.valueOf(dateFormat.format(lastDate.getTime())));
+                                }else {
+                                    totalWorkLastDate.setText("le " + String.valueOf(dateFormat.format(lastDate.getTime())));
+                                    totalWorkFirstDate.setText("");
+                                }
                             }
-                        }
+                        }else showToast("Vous n'avez pas encore travaillé sur cette tâche");
                     }  else if(resultCode==401){
                         showToast("Your session has expired");
                         logoutAndFinish();
