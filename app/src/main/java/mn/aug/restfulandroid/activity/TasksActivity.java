@@ -38,7 +38,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
     private Button newTask;
 
     private UndoBarController mUndoBarController;
-    private Long requestId;
+    private Long requestId=0L;
     private BroadcastReceiver requestReceiver;
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
@@ -213,7 +213,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                         tasks=todos;
                         adapter=new MyArrayAdapter(context,R.layout.adapter,tasks);
                         swipelistview.setAdapter(adapter);
-                        requestId=null;
+                        requestId=0L;
 
 
                     }  else if(resultCode==401){
@@ -233,7 +233,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
         this.registerReceiver(requestReceiver, filter);
 
-        if (requestId == null) {
+        if (requestId == 0) {
            requestId = mWunderlistServiceHelper.getTasks();
         }
 

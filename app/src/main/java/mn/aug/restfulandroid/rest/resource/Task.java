@@ -12,6 +12,8 @@ import mn.aug.restfulandroid.util.Logger;
 
 public class Task implements Resource, TaskList, Parcelable {
 
+    public static final String TITLE_EXTRA ="title";
+    public static final String DUE_DATE_EXTRA ="due_date";
     public static final String AUTHORITY="WUNDERLIST";
     public static final String PATH="TASK";
 

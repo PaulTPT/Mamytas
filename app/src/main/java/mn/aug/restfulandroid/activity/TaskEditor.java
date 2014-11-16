@@ -33,6 +33,8 @@ public class TaskEditor extends Activity {
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
         this.context=this;
         Intent i = getIntent();
+        String title= i.getStringExtra(Task.TITLE_EXTRA);
+        String due_date =i.getStringExtra(Task.DUE_DATE_EXTRA);
 
         // Edit Text
         taskName = (EditText) findViewById(R.id.inputTaskName);
