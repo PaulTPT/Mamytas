@@ -18,39 +18,38 @@
         android:padding="3dp"
         android:layout_marginLeft="10dp"
         android:layout_marginTop="7dp"
-        android:layout_marginRight="10dp"
-        android:layout_marginBottom="7dp" />
+        android:layout_marginBottom="7dp"
+        android:layout_toLeftOf="@+id/newWorkTimer"
+        android:layout_toStartOf="@+id/newWorkTimer" />
 
     <Button
         style="?android:attr/buttonStyleSmall"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="50dp"
+        android:layout_height="30dp"
         android:text="Start"
         android:id="@+id/startWork"
-        android:layout_alignTop="@+id/taskName"
         android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true"
-        android:layout_alignBottom="@+id/taskName"
+        android:layout_marginTop="7dp"
+        android:layout_marginBottom="7dp"
         android:layout_marginRight="10dp"
-        android:layout_marginLeft="10dp"
-        android:gravity="center_vertical"
+        android:layout_marginLeft="7dp"
         android:background="@drawable/button_play"
-        android:paddingLeft="10dp"
-        android:paddingRight="10dp"
         android:textColor="#fff"
         android:shadowColor="#333"
-        android:singleLine="false" />
+        android:singleLine="false"
+        android:layout_alignParentTop="true" />
 
-    <TextView
+    <Chronometer
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="00:00:00"
         android:gravity="center_vertical|right"
         android:id="@+id/newWorkTimer"
         android:layout_toLeftOf="@+id/startWork"
         android:layout_toStartOf="@+id/startWork"
         android:textColor="#000"
+        android:layout_marginLeft="3dp"
         android:layout_alignTop="@+id/startWork"
         android:layout_alignBottom="@+id/startWork" />
 

@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +41,7 @@ public class TaskActivity extends ListActivity {
     private Long requestId;
     private BroadcastReceiver requestReceiver;
     private Button startStopWork;
+    private Chronometer newWorkTimer;
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
 
@@ -68,6 +70,7 @@ public class TaskActivity extends ListActivity {
         TextView txtProduct = (TextView) findViewById(R.id.taskName);
         txtProduct.setText(tache.getTitle());
 
+        newWorkTimer = (Chronometer)findViewById(R.id.newWorkTimer);
         startStopWork = (Button)findViewById(R.id.startWork);
         startStopWork.setOnClickListener(play);
 
@@ -198,9 +201,11 @@ public class TaskActivity extends ListActivity {
             TextView startStopBtn = (TextView) findViewById(R.id.startWork);
 
             if (startStopWork.getText().toString().equals("Start")){
+                newWorkTimer.start();
                 startStopBtn.setText("Stop");
                 startStopBtn.setBackground(getResources().getDrawable(R.drawable.button_stop));
             }else{
+                newWorkTimer.stop();
                 startStopBtn.setText("Start");
                 startStopBtn.setBackground(getResources().getDrawable(R.drawable.button_play));
             }
