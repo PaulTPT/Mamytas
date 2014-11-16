@@ -40,8 +40,9 @@ public class TaskActivity extends ListActivity {
 
     private Long requestId;
     private BroadcastReceiver requestReceiver;
-    private Button startStopWork;
+    private Button startStopWork, btnEditTask;
     private Chronometer newWorkTimer;
+    private Task tache;
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
 
@@ -64,7 +65,7 @@ public class TaskActivity extends ListActivity {
         // displaying selected product name
         tasksDBAccess.open();
         Logger.debug("task_id",String.valueOf(task_id));
-        Task tache = tasksDBAccess.retrieveTodo(task_id);
+        tache = tasksDBAccess.retrieveTodo(task_id);
         tasksDBAccess.close();
 
         TextView txtProduct = (TextView) findViewById(R.id.taskName);
@@ -73,6 +74,18 @@ public class TaskActivity extends ListActivity {
         newWorkTimer = (Chronometer)findViewById(R.id.newWorkTimer);
         startStopWork = (Button)findViewById(R.id.startWork);
         startStopWork.setOnClickListener(play);
+
+        // view products click event
+        btnEditTask = (Button) findViewById(R.id.btnEditTask);
+        btnEditTask.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // Launching create new task activity
+                Intent i = new Intent(getApplicationContext(), TaskEditor.class);
+                i.putExtra(Task.TASK_ID_EXTRA, tache.getId());
+                startActivity(i);
+            }
+        });
 
 		/*
 		 * 1. Register for broadcast from WunderlistServiceHelper

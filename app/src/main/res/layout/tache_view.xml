@@ -159,5 +159,18 @@
         android:clickable="false"
         android:textColor="#000"/>
 
-
+    <!-- Button Create Product -->
+    <Button android:id="@+id/btnEditTask"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_login"
+        android:layout_below="@android:id/list"
+        android:layout_marginTop="20dip"
+        android:layout_marginLeft="10dip"
+        android:layout_marginRight="10dip"
+        android:padding="10dip"
+        android:textColor="#fff"
+        android:textSize="17dip"
+        android:text="Editer la tache"
+        android:gravity="center_vertical|center_horizontal" />
 </RelativeLayout>

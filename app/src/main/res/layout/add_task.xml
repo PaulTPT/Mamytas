@@ -54,7 +54,7 @@ android:orientation="vertical" >
     android:padding="10dip"
     android:textColor="#fff"
     android:textSize="17dip"
-    android:text="Create Product"
+    android:text="Ajouter la tache"
     android:gravity="center_vertical|center_horizontal" />
 
 </LinearLayout>
