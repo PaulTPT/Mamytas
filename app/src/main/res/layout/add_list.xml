@@ -6,12 +6,13 @@ android:orientation="vertical" >
 
 <TextView android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:text="Nom de votre tâche :"
+    android:text="Nom de votre liste :"
     android:layout_marginTop="20dip"
     android:layout_marginLeft="10dip"
     android:layout_marginRight="10dip"
     android:textSize="17dip"/>
-<EditText android:id="@+id/inputTaskName"
+
+<EditText android:id="@+id/inputListName"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
     android:hint="... ... ..."
@@ -19,34 +20,6 @@ android:orientation="vertical" >
     android:layout_marginRight="10dip"
     android:textSize="17dip"
     android:singleLine="true"/>
-
-<TextView android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:text="Echéance :"
-    android:layout_marginTop="20dip"
-    android:layout_marginLeft="10dip"
-    android:layout_marginRight="10dip"
-    android:textSize="17dip"/>
-<EditText android:id="@+id/inputTaskDueDate"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dip"
-    android:layout_marginRight="10dip"
-    android:hint="yyyy-mm-dd"
-    android:singleLine="true"
-    android:onClick="showDatePickerDialog"
-    android:textSize="17dip"
-    android:inputType="datetime"/>
-<EditText android:id="@+id/inputTaskDueDateTime"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:layout_marginLeft="10dip"
-    android:layout_marginRight="10dip"
-    android:hint="hh:mm"
-    android:singleLine="true"
-    android:onClick="showTimePickerDialog"
-    android:textSize="17dip"
-    android:inputType="datetime"/>
 
 <Button android:id="@+id/btnCreateTask"
     android:layout_width="fill_parent"
@@ -58,7 +31,7 @@ android:orientation="vertical" >
     android:padding="10dip"
     android:textColor="#fff"
     android:textSize="17dip"
-    android:text="Ajouter la tache"
+    android:text="Ajouter la liste"
     android:gravity="center_vertical|center_horizontal" />
 
 </LinearLayout>
