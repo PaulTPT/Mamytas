@@ -28,6 +28,8 @@ public class WunderlistService extends IntentService {
     public static final int RESOURCE_TYPE_LOGIN = 2;
     public static final int RESOURCE_TYPE_TASK= 3;
     public static final int RESOURCE_TYPE_TIMERS= 4;
+    public static final int RESOURCE_TYPE_LISTS = 5;
+    public static final int RESOURCE_TYPE_LIST = 6;
 
 	public static final String SERVICE_CALLBACK = "wunderlist.SERVICE_CALLBACK";
 
@@ -35,7 +37,8 @@ public class WunderlistService extends IntentService {
 
 	private static final int REQUEST_INVALID = -1;
 
-	private ResultReceiver mCallback;
+
+    private ResultReceiver mCallback;
 
 	private Intent mOriginalRequestIntent;
 
@@ -57,21 +60,21 @@ public class WunderlistService extends IntentService {
 
 		switch (resourceType) {
 
-		case RESOURCE_TYPE_TASKS:
+            case RESOURCE_TYPE_TASKS:
 
-			if (method.equalsIgnoreCase(METHOD_GET) ) {
-				TasksProcessor processor = new TasksProcessor(getApplicationContext());
-				processor.getTasks(makeProcessorCallback());
-			}else if (method.equalsIgnoreCase(METHOD_POST) ) {
+                if (method.equalsIgnoreCase(METHOD_GET) ) {
+                    TasksProcessor processor = new TasksProcessor(getApplicationContext());
+                    processor.getTasks(makeProcessorCallback());
+                }else if (method.equalsIgnoreCase(METHOD_POST) ) {
 
-                long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+                    long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
 
-                TasksProcessor processor = new TasksProcessor(getApplicationContext());
-                processor.postTask(makeProcessorCallback(),task_id, body);
-            }else{
-				mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
-			}
-			break;
+                    TasksProcessor processor = new TasksProcessor(getApplicationContext());
+                    processor.postTask(makeProcessorCallback(),task_id, body);
+                }else{
+                    mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
+                }
+                break;
 
             case RESOURCE_TYPE_TASK:
 
@@ -90,6 +93,41 @@ public class WunderlistService extends IntentService {
                     mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
                 }
                 break;
+
+            case RESOURCE_TYPE_LISTS:
+
+                if (method.equalsIgnoreCase(METHOD_GET) ) {
+                    ListsProcessor processor = new ListsProcessor(getApplicationContext());
+                    processor.getLists(makeProcessorCallback());
+                }else if (method.equalsIgnoreCase(METHOD_POST) ) {
+
+                    long list_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+
+                    ListsProcessor processor = new ListsProcessor(getApplicationContext());
+                    processor.postList(makeProcessorCallback(),list_id, body);
+                }else{
+                    mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
+                }
+                break;
+
+            case RESOURCE_TYPE_LIST:
+
+                if (method.equalsIgnoreCase(METHOD_DELETE) ) {
+                    long list_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+
+                    ListProcessor processor = new ListProcessor(getApplicationContext());
+                    processor.deleteList(makeProcessorCallback(),list_id);
+                }else if (method.equalsIgnoreCase(METHOD_PUT) ) {
+
+                    long list_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+
+                    ListProcessor processor = new ListProcessor(getApplicationContext());
+                    processor.putList(makeProcessorCallback(), list_id, body);
+                }else{
+                    mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
+                }
+                break;
+
 
             case RESOURCE_TYPE_LOGIN:
 

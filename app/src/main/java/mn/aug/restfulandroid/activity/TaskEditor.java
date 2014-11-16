@@ -22,12 +22,14 @@ public class TaskEditor extends Activity {
 
     private  EditText taskDueDate;
     private  EditText taskName;
+    private  Button button;
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
     private TasksDBAccess tasksDBAccess;
     private Context context;
     private Boolean edit=false;
     private Task task=null;
+    private long list_id=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,23 +52,24 @@ public class TaskEditor extends Activity {
             tasksDBAccess.close();
             taskName.setText(task.getTitle());
             taskDueDate.setText(task.getDue_date());
+            button.setText("Modifier la tâche");
             edit=true;
         }
 
 
 
         // Create button
-        Button btnCreateTask = (Button) findViewById(R.id.btnCreateTask);
+        button = (Button) findViewById(R.id.btnCreateTask);
 
         // button click event
-        btnCreateTask.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Logger.debug("show", "Creating Product "+taskName.getText().toString()+" with due date: "+taskDueDate.getText().toString());
                 showToast("Creating Product "+taskName.getText().toString()+" with due date: "+taskDueDate.getText().toString());
                 if(!edit) {
                     ownershipDBAccess.open();
-                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), taskDueDate.getText().toString(), 0));
+                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), taskDueDate.getText().toString(), list_id));
                     ownershipDBAccess.close();
                     mWunderlistServiceHelper.postTask(task);
                 }else{

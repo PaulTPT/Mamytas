@@ -38,6 +38,8 @@
         <activity android:name=".activity.TaskActivity" />
         <activity android:name=".activity.TaskEditor" />
         <activity android:name=".activity.AboutActivity" />
+        <activity android:name=".activity.ListsActivity" />
+
 
 
         <service android:name=".service.WunderlistService" />

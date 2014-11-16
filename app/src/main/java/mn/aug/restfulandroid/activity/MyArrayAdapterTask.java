@@ -17,13 +17,13 @@ import java.util.List;
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.rest.resource.Task;
 
-public class MyArrayAdapter extends ArrayAdapter<Task> {
+public class MyArrayAdapterTask extends ArrayAdapter<Task> {
     private final Context context;
     private final List<Task> todos;
     private final int layout;
 
 
-    public MyArrayAdapter(Context context,int layout, List<Task> todos ) {
+    public MyArrayAdapterTask(Context context, int layout, List<Task> todos) {
         super(context, layout, todos);
         this.context = context;
         this.todos=todos;
@@ -36,12 +36,13 @@ public class MyArrayAdapter extends ArrayAdapter<Task> {
 
         RowHolder holder = null;
         View row = convertView;
-        holder = null;
 
-        if(row == null)
+        if(holder == null)
         {
-            LayoutInflater inflater = ((Activity)context).getLayoutInflater();
-            row = inflater.inflate(layout, parent, false);
+            if(row==null) {
+                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
+                row = inflater.inflate(layout, parent, false);
+            }
 
             holder = new RowHolder();
 

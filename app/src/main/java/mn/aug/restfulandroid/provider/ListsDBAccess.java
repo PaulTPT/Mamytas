@@ -5,6 +5,9 @@ import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import mn.aug.restfulandroid.rest.resource.Listw;
 
 /**
@@ -44,7 +47,7 @@ public class ListsDBAccess {
      */
     public boolean storeList(Listw list) {
 
-        if (!ListIsInDB(list)) try {
+        if (!ListIsInDB(list.getId())) try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.LISTS_ID, list.getId());
             values.put(ProviderDbHelper.LISTS_TITLE, list.getTitle());
@@ -67,7 +70,7 @@ public class ListsDBAccess {
     public boolean updateList(Listw list) {
 
 
-        if (ListIsInDB(list)) try {
+        if (ListIsInDB(list.getId())) try {
             ContentValues values = new ContentValues();
             values.put(ProviderDbHelper.LISTS_TITLE, list.getTitle());
             bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = '" + list.getId()+"'", null);
@@ -113,7 +116,7 @@ public class ListsDBAccess {
      */
     public boolean deleteList(long listID) {
 
-        if (ListIsInDB(retrieveList(listID))) {
+        if (ListIsInDB(listID)) {
             try {
                 bdd.delete(ProviderDbHelper.TABLE_LISTS, ProviderDbHelper.LISTS_ID + " = '" + listID+"'", null);
             } catch (Exception e) {
@@ -126,11 +129,11 @@ public class ListsDBAccess {
     }
 
 
-    public boolean ListIsInDB(Listw list) {
+    public boolean ListIsInDB(long id) {
 
         Cursor c = null;
         try {
-            c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_TITLE}, ProviderDbHelper.LISTS_ID + " ='" + list.getId() + "'", null, null, null, null);
+            c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_TITLE}, ProviderDbHelper.LISTS_ID + " ='" + id + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return false;
@@ -138,13 +141,13 @@ public class ListsDBAccess {
         return c.getCount() != 0;
     }
 
-    public boolean setStatus(Listw list, String state) {
+    public boolean setStatus(long id, String state) {
 
-        if (ListIsInDB(list)) {
+        if (ListIsInDB(id)) {
             try {
                 ContentValues values = new ContentValues();
                 values.put(ProviderDbHelper.LISTS_STATE, state);
-                bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = '" + list.getId()+"'", null);
+                bdd.update(ProviderDbHelper.TABLE_LISTS, values, ProviderDbHelper.LISTS_ID + " = '" + id+"'", null);
             } catch (Exception e) {
                 e.printStackTrace();
                 return false;
@@ -154,13 +157,13 @@ public class ListsDBAccess {
         return false;
     }
 
-    public String getStatus(Listw list) {
+    public String getStatus(long id) {
 
-        if (ListIsInDB(list)) {
+        if (ListIsInDB(id)) {
             Cursor c = null;
             try {
                 c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_STATE},
-                        ProviderDbHelper.LISTS_ID + " ='" +list.getId() + "'", null, null, null, null);
+                        ProviderDbHelper.LISTS_ID + " ='" +id + "'", null, null, null, null);
             } catch (Exception e) {
                 e.printStackTrace();
                 return null;
@@ -176,6 +179,56 @@ public class ListsDBAccess {
 
         }
         return "not_existing";
+    }
+
+    public List<Long> retrieveAllLists(){
+
+        List<Long> list = new ArrayList<Long>();
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_ID},null, null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return list;
+        else {
+            c.moveToFirst();
+            do {
+                long list_id = c.getLong(0);
+                list.add(list_id);
+            } while (c.moveToNext());
+            return list;
+
+        }
+
+    }
+
+    public List<Long> retrieveListsWithState(String state){
+
+        List<Long> list = new ArrayList<Long>();
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_LISTS, new String[]{ProviderDbHelper.LISTS_ID},
+                    ProviderDbHelper.LISTS_STATE + " ='" + state+ "'", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return null;
+        else {
+            c.moveToFirst();
+            do {
+                long list_id = c.getLong(0);
+                list.add(list_id);
+            } while (c.moveToNext());
+            return list;
+
+        }
     }
 
 

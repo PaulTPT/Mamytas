@@ -130,6 +130,37 @@ public class OwnershipDBAccess {
 
     }
 
+
+
+    /**
+     * Add a task to the user's ownership list
+     *
+     * @param name Name of the user
+     * @param list The list
+     * @return Whether it was successful
+     */
+    public boolean addList(String name, Listw list) {
+
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "LIST");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER, name);
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID, list.getId());
+            values.put(ProviderDbHelper.OWNERSHIP_ID, list.getId());
+            bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
+
+            listsDBAccess.open();
+            listsDBAccess.storeList(list);
+            listsDBAccess.setStatus(list.getId(),"new");
+            listsDBAccess.close();
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+
+    }
+
     /**
      * Add a list to the user's ownership list
      *
@@ -137,7 +168,7 @@ public class OwnershipDBAccess {
      * @param list The list
      * @return Whether it was successful
      */
-    public Listw addList(String name, Listw list) {
+    public Listw addListGetId(String name, Listw list) {
 
 
         try {
@@ -388,6 +419,7 @@ public class OwnershipDBAccess {
 
         return list;
     }
+
 
     /**
      * Get all the lists owned by a user
