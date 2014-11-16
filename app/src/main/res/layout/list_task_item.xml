@@ -27,7 +27,7 @@
         android:id="@+id/front"
         android:tag="front"
         style="@style/MyListFrontContent">
-        
+
         <TextView
             android:layout_width="fill_parent"
             android:text="Nom de la tache"
