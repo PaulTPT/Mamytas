@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
+import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
@@ -23,22 +24,36 @@ public class TaskEditor extends Activity {
     private  EditText taskName;
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
+    private TasksDBAccess tasksDBAccess;
     private Context context;
+    private Boolean edit=false;
+    private Task task=null;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.add_task);
         ownershipDBAccess = new OwnershipDBAccess(this);
+        tasksDBAccess = new TasksDBAccess(this);
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
         this.context=this;
         Intent i = getIntent();
-        String title= i.getStringExtra(Task.TITLE_EXTRA);
-        String due_date =i.getStringExtra(Task.DUE_DATE_EXTRA);
+        Long task_id= i.getLongExtra(Task.TASK_ID_EXTRA,0L);
 
         // Edit Text
         taskName = (EditText) findViewById(R.id.inputTaskName);
         taskDueDate = (EditText) findViewById(R.id.inputTaskDueDate);
+
+        if(task_id!=0){
+            tasksDBAccess.open();
+            task= tasksDBAccess.retrieveTodo(task_id);
+            tasksDBAccess.close();
+            taskName.setText(task.getTitle());
+            taskDueDate.setText(task.getDue_date());
+            edit=true;
+        }
+
+
 
         // Create button
         Button btnCreateTask = (Button) findViewById(R.id.btnCreateTask);
@@ -49,10 +64,19 @@ public class TaskEditor extends Activity {
             public void onClick(View view) {
                 Logger.debug("show", "Creating Product "+taskName.getText().toString()+" with due date: "+taskDueDate.getText().toString());
                 showToast("Creating Product "+taskName.getText().toString()+" with due date: "+taskDueDate.getText().toString());
-                ownershipDBAccess.open();
-                Task task =ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(),new Task(taskName.getText().toString(),taskDueDate.getText().toString(),0));
-                ownershipDBAccess.close();
-                mWunderlistServiceHelper.postTask(task);
+                if(!edit) {
+                    ownershipDBAccess.open();
+                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), taskDueDate.getText().toString(), 0));
+                    ownershipDBAccess.close();
+                    mWunderlistServiceHelper.postTask(task);
+                }else{
+                    task.setTitle(taskName.getText().toString());
+                    task.setDue_date(taskDueDate.getText().toString());
+                    tasksDBAccess.open();
+                    tasksDBAccess.updateTodo(task);
+                    tasksDBAccess.close();
+                    mWunderlistServiceHelper.putTask(task);
+                }
                 finish();
             }
         });
