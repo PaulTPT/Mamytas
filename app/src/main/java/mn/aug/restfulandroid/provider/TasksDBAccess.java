@@ -8,9 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
 import java.util.ArrayList;
 import java.util.List;
 
-import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
-import mn.aug.restfulandroid.util.Logger;
 
 /**
  * Created by Paul on 09/11/2014.
@@ -177,12 +175,44 @@ public class TasksDBAccess {
             return null;
         }
         if (c.getCount() == 0)
-            return null;
+            return list;
         else {
             c.moveToFirst();
             do {
                 int list_id = c.getInt(0);
                 list.add(list_id);
+            } while (c.moveToNext());
+            return list;
+
+        }
+
+    }
+
+    /**
+     * Retrieve tasks related to a list
+     *
+     * @param listID The Id of the list
+     * @return The tasks ids corresponding to the list
+     */
+    public List<Task> retrieveTodosInstancesFromList(long listID) {
+
+        List<Task> list = new ArrayList<Task>();
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_TODOS, new String[]{ProviderDbHelper.TODOS_ID},
+                    ProviderDbHelper.TODOS_LIST_ID + " ='" + listID + "'", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return list;
+        else {
+            c.moveToFirst();
+            do {
+                int task_id = c.getInt(0);
+                list.add(retrieveTodo(task_id));
             } while (c.moveToNext());
             return list;
 

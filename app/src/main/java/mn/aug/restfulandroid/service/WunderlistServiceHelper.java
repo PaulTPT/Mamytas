@@ -9,6 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Timers;
 
@@ -27,9 +28,13 @@ public class WunderlistServiceHelper {
 	private static final String REQUEST_ID = "REQUEST_ID";
 	private static final String getTasksHashkey = "GET_TASKS";
     private static final String postTaskHashkey = "POST_TASK";
-    private static final String loginHashkey = "LOGIN";
     private static final String putTaskHashkey = "PUT_TASK";
     private static final String deleteTaskHashkey = "DELETE_TASK";
+    private static final String getListsHashkey = "GET_LISTS";
+    private static final String postListHashkey = "POST_LIST";
+    private static final String putListHashkey = "PUT_LIST";
+    private static final String deleteListHashkey = "DELETE_LIST";
+    private static final String loginHashkey = "LOGIN";
     private static final String getTimersHashkey = "GET_TIMERS";
 
 	private static Object lock = new Object();
@@ -76,6 +81,29 @@ public class WunderlistServiceHelper {
 		
 		return requestId;		
 	}
+
+    public long getLists() {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(getListsHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, getListsHashkey);
+            }
+        };
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_GET);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_LISTS);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
 
     public long getTimers(Long task_id) {
 
@@ -130,6 +158,35 @@ public class WunderlistServiceHelper {
         return requestId;
     }
 
+    public long postList(Listw list) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(postListHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, postListHashkey);
+            }
+        };
+
+
+
+        byte[] body= list.toString().getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_POST);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_LISTS);
+        intent.putExtra(WunderlistService.BODY_EXTRA, body);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,list.getId());
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
+
     public long putTask(Task task) {
 
         long requestId = generateRequestID();
@@ -159,6 +216,35 @@ public class WunderlistServiceHelper {
         return requestId;
     }
 
+    public long putList(Listw list) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(putListHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, putListHashkey);
+            }
+        };
+
+
+
+        byte[] body=list.toString().getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_PUT);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_LIST);
+        intent.putExtra(WunderlistService.BODY_EXTRA, body);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,list.getId());
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
+
 
     public long deleteTask(Task task) {
 
@@ -181,6 +267,35 @@ public class WunderlistServiceHelper {
         intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TASK);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
         intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
+
+
+    public long deleteList(Listw list) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(deleteListHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, deleteListHashkey);
+            }
+        };
+
+
+
+        byte[] body= list.toString().getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_DELETE);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_LIST);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,list.getId());
         intent.putExtra(REQUEST_ID, requestId);
 
         this.ctx.startService(intent);

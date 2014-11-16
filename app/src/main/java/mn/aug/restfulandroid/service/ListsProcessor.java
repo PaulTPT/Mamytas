@@ -2,17 +2,16 @@ package mn.aug.restfulandroid.service;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.List;
 
+import mn.aug.restfulandroid.provider.ListsDBAccess;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
-import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.RestMethod;
 import mn.aug.restfulandroid.rest.RestMethodFactory;
 import mn.aug.restfulandroid.rest.RestMethodFactory.Method;
 import mn.aug.restfulandroid.rest.RestMethodResult;
-import mn.aug.restfulandroid.rest.resource.Task;
-import mn.aug.restfulandroid.rest.resource.Tasks;
+import mn.aug.restfulandroid.rest.resource.Lists;
+import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.util.Logger;
 
@@ -22,24 +21,24 @@ import mn.aug.restfulandroid.util.Logger;
  *
  * @author Peter Pascale
  */
-public class TasksProcessor {
+public class ListsProcessor {
 
 
     private ProcessorCallback mCallback;
     private Context mContext;
     private OwnershipDBAccess ownershipDBAccess;
-    private TasksDBAccess tasksDBAccess;
+    private ListsDBAccess listsDBAccess;
 
 
-    public TasksProcessor(Context context) {
+    public ListsProcessor(Context context) {
 
         mContext = context;
         ownershipDBAccess = new OwnershipDBAccess(mContext);
-        tasksDBAccess = new TasksDBAccess(mContext);
+        listsDBAccess = new ListsDBAccess(mContext);
     }
 
 
-    void getTasks(ProcessorCallback callback) {
+    void getLists(ProcessorCallback callback) {
 
 		/*
         Processor is a POJO
@@ -57,20 +56,20 @@ public class TasksProcessor {
         // results column
         // Look at ContentProvider example, and build a content provider
         // that tracks the necessary data.
-        tasksDBAccess.open();
-        List<Integer> list_ids = tasksDBAccess.retrieveAllTasks();
-        if (list_ids != null) for (int id : list_ids) {
-            tasksDBAccess.setStatus(id, "updating");
+        listsDBAccess.open();
+        List<Long> list_ids = listsDBAccess.retrieveAllLists();
+        if (list_ids != null) for (Long id : list_ids) {
+            listsDBAccess.setStatus(id, "updating");
         }
-        tasksDBAccess.close();
+        listsDBAccess.close();
 
         // (5) Call the REST method
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
 
-        RestMethod<Tasks> getTasksMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Tasks.CONTENT_URI, Method.GET, null, null, 0);
-        RestMethodResult<Tasks> result = getTasksMethod.execute();
+        RestMethod<Lists> getTasksMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
+                Lists.CONTENT_URI, Method.GET, null, null, 0);
+        RestMethodResult<Lists> result = getTasksMethod.execute();
 
 				/*
                  * (8) Insert-Update the ContentProvider status, and insert the result
@@ -78,7 +77,7 @@ public class TasksProcessor {
 				 * the content provider
 				 */
 
-        Logger.debug("tasks", String.valueOf(result.getStatusCode()));
+        Logger.debug("lists", String.valueOf(result.getStatusCode()));
 
         if (result.getStatusCode() == 200) {
             updateDataBase(result.getResource());
@@ -91,7 +90,7 @@ public class TasksProcessor {
     }
 
 
-    public void postTask(ProcessorCallback callback, long task_id, byte[] body) {
+    public void postList(ProcessorCallback callback, long list_id, byte[] body) {
 
         /*
         Processor is a POJO
@@ -109,16 +108,16 @@ public class TasksProcessor {
         // results column
         // Look at ContentProvider example, and build a content provider
         // that tracks the necessary data.
-        tasksDBAccess.open();
-        tasksDBAccess.setStatus(task_id, "uploading");
-        tasksDBAccess.close();
+        listsDBAccess.open();
+        listsDBAccess.setStatus(list_id, "uploading");
+        listsDBAccess.close();
         // (5) Call the REST method
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
 
-        RestMethod<Task> postTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Tasks.CONTENT_URI, Method.POST, null, body, 0);
-        RestMethodResult<Task> result = postTaskMethod.execute();
+        RestMethod<Listw> postListMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
+                Lists.CONTENT_URI, Method.POST, null, body, 0);
+        RestMethodResult<Listw> result = postListMethod.execute();
 
 				/*
                  * (8) Insert-Update the ContentProvider status, and insert the result
@@ -129,66 +128,49 @@ public class TasksProcessor {
 
         if (result.getStatusCode() == 200) {
 
-            ownershipDBAccess.open();
-            ownershipDBAccess.removeTask(task_id);
-            Task task = result.getResource();
             String user = AuthorizationManager.getInstance(mContext).getUser();
-            ownershipDBAccess.addTask(user, task);
-            ArrayList<String> listOwners = ownershipDBAccess.getListOwners(task.getList_id());
-            for (String owner : listOwners) {
-                if (!owner.equals(user)) {
-                    ownershipDBAccess.addSharedTask(owner, task);
-                }
-            }
+            ownershipDBAccess.open();
+            ownershipDBAccess.removeListFromUser(user, list_id);
+            Listw list = result.getResource();
+            ownershipDBAccess.addListGetId(user, list);
             ownershipDBAccess.close();
-              }
-
-        // (9) Operation complete callback to Service
-
-        callback.send(result.getStatusCode());
-
-    }
-
-    private void updateDataBase(Tasks tasksResult) {
+        }
 
 
-        List<Task> tasks = tasksResult.getTasks();
+    // (9) Operation complete callback to Service
+
+    callback.send(result.getStatusCode());
+
+}
+
+    //TODO
+    private void updateDataBase(Lists listsResult) {
+
+        List<Listw> lists = listsResult.getLists();
 
         String user = AuthorizationManager.getInstance(mContext).getUser();
 
-        if (tasks != null && user != null) {
+        if (lists != null && user != null) {
             // insert/update row for each Task
-            tasksDBAccess.open();
+            listsDBAccess.open();
             ownershipDBAccess.open();
-            for (Task task : tasks) {
+            for (Listw list : lists) {
 
-                if (!tasksDBAccess.TodoIsInDB(task)) {
-                    ownershipDBAccess.addTask(user, task);
-                    ArrayList<String> listOwners = ownershipDBAccess.getListOwners(task.getList_id());
-                    for (String owner : listOwners) {
-                        if (!owner.equals(user)) {
-                            ownershipDBAccess.addSharedTask(owner, task);
-                        }
-
-                    }
+                if (!listsDBAccess.ListIsInDB(list.getId())) {
+                    ownershipDBAccess.addList(user, list);
                 } else {
-                    tasksDBAccess.updateTodo(task);
-                    tasksDBAccess.setStatus((int) task.getId(), "up_to_date");
+                    listsDBAccess.updateList(list);
+                    listsDBAccess.setStatus((int) list.getId(), "up_to_date");
                 }
 
-                if (!ownershipDBAccess.userOwnsTask(user, task.getId())) {
-                    ownershipDBAccess.addSharedTask(user, task);
                 }
+
+
+            List<Long> list_ids = listsDBAccess.retrieveListsWithState("updating");
+            if (list_ids != null) for (long id : list_ids) {
+                ownershipDBAccess.removeListFromUser(user, id);
             }
-
-
-            List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("updating");
-            if (list_ids != null) for (int id : list_ids) {
-                ownershipDBAccess.removeTask(id);
-            }
-
-
-            tasksDBAccess.close();
+            listsDBAccess.close();
             ownershipDBAccess.close();
         }
 

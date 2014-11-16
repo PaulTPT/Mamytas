@@ -40,7 +40,7 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
     public static final String LISTS_CREATE =
             "create table " + TABLE_LISTS + "("
                     + LISTS_ID + " integer primary key autoincrement, "
-                    + LISTS_STATE + " text "
+                    + LISTS_STATE + " text, "
                     + LISTS_TITLE + " text "
                     + ");";
     //Strings for the OWNERSHIP TABLE

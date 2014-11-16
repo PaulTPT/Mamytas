@@ -11,21 +11,21 @@ import java.net.URI;
 import java.util.List;
 import java.util.Map;
 
-import mn.aug.restfulandroid.rest.resource.Task;
+import mn.aug.restfulandroid.rest.resource.Listw;
 
 /**
  * Created by Paul on 10/11/2014.
  */
-public class PostTaskRestMethod extends AbstractRestMethod<Task> {
+public class PostListRestMethod extends AbstractRestMethod<Listw> {
 
     private Context mContext;
 
-    private static final URI TASK_URI = URI.create("http://paultpt-wunderlist.rhcloud.com/me/tasks");
+    private static final URI LIST_URI = URI.create("http://paultpt-wunderlist.rhcloud.com/me/lists");
 
     private Map<String, List<String>> headers;
     private byte[] body;
 
-    public PostTaskRestMethod(Context context, Map<String, List<String>> headers,byte[] body){
+    public PostListRestMethod(Context context, Map<String, List<String>> headers,byte[] body){
         mContext = context.getApplicationContext();
         this.headers = headers;
         this.body=body;
@@ -34,19 +34,19 @@ public class PostTaskRestMethod extends AbstractRestMethod<Task> {
     @Override
     protected Request buildRequest() {
 
-        Request request = new Request(RestMethodFactory.Method.POST, TASK_URI, headers, body);
+        Request request = new Request(RestMethodFactory.Method.POST, LIST_URI, headers, body);
         return request;
     }
 
     @Override
-    protected Task parseResponseBody(String responseBody) throws Exception {
+    protected Listw parseResponseBody(String responseBody) throws Exception {
 
-        Task task=null;
+        Listw list=null;
 
         if (responseBody!= null && responseBody.length()>0) {
             try {
                 final ObjectMapper mapper = new ObjectMapper();
-                task = mapper.readValue(responseBody, Task.class);
+                list = mapper.readValue(responseBody, Listw.class);
             } catch (JsonParseException e) {
                 e.printStackTrace();
             } catch (JsonMappingException e) {
@@ -55,7 +55,7 @@ public class PostTaskRestMethod extends AbstractRestMethod<Task> {
                 e.printStackTrace();
             }
         }
-        return task;
+        return list;
 
     }
 

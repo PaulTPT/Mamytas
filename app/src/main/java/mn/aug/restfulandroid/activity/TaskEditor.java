@@ -26,16 +26,17 @@ import mn.aug.restfulandroid.util.TimePickerFragment;
 
 public class TaskEditor extends Activity {
 
-    private EditText taskName, taskDueDate, taskDueTime ;
-    private Button btnCreateTask;
-    private String toastVerb = "Creating";
 
+    private  Button button;
+    private EditText taskName, taskDueDate, taskDueTime ;
+    private String toastVerb = "Creating";
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
     private TasksDBAccess tasksDBAccess;
     private Context context;
     private Boolean edit=false;
     private Task task=null;
+    private long list_id=0;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -52,14 +53,14 @@ public class TaskEditor extends Activity {
         taskName = (EditText) findViewById(R.id.inputTaskName);
         taskDueDate = (EditText) findViewById(R.id.inputTaskDueDate);
         taskDueTime = (EditText) findViewById(R.id.inputTaskDueDateTime);
-        btnCreateTask = (Button) findViewById(R.id.btnCreateTask);
+        button = (Button) findViewById(R.id.btnCreateTask);
 
         if(task_id!=0){
             tasksDBAccess.open();
             task= tasksDBAccess.retrieveTodo(task_id);
             tasksDBAccess.close();
             taskName.setText(task.getTitle());
-            btnCreateTask.setText("Editer la tache");
+            button.setText("Modifier la tâche");
             toastVerb = "Editing";
             try {
                 taskDueDate.setText(DateHelper.getDateFromDate(task.getDue_date()));
@@ -67,13 +68,12 @@ public class TaskEditor extends Activity {
             } catch (ParseException e) {showToast("Mauvais format pour la due date, heureusement que vous passez par là !");}
             edit=true;
         }else{
-            btnCreateTask.setText("Ajouter la tache");
+            button.setText("Ajouter la tache");
         }
 
-        // Create button
 
         // button click event
-        btnCreateTask.setOnClickListener(new View.OnClickListener() {
+        button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 String dueDate = null;
@@ -88,7 +88,7 @@ public class TaskEditor extends Activity {
                 showToast(toastVerb+" task " + taskName.getText().toString() + " with due date: " + dueDate);
                 if(!edit) {
                     ownershipDBAccess.open();
-                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), dueDate, 0));
+                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), taskDueDate.getText().toString(), list_id));
                     ownershipDBAccess.close();
                     mWunderlistServiceHelper.postTask(task);
                 }else{

@@ -25,19 +25,17 @@ import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.activity.base.RESTfulActivity;
 import mn.aug.restfulandroid.activity.base.UndoBarController;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
-import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.resource.Listw;
-import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
-public class TasksActivity extends RESTfulActivity implements UndoBarController.UndoListener {
+public class ListsActivity extends RESTfulActivity implements UndoBarController.UndoListener {
 
-    private static final String TAG = TasksActivity.class.getSimpleName();
-    private Button newTask;
+    private static final String TAG = ListsActivity.class.getSimpleName();
+    private Button newList;
 
     private UndoBarController mUndoBarController;
     private Long requestId=0L;
@@ -45,25 +43,20 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
-    private TasksDBAccess tasksDBAccess;
 
-   private  SwipeListView swipelistview;
-   private MyArrayAdapterTask adapter;
-   private  List<Task> tasks;
-   private Context context=this;
-   private Long list_id;
+    private  SwipeListView swipelistview;
+    private  MyArrayAdapterList adapter;
+    private  List<Listw> lists;
+    private Context context=this;
 
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        setContentResId(R.layout.list_tasks);
+        setContentResId(R.layout.home);
         super.onCreate(savedInstanceState);
-        Intent i = getIntent();
-        list_id= i.getLongExtra(Listw.LIST_ID_EXTRA,0L);
         mUndoBarController = new UndoBarController(findViewById(R.id.undobar), this);
         ownershipDBAccess = new OwnershipDBAccess(this);
-        tasksDBAccess = new TasksDBAccess(this);
         swipelistview=(SwipeListView)findViewById(R.id.example_swipe_lv_list);
 
         //These are the swipe listview settings. you can change these
@@ -73,23 +66,21 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         swipelistview.setAnimationTime(50); // animarion time
         swipelistview.setSwipeOpenOnLongPress(false); // enable or disable SwipeOpenOnLongPress
 
-        tasks=new ArrayList<Task>();
-
-        adapter=new MyArrayAdapterTask(this,R.layout.list_task_item,tasks);
+        lists=new ArrayList<Listw>();
+        adapter=new MyArrayAdapterList(this,R.layout.adapter,lists);
         swipelistview.setAdapter(adapter);
 
         swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
             @Override
             public void onOpened(int position, boolean toRight) {
-                Task task=tasks.get(position);
-                task.setPosition(position);
+                Listw list=lists.get(position);
+                list.setPosition(position);
                 mUndoBarController.showUndoBar(
                         false,
-                        "Tâche supprimée",
-                        task);
-                tasks.remove(position);
-
-                adapter=new MyArrayAdapterTask(context,R.layout.list_task_item,tasks);
+                        "Liste supprimée",
+                        list);
+                lists.remove(position);
+                adapter=new MyArrayAdapterList(context,R.layout.adapter,lists);
                 swipelistview.setAdapter(adapter);
 
             }
@@ -108,7 +99,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
             @Override
             public void onStartOpen(int position, int action, boolean right) {
-               // Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
+                // Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
             }
 
             @Override
@@ -118,18 +109,18 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
             @Override
             public void onClickFrontView(int position) {
-                Task item = (Task) adapter.getItem(position);
+                Listw item = (Listw) adapter.getItem(position);
                 // Launching new Activity on selecting single List Item
-                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
+                Intent i = new Intent(getApplicationContext(), TasksActivity.class);
                 // sending data to new activity
-                i.putExtra("task_id", item.getId());
+                i.putExtra("list_id", item.getId());
                 startActivity(i);
 
             }
 
             @Override
             public void onClickBackView(int position) {
-                       }
+            }
 
             @Override
             public void onDismiss(int[] reverseSortedPositions) {
@@ -139,14 +130,13 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         });
 
         // view products click event
-        newTask = (Button) findViewById(R.id.create);
-        newTask.setOnClickListener(new View.OnClickListener() {
+        newList = (Button) findViewById(R.id.create);
+        newList.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Launching create new task activity
-                Intent i = new Intent(getApplicationContext(), TaskEditor.class);
-                i.putExtra(Listw.LIST_ID_EXTRA,list_id);
-                startActivity(i);
+                // Launching create new list activity
+                //Intent i = new Intent(getApplicationContext(), ListEditor.class);
+                //startActivity(i);
             }
         });
     }
@@ -209,7 +199,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
                     Logger.debug(TAG, "Result is for our request ID");
 
-                                        int resultCode = intent.getIntExtra(WunderlistServiceHelper.EXTRA_RESULT_CODE, 0);
+                    int resultCode = intent.getIntExtra(WunderlistServiceHelper.EXTRA_RESULT_CODE, 0);
 
                     Logger.debug(TAG, "Result code = " + resultCode);
 
@@ -217,12 +207,11 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                         stopRefreshing();
                         Logger.debug(TAG, "Updating UI with new data");
                         String user = AuthorizationManager.getInstance(context).getUser();
-                        tasksDBAccess.open();
-                        List<Task> todos= tasksDBAccess.retrieveTodosInstancesFromList(list_id);
-                        Logger.debug("list id :",String.valueOf(list_id));
-                        tasksDBAccess.close();
-                        tasks=todos;
-                        adapter=new MyArrayAdapterTask(context,R.layout.list_task_item,tasks);
+                        ownershipDBAccess.open();
+                        List<Listw> new_lists= ownershipDBAccess.getLists(user);
+                        ownershipDBAccess.close();
+                        lists=new_lists;
+                        adapter=new MyArrayAdapterList(context,R.layout.adapter,lists);
                         swipelistview.setAdapter(adapter);
                         requestId=0L;
 
@@ -245,7 +234,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         this.registerReceiver(requestReceiver, filter);
 
         if (requestId == 0) {
-           requestId = mWunderlistServiceHelper.getTasks();
+            requestId = mWunderlistServiceHelper.getLists();
             startRefreshing();
         }
 
@@ -279,7 +268,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
     @Override
     protected void refresh() {
-        requestId = mWunderlistServiceHelper.getTasks();
+        requestId = mWunderlistServiceHelper.getLists();
     }
 
     protected void logoutAndFinish(){
@@ -299,10 +288,10 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
     @Override
     public void onUndo(Parcelable token) {
-        Task task= (Task) token;
-        if (task!=null) {
-            tasks.add(task.getPosition(), task);
-            adapter = new MyArrayAdapterTask(context, R.layout.list_task_item, tasks);
+        Listw list= (Listw) token;
+        if (list!=null) {
+            lists.add(list.getPosition(), list);
+            adapter = new MyArrayAdapterList(context, R.layout.adapter, lists);
             swipelistview.setAdapter(adapter);
             mUndoBarController.clearUndoToken();
         }
@@ -311,10 +300,10 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
     @Override
     public void undoDisabled(Parcelable token) {
-        Task task= (Task) token;
-        if (task!=null){
+        Listw list= (Listw) token;
+        if (list!=null){
             Logger.debug("Undo","undo disabled");
-            mWunderlistServiceHelper.deleteTask(task);
+            mWunderlistServiceHelper.deleteList(list);
         }
     }
 }
