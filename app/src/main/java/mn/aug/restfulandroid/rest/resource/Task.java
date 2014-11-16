@@ -19,7 +19,7 @@ public class Task implements Resource, TaskList, Parcelable {
             + "/" + PATH);
 
 
-    private long id;
+    private long id=0;
     private String title;
     private String due_date;
     private long list_id;
@@ -34,6 +34,16 @@ public class Task implements Resource, TaskList, Parcelable {
 
         Logger.debug("task", toString());
     }
+
+    public Task(String title,String due_date, long list_id) {
+        this.id = id;
+        this.title = title;
+        this.due_date = due_date;
+        this.list_id = list_id;
+
+        Logger.debug("task", toString());
+    }
+
 
 
 
@@ -81,7 +91,7 @@ public class Task implements Resource, TaskList, Parcelable {
     public String toString() {
         return  "id=" + id +
                 "&title=" + title +
-                "&due_date='" + due_date +
+                "&due_date=" + due_date +
                 "&list_id=" + list_id ;
     }
 

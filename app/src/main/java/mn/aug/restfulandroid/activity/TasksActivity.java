@@ -213,7 +213,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                         tasks=todos;
                         adapter=new MyArrayAdapter(context,R.layout.adapter,tasks);
                         swipelistview.setAdapter(adapter);
-
+                        requestId=null;
 
 
                     }  else if(resultCode==401){
