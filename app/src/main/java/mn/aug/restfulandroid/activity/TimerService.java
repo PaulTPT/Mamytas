@@ -28,7 +28,7 @@ public class TimerService extends IntentService {
     private ResultReceiver mCallback;
 
     private Intent mOriginalRequestIntent;
-    private HashMap<Long,Time_storage> chronos = new HashMap<Long,Time_storage>();
+    private static HashMap<Long,Time_storage> chronos = new HashMap<Long,Time_storage>();
 
 
     public TimerService() {
@@ -38,6 +38,7 @@ public class TimerService extends IntentService {
     @Override
     protected void onHandleIntent(Intent requestIntent) {
 
+        mCallback = requestIntent.getParcelableExtra(SERVICE_CALLBACK);
 
         mOriginalRequestIntent = requestIntent;
 
@@ -46,26 +47,19 @@ public class TimerService extends IntentService {
         if (action.equals(TimerServiceHelper.START_CHRONO)) {
             long task_id = mOriginalRequestIntent.getLongExtra(TimerServiceHelper.EXTRA_TASK_ID, 0L);
             long initial_timer = mOriginalRequestIntent.getLongExtra(TimerServiceHelper.EXTRA_INIT_VALUE, 0L);
-            Callback myCallback = makeCallback();
-            if (!chronos.containsKey(task_id)) ;
-            {
+
+            if (!chronos.containsKey(task_id)) {
                 Time_storage storage=new Time_storage(initial_timer, SystemClock.uptimeMillis());
                 chronos.put(task_id,storage);
-                myCallback.send(1);
             }
-            myCallback.send(0);
 
         } else if (action.equals(TimerServiceHelper.STOP_CHRONO)) {
             long task_id = mOriginalRequestIntent.getLongExtra(TimerServiceHelper.EXTRA_TASK_ID, 0L);
-            Callback myCallback = makeCallback();
             if (chronos.containsKey(task_id)) {
                 chronos.remove(task_id);
-                myCallback.send(1);
-            }
-            myCallback.send(0);
+               }
 
         } else if (action.equals(TimerServiceHelper.GET_CHRONO)) {
-            Callback myCallback = makeCallback();
             long task_id = mOriginalRequestIntent.getLongExtra(TimerServiceHelper.EXTRA_TASK_ID, 0L);
             if (chronos.containsKey(task_id)) {
                 Time_storage storage = chronos.get(task_id);
@@ -73,34 +67,16 @@ public class TimerService extends IntentService {
                 long start_time = storage.getStart_time();
                 long timeInMilliseconds = SystemClock.uptimeMillis() - start_time;
                 long updatedTime = initial_timer + timeInMilliseconds;
-                myCallback.send(1, updatedTime);
+                mCallback.send(1, getOriginalIntentBundleWithValue(updatedTime));
             }
-
+             mCallback.send(0, getOriginalIntentBundle());
         }
 
 
     }
 
 
-    private Callback makeCallback() {
-        Callback callback = new Callback() {
 
-            @Override
-            public void send(int resultCode) {
-                if (mCallback != null) {
-                    mCallback.send(resultCode, getOriginalIntentBundle());
-                }
-            }
-
-            @Override
-            public void send(int resultCode, Long chrono_ms) {
-                if (mCallback != null) {
-                    mCallback.send(resultCode, getOriginalIntentBundleWithValue(chrono_ms));
-                }
-            }
-        };
-        return callback;
-    }
 
     protected Bundle getOriginalIntentBundle() {
         Bundle originalRequest = new Bundle();
@@ -115,13 +91,7 @@ public class TimerService extends IntentService {
         return originalRequest;
     }
 
-    private interface Callback {
 
-        void send(int resultCode);
-
-        void send(int resultCode, Long chrono_ms);
-
-    }
 
     private class Time_storage {
         private Long start_time;

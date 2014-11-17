@@ -36,6 +36,7 @@ import mn.aug.restfulandroid.util.Logger;
 public class TaskActivity extends ListActivity {
 
     private static final String TAG = TaskActivity.class.getSimpleName();
+    private static final String UPDATED_TIME = "updated_time";
     private TasksDBAccess tasksDBAccess = new TasksDBAccess(this);
     private Context context;
     private Long requestId = 0L;
@@ -66,6 +67,7 @@ public class TaskActivity extends ListActivity {
             } else {
                 mTimerServiceHelper.stopChrono(context, task_id);
                 customHandler.removeCallbacks(timer_update_runnable);
+                requestId_timer=0L;
                 startStopWork.setText("Start");
                 startStopWork.setBackground(getResources().getDrawable(R.drawable.button_play));
             }
@@ -94,9 +96,11 @@ public class TaskActivity extends ListActivity {
         @Override
         public void run() {
             while(!Thread.currentThread().isInterrupted()){
-                requestId_timer=mTimerServiceHelper.getChrono(context,list_id);
+                if(requestId_timer==0) {
+                    requestId_timer = mTimerServiceHelper.getChrono(context,task_id);
+                                   }
                 try {
-                    wait(50);
+                 Thread.sleep(50);
                 } catch (InterruptedException e) {
 
                     Thread.currentThread().interrupt();
@@ -106,7 +110,7 @@ public class TaskActivity extends ListActivity {
         }
     };
 
-    private Thread timerThread=new Thread(actualize_runnable);
+    private Thread timerThread;
 
 
     @Override
@@ -250,23 +254,30 @@ public class TaskActivity extends ListActivity {
             @Override
             public void onReceive(Context context, Intent intent) {
 
-                long resultRequestId = intent
-                        .getLongExtra(TimerServiceHelper.EXTRA_REQUEST_ID, 0);
+                long resultRequestId = intent.getLongExtra(TimerServiceHelper.EXTRA_REQUEST_ID, 0);
                 int resultCode = intent.getIntExtra(TimerServiceHelper.EXTRA_RESULT_CODE, 0);
 
-                if (resultRequestId == requestId) {
+
+                if (resultRequestId == requestId_timer) {
                     if (resultCode == 1) {
                         updatedTime = intent.getLongExtra(TimerServiceHelper.EXTRA_RESULT, 0);
                         customHandler.post(timer_update_runnable);
+                        if (startStopWork.getText().toString().equals("Start")) {
+                            startStopWork.setText("Stop");
+                            startStopWork.setBackground(getResources().getDrawable(R.drawable.button_play));
+                        }
+
                     }
+                    requestId_timer=0L;
                 }
 
             }
         };
 
         this.registerReceiver(requestReceiver_timer, filter_timer);
-
+        timerThread=new Thread(actualize_runnable);
         timerThread.start();
+        customHandler.post(timer_update_runnable);
     }
 
     @Override
@@ -327,5 +338,22 @@ public class TaskActivity extends ListActivity {
         super.finish();
         timerThread.interrupt();
         customHandler.removeCallbacks(timerThread);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putLong(UPDATED_TIME, updatedTime);
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
+
+    public void onRestoreInstanceState(Bundle savedInstanceState) {
+        // Always call the superclass so it can restore the view hierarchy
+        super.onRestoreInstanceState(savedInstanceState);
+
+        // Restore state members from saved instance
+        updatedTime = savedInstanceState.getLong(UPDATED_TIME);
+
     }
 }

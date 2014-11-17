@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import mn.aug.restfulandroid.util.Logger;
+
 /**
  * Created by Paul on 16/11/2014.
  */
@@ -17,7 +19,6 @@ public class TimerServiceHelper {
     public static String ACTION_REQUEST_RESULT = "REQUEST_RESULT_TIMER";
     public static String EXTRA_REQUEST_ID = "EXTRA_REQUEST_ID";
     public static String EXTRA_RESULT_CODE = "EXTRA_RESULT_CODE";
-    private static final String REQUEST_ID = "REQUEST_ID";
 
     public static final String START_CHRONO = "mn.aug.restfulandroid.activity.action.START";
     public static final String STOP_CHRONO = "mn.aug.restfulandroid.activity.action.STOP";
@@ -77,6 +78,8 @@ public class TimerServiceHelper {
         intent.setAction(START_CHRONO);
         intent.putExtra(EXTRA_TASK_ID, task_id);
         intent.putExtra(EXTRA_INIT_VALUE, initial_value);
+        intent.putExtra(TimerService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(EXTRA_REQUEST_ID, requestId);
         context.startService(intent);
 
     }
@@ -105,6 +108,8 @@ public class TimerServiceHelper {
         Intent intent = new Intent(context, TimerService.class);
         intent.setAction(STOP_CHRONO);
         intent.putExtra(EXTRA_TASK_ID, task_id);
+        intent.putExtra(TimerService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(EXTRA_REQUEST_ID, requestId);
         context.startService(intent);
     }
 
@@ -124,6 +129,8 @@ public class TimerServiceHelper {
         Intent intent = new Intent(context, TimerService.class);
         intent.setAction(GET_CHRONO);
         intent.putExtra(EXTRA_TASK_ID, task_id);
+        intent.putExtra(TimerService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(EXTRA_REQUEST_ID, requestId);
         context.startService(intent);
         return requestId;
     }
@@ -142,10 +149,10 @@ public class TimerServiceHelper {
     private void handleResponse(int resultCode, Bundle resultData, String hashKey){
 
         Intent origIntent = (Intent)resultData.getParcelable(TimerService.ORIGINAL_INTENT_EXTRA);
-
+        Logger.debug("handleResponse", origIntent.toString());
         if(origIntent != null){
-            long requestId = origIntent.getLongExtra(REQUEST_ID, 0);
-            Long result = origIntent.getLongExtra(EXTRA_RESULT,0);
+            long requestId = origIntent.getLongExtra(EXTRA_REQUEST_ID, 0);
+            long result = origIntent.getLongExtra(EXTRA_RESULT, 0);
 
             pendingRequests.remove(hashKey);
 
