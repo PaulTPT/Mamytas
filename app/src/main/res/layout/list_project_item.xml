@@ -35,21 +35,6 @@
             android:layout_height="wrap_content"
             android:id="@+id/name"
             android:padding="8dp"
-            android:textSize="17sp"
-            android:layout_toLeftOf="@+id/editBtn"
-            android:layout_toStartOf="@+id/editBtn" />
-
-        <Button
-            android:layout_width="wrap_content"
-            android:layout_height="match_parent"
-            android:background="#efefff"
-            android:text="Edit"
-            android:padding="0dp"
-            android:textSize="17sp"
-            android:id="@+id/editBtn"
-            android:layout_alignParentTop="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentEnd="true"
-            android:minHeight="30dp" />
+            android:textSize="17sp"/>
     </RelativeLayout>
 </FrameLayout>
