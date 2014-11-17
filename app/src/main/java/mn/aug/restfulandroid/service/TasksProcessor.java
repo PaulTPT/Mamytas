@@ -126,6 +126,10 @@ public class TasksProcessor {
         if (result.getStatusCode() == 200) {
 
             tasksDBAccess.open();
+            tasksDBAccess.setStatus(task_id, "up_to_date");
+            tasksDBAccess.close();
+
+            tasksDBAccess.open();
             tasksDBAccess.deleteTodo(task_id);
             Task task = result.getResource();
             tasksDBAccess.storeTodo(task);

@@ -31,6 +31,23 @@ public class Timer implements Resource,Parcelable {
 
     }
 
+    @Override
+    public String toString() {
+        return  "name=" + name +
+                "&timer=" + timer +
+                "&timer_start=" + timer_start +
+                "&ownership_id=" + ownership_id +
+                "&task_id=" +task_id;
+    }
+
+    public Timer(String name,String timer, String timer_start, Long task_id) {
+        this.name = name;
+        this.timer = timer;
+        this.timer_start = timer_start;
+        this.task_id=task_id;
+
+    }
+
     public String getName() {
         return name;
     }

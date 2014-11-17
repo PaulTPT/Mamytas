@@ -117,6 +117,10 @@ public class RestMethodFactory {
                 switch (method) {
                     case GET:
                         return new GetTimersRestMethod(mContext, headers,body,id);
+                    case POST:
+                        return new PostTimerRestMethod(mContext, headers,body,id);
+                    case PUT:
+                        return new PutTimerRestMethod(mContext, headers, body, id);
                     default :
                         break;
                 }

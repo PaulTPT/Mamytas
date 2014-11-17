@@ -9,6 +9,7 @@ import android.content.IntentFilter;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
@@ -28,6 +29,7 @@ import java.util.Date;
 import java.util.List;
 
 import mn.aug.restfulandroid.R;
+import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
@@ -45,13 +47,16 @@ public class TaskActivity extends ListActivity {
 
     private static final String UPDATED_TIME = "updated_time";
     private TasksDBAccess tasksDBAccess = new TasksDBAccess(this);
+    private OwnershipDBAccess ownershipDBAccess = new OwnershipDBAccess(this);
     private Context context;
     private Long requestId = 0L;
+    private Long requestId_post = 0L;
     private Long requestId_timer = 0L;
 
     private BroadcastReceiver requestReceiver;
     private BroadcastReceiver requestReceiver_timer;
     private Button startStopWork, btnEditTask;
+    private Timer timer;
 
     private TextView newWorkTimer;
     private Handler customHandler= new Handler();
@@ -69,6 +74,13 @@ public class TaskActivity extends ListActivity {
         @Override
         public void onClick(View v) {
             if (startStopWork.getText().toString().equals("Start")) {
+                updatedTime=0L;
+                timer=new Timer(AuthorizationManager.getInstance(context).getUser(),String.valueOf(updatedTime), String.valueOf(SystemClock.uptimeMillis()),task_id);
+                ownershipDBAccess.open();
+                timer=ownershipDBAccess.storeTimer(timer);
+                ownershipDBAccess.setStatus(timer.getOwnership_id(),"new");
+                ownershipDBAccess.close();
+                requestId_post=mWunderlistServiceHelper.postTimer(timer);
                 mTimerServiceHelper.startChrono(context,task_id,updatedTime);
                                 startStopWork.setText("Stop");
                 startStopWork.setBackground(getResources().getDrawable(R.drawable.button_stop));
@@ -76,6 +88,7 @@ public class TaskActivity extends ListActivity {
                 mTimerServiceHelper.stopChrono(context, task_id);
                 customHandler.removeCallbacks(timer_update_runnable);
                 requestId_timer=0L;
+                requestId = mWunderlistServiceHelper.getTimers(task_id);
                 startStopWork.setText("Start");
                 startStopWork.setBackground(getResources().getDrawable(R.drawable.button_play));
             }
@@ -99,6 +112,7 @@ public class TaskActivity extends ListActivity {
         }
     };
 
+
     private Runnable actualize_runnable=new Runnable() {
 
         @Override
@@ -106,9 +120,9 @@ public class TaskActivity extends ListActivity {
             while(!Thread.currentThread().isInterrupted()){
                 if(requestId_timer==0) {
                     requestId_timer = mTimerServiceHelper.getChrono(context,task_id);
-                                   }
+                }
                 try {
-                 Thread.sleep(50);
+                    Thread.sleep(50);
                 } catch (InterruptedException e) {
 
                     Thread.currentThread().interrupt();
@@ -118,7 +132,31 @@ public class TaskActivity extends ListActivity {
         }
     };
 
+    private Runnable store_runnable=new Runnable() {
+
+        @Override
+        public void run() {
+            while(!Thread.currentThread().isInterrupted()){
+                if(timer!=null) {
+                    timer.setTimer(String.valueOf(updatedTime));
+                    ownershipDBAccess.open();
+                    ownershipDBAccess.updateTimer(timer);
+                    ownershipDBAccess.setStatus(timer.getOwnership_id(),"updated");
+                    ownershipDBAccess.close();
+                    mWunderlistServiceHelper.putTimer(timer);
+                }
+                try {
+                    Thread.sleep(1000*60);
+                } catch (InterruptedException e) {
+
+                    Thread.currentThread().interrupt();
+                }
+
+            }
+        }
+    };
     private Thread timerThread;
+    private Thread store_thread;
 
 
     @Override
@@ -242,7 +280,15 @@ public class TaskActivity extends ListActivity {
                         showToast("Your session has expired");
                         logoutAndFinish();
                     }
-                } else {
+                } else if (resultRequestId == requestId_post){
+                    int resultCode = intent.getIntExtra(WunderlistServiceHelper.EXTRA_RESULT_CODE, 0);
+
+                    if (resultCode == 200) {
+
+                        timer = (Timer) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
+                    }
+
+                } else{
                     Logger.debug(TAG, "Result is NOT for our request ID");
                 }
 
@@ -284,6 +330,8 @@ public class TaskActivity extends ListActivity {
         this.registerReceiver(requestReceiver_timer, filter_timer);
         timerThread=new Thread(actualize_runnable);
         timerThread.start();
+        store_thread=new Thread(actualize_runnable);
+        store_thread.start();
         customHandler.post(timer_update_runnable);
     }
 
@@ -309,6 +357,9 @@ public class TaskActivity extends ListActivity {
             }
         }
 
+        if(store_thread!=null) {
+            store_thread.interrupt();
+        }
         if(timerThread!=null) {
             timerThread.interrupt();
         }
@@ -343,8 +394,15 @@ public class TaskActivity extends ListActivity {
     @Override
     public void finish() {
         super.finish();
-        timerThread.interrupt();
-        customHandler.removeCallbacks(timerThread);
+        if(timerThread!=null) {
+            timerThread.interrupt();
+            customHandler.removeCallbacks(timerThread);
+        }
+
+        if(store_thread!=null) {
+            store_thread.interrupt();
+            customHandler.removeCallbacks(store_thread);
+        }
     }
 
     @Override

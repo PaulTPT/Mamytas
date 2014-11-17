@@ -43,6 +43,7 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
                     + LISTS_STATE + " text, "
                     + LISTS_TITLE + " text "
                     + ");";
+
     //Strings for the OWNERSHIP TABLE
     public static final String TABLE_OWNERSHIP = "ownership";
     public static final String OWNERSHIP_ID = "_id";
@@ -56,11 +57,12 @@ public class ProviderDbHelper extends SQLiteOpenHelper {
     public static final String OWNERSHIP_CREATE =
             "create table " + TABLE_OWNERSHIP + "("
                     + OWNERSHIP_ID + " integer primary key autoincrement, "
-                    + OWNERSHIP_STATE + "text, "
                     + OWNERSHIP_TYPE + " text, "
                     + OWNERSHIP_OWNER + " text, "
                     + OWNERSHIP_EFFECTIVE_ID + " integer, "
-                    + OWNERSHIP_TIMER + " text "
+                    + OWNERSHIP_STATE + " text, "
+                    + OWNERSHIP_TIMER + " text, "
+                    + OWNERSHIP_TIMER_START + " text "
                     + ");";
     //Strings for the REMINDERS TABLE
     public static final String TABLE_REMINDERS = "reminders";

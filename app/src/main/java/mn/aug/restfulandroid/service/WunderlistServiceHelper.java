@@ -3,6 +3,7 @@ package mn.aug.restfulandroid.service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.ResultReceiver;
 
 import java.util.HashMap;
@@ -11,7 +12,7 @@ import java.util.UUID;
 
 import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
-import mn.aug.restfulandroid.rest.resource.Timers;
+import mn.aug.restfulandroid.rest.resource.Timer;
 
 
 /**
@@ -36,6 +37,8 @@ public class WunderlistServiceHelper {
     private static final String deleteListHashkey = "DELETE_LIST";
     private static final String loginHashkey = "LOGIN";
     private static final String getTimersHashkey = "GET_TIMERS";
+    private static final String postTimerHashkey = "POST_TIMER";
+    private static final String putTimerHashkey = "PUT_TIMER";
 
 	private static Object lock = new Object();
 
@@ -130,6 +133,36 @@ public class WunderlistServiceHelper {
         return requestId;
     }
 
+    public long postTimer(Timer timer) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(postTimerHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, postTimerHashkey);
+            }
+        };
+
+
+
+        byte[] body= timer.toString().getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_POST);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TIMERS);
+        intent.putExtra(WunderlistService.BODY_EXTRA, body);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,timer.getTask_id());
+        intent.putExtra(WunderlistService.INFO_EXTRA_2,timer.getOwnership_id());
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
+
     public long postTask(Task task) {
 
         long requestId = generateRequestID();
@@ -210,6 +243,37 @@ public class WunderlistServiceHelper {
         intent.putExtra(WunderlistService.BODY_EXTRA, body);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
         intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
+
+
+    public long putTimer(Timer timer) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(putTimerHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, putTimerHashkey);
+            }
+        };
+
+
+
+        byte[] body= timer.toString().getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_PUT);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TIMERS);
+        intent.putExtra(WunderlistService.BODY_EXTRA, body);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,timer.getTask_id());
+        intent.putExtra(WunderlistService.INFO_EXTRA_2,timer.getOwnership_id());
         intent.putExtra(REQUEST_ID, requestId);
 
         this.ctx.startService(intent);
@@ -349,14 +413,14 @@ public class WunderlistServiceHelper {
 
 		if(origIntent != null){
 			long requestId = origIntent.getLongExtra(REQUEST_ID, 0);
-            Timers timers = origIntent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
+            Parcelable resource= origIntent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
 
 			pendingRequests.remove(hashKey);
 
 			Intent resultBroadcast = new Intent(ACTION_REQUEST_RESULT);
 			resultBroadcast.putExtra(EXTRA_REQUEST_ID, requestId);
 			resultBroadcast.putExtra(EXTRA_RESULT_CODE, resultCode);
-            resultBroadcast.putExtra(WunderlistService.RESOURCE_EXTRA, timers);
+            resultBroadcast.putExtra(WunderlistService.RESOURCE_EXTRA, resource);
 
 			ctx.sendBroadcast(resultBroadcast);
 		}

@@ -9,8 +9,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
-import mn.aug.restfulandroid.util.Logger;
-
 /**
  * Created by Paul on 16/11/2014.
  */
@@ -149,8 +147,7 @@ public class TimerServiceHelper {
     private void handleResponse(int resultCode, Bundle resultData, String hashKey){
 
         Intent origIntent = (Intent)resultData.getParcelable(TimerService.ORIGINAL_INTENT_EXTRA);
-        Logger.debug("handleResponse", origIntent.toString());
-        if(origIntent != null){
+         if(origIntent != null){
             long requestId = origIntent.getLongExtra(EXTRA_REQUEST_ID, 0);
             long result = origIntent.getLongExtra(EXTRA_RESULT, 0);
 

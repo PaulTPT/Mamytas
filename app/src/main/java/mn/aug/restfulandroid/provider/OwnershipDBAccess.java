@@ -10,6 +10,7 @@ import java.util.List;
 
 import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
+import mn.aug.restfulandroid.rest.resource.Timer;
 import mn.aug.restfulandroid.util.Logger;
 
 /**
@@ -597,6 +598,55 @@ public class OwnershipDBAccess {
 
     }
 
- //TODO timers
 
+    public Timer storeTimer(Timer timer){
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "TASKS");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER,timer.getName());
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID,timer.getTask_id());
+            values.put(ProviderDbHelper.OWNERSHIP_TIMER,timer.getTimer());
+            values.put(ProviderDbHelper.OWNERSHIP_TIMER_START,timer.getTimer_start());
+            long id = bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
+            timer.setOwnership_id(id);
+            return timer;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    public Timer updateTimer(Timer timer){
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "TASKS");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER,timer.getName());
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID,timer.getTask_id());
+            values.put(ProviderDbHelper.OWNERSHIP_TIMER,timer.getTimer());
+            values.put(ProviderDbHelper.OWNERSHIP_TIMER_START,timer.getTimer_start());
+            bdd.update(ProviderDbHelper.TABLE_OWNERSHIP,values,ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + timer.getOwnership_id()+  "'",null);
+            return timer;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    /**
+     * Remove a task from the user's ownership list
+     *
+     * @return Whether it was successful
+     */
+    public boolean deleteTimer(long timer_id) {
+
+        try {
+            bdd.delete(ProviderDbHelper.TABLE_OWNERSHIP, ProviderDbHelper.OWNERSHIP_ID+ " = '" + timer_id + "'", null);
+            return true;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
