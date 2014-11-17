@@ -243,10 +243,11 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
     }
 
     public class OnTouchListener implements View.OnTouchListener {
-        int initialX = 20;
+        int initialX = 0;
         RelativeLayout front;
         TextView backBtn;
 
+        private ProjectsArrayAdapter.RowHolder holder;
         private int position;
 
         public void setPosition(int position) {
@@ -261,11 +262,14 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
             int width = size.x;
             int height = size.y;
 
-            backBtn = (TextView) view.findViewById(R.id.delete);
-            front = (RelativeLayout) view.findViewById(R.id.front);
             int X = (int) event.getRawX();
             int offset = X - initialX;
             if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                holder = ((ProjectsArrayAdapter.RowHolder) view.getTag());
+                setPosition(holder.position);
+                backBtn = (TextView) view.findViewById(R.id.delete);
+                front = (RelativeLayout) view.findViewById(R.id.front);
+                Logger.debug("holderPosition","holder.position:"+holder.position);
                 initialX = X;
                 front.setTranslationX(0);
             }
@@ -322,12 +326,12 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     animator.start();
 
                     // Launching new Activity on selecting single List Item
-                    Intent i = new Intent((Activity) context, TasksActivity.class);
+                    Intent i = new Intent((Activity) context, ProjectEditor.class);
                     // sending data to new activity
                     i.putExtra("list_id", lists.get(position).getId());
                     context.startActivity(i);
                 } else{// Animate back if no action was performed.
-                    animator = ValueAnimator.ofInt(X - initialX, 0);
+                    animator = ValueAnimator.ofInt(offset, 0);
                     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
                         public void onAnimationUpdate(ValueAnimator valueAnimator) {
@@ -336,6 +340,13 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     });
                     animator.setDuration(150);
                     animator.start();
+                }
+                if (Math.abs(offset)<2){
+                    // Launching new Activity on selecting single List Item
+                    Intent i = new Intent((Activity) context, TasksActivity.class);
+                    // sending data to new activity
+                    i.putExtra("list_id", lists.get(position).getId());
+                    context.startActivity(i);
                 }
             }
             return true;

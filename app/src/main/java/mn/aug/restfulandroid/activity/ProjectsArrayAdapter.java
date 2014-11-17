@@ -31,11 +31,9 @@ public class ProjectsArrayAdapter extends ArrayAdapter<Listw> {
     private final Context contextProjects;
     private final List<Listw> lists;
     private final int layout;
+    private final LayoutInflater inflator;
 
     public ProjectsActivity.OnTouchListener listener;
-
-    private long projectID;
-    private int pos;
 
     public ProjectsArrayAdapter(Context contextProjects, int layout, List<Listw> lists, ProjectsActivity.OnTouchListener _listener) {
         super(contextProjects, layout, lists);
@@ -43,20 +41,53 @@ public class ProjectsArrayAdapter extends ArrayAdapter<Listw> {
         this.lists=lists;
         this.layout=layout;
         this.listener = _listener;
+        inflator = ((Activity) contextProjects).getLayoutInflater();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
+        View view = null;
+        if(position > lists.size())
+            return null;
+        Listw m = lists.get(position);
+        final RowHolder viewHolder = new RowHolder();
+        RowHolder Holder = null;
+        if (convertView == null) {
+
+            view = inflator.inflate(layout, parent, false);
+
+            view.setTag(viewHolder);
+
+            viewHolder.name = (TextView)view.findViewById(R.id.name);
+            viewHolder.front = (RelativeLayout)view.findViewById(R.id.front);
+            viewHolder.btnEditTask = (Button)view.findViewById(R.id.editBtn);
+            viewHolder.front.setTag(m);
+            viewHolder.btnEditTask.setTag(m);
+
+            viewHolder.position = position;
+
+            Holder = viewHolder;
+        } else {
+            view = convertView;
+            Holder = ((RowHolder) view.getTag());
+        }
+
+        if(this.listener != null)
+            view.setOnTouchListener(this.listener);
+
+        Holder.model = m;
+        Holder.position = position;
+        Holder.name.setText(m.getTitle());
+        return view;
+
+        /*
         RowHolder holder = null;
         View row = convertView;
         holder = null;
-        //projectID = lists.get(position).getId();
-        this.pos = position;
 
         if(holder == null) {
             if(row==null) {
-                LayoutInflater inflater = ((Activity) contextProjects).getLayoutInflater();
-                row = inflater.inflate(layout, parent, false);
+                row = inflator.inflate(layout, parent, false);
             }
             holder = new RowHolder();
 
@@ -68,43 +99,53 @@ public class ProjectsArrayAdapter extends ArrayAdapter<Listw> {
             holder = (RowHolder)row.getTag();
         holder.name.setText(lists.get(position).getTitle());
         holder.projectID = lists.get(position).getId();
-        projectID = lists.get(position).getId();
-        Logger.debug("projectID","projectID:"+position);
-                Logger.debug("position","position:"+position);
+        holder.position = position;
+
+        if(this.listener != null){
+            row.setOnTouchListener(this.listener);
+        }//*/
+
+        /*
+        holder.front.setTag(1,position);
         holder.front.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int position = (Integer)view.getTag(1);
                 // Launching new Activity on selecting single List Item
                 Intent i = new Intent((Activity) contextProjects, TasksActivity.class);
                 // sending data to new activity
-                Logger.debug("projectID","projectID:"+projectID);
-                i.putExtra("list_id", projectID);
+                Logger.debug("positionOnclick","position:"+position);
+                i.putExtra("list_id", lists.get(position).getId());
                 contextProjects.startActivity(i);
             }
         });
+        holder.btnEditTask.setTag(1,position);
         holder.btnEditTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                int position = (Integer)view.getTag(1);
                 // Launching create new task activity
                 Intent i = new Intent((Activity) contextProjects, ProjectEditor.class);
-                i.putExtra(Listw.LIST_ID_EXTRA, projectID);
+                i.putExtra(Listw.LIST_ID_EXTRA, lists.get(position).getId());
                 contextProjects.startActivity(i);
             }
-        });
+        });//*/
 
-        if(this.listener != null){
-            this.listener.setPosition(position);
-            row.setOnTouchListener(this.listener);
-        }
-
-        return row;
+        //return row;
     }
 
-    static class RowHolder{
+    public static class RowHolder{
+        public Listw model;
+
+        public void RowHolder(){
+
+        }
+
         TextView name;
         public RelativeLayout front;
         public Button btnEditTask;
         public long projectID;
+        public int position;
     }
 
 }
