@@ -1,53 +1,89 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<FrameLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal"
     android:layout_width="fill_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="10dp"
-    android:paddingRight="10dp"
-    android:paddingTop="5dp"
-    android:paddingBottom="5dp"
     android:textColor="#000"
     android:background="@drawable/list">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="Bob:"
-        android:id="@+id/workUserName"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginRight="10dp"
-        android:layout_weight="40"
-        android:textColor="#000"
-        android:textStyle="bold" />
+    <LinearLayout
+        android:id="@+id/back"
+        android:tag="back"
+        android:orientation="horizontal"
+        style="@style/MyListBackContent">
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceMedium"
-        android:text="45 min"
-        android:id="@+id/workTimeSpent"
-        android:layout_alignBottom="@+id/workUserName"
-        android:layout_toRightOf="@+id/workUserName"
-        android:layout_weight="8.80"
-        android:layout_toEndOf="@+id/workUserName"
-        android:textColor="#000" />
+        <TextView
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:background="@drawable/button_stop_normal"
+            android:text="Retirer"
+            android:gravity="left|center_vertical"
+            android:textColor="#FFF"
+            android:id="@+id/delete"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textSize="17sp"
+            android:phoneNumber="false" />
+    </LinearLayout>
+    <RelativeLayout
+        android:orientation="vertical"
+        android:id="@+id/front"
+        android:tag="front"
+        android:background="@drawable/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Bob:"
+            android:id="@+id/workUserName"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginRight="10dp"
+            android:layout_weight="40"
+            android:textSize="17sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:textColor="#000"
+            android:textStyle="bold" />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="le 14/11/2014 à 12h31"
-        android:id="@+id/workFirstDate"
-        android:textColor="#000"
-        android:layout_alignBaseline="@+id/workUserName"
-        android:layout_alignBottom="@+id/workUserName"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"
-        android:textStyle="italic" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="45 min"
+            android:id="@+id/workTimeSpent"
+            android:layout_alignBottom="@+id/workUserName"
+            android:layout_toRightOf="@+id/workUserName"
+            android:layout_weight="8.80"
+            android:textSize="17sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_toEndOf="@+id/workUserName"
+            android:textColor="#000" />
 
-</LinearLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="le 14/11/2014 à 12h31"
+            android:id="@+id/workFirstDate"
+            android:textColor="#000"
+            android:textSize="17sp"
+            android:paddingTop="5dp"
+            android:paddingBottom="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:layout_alignBaseline="@+id/workUserName"
+            android:layout_alignBottom="@+id/workUserName"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:textStyle="italic" />
+    </RelativeLayout>
+</FrameLayout>
