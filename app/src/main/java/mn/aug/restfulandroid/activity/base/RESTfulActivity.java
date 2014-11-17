@@ -11,7 +11,7 @@ public abstract class RESTfulActivity extends Activity {
 
     private int mContentResId;
     private MenuItem refreshingItem;
-    private boolean refreshing =false;
+    private boolean refreshing = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,11 +21,12 @@ public abstract class RESTfulActivity extends Activity {
 
         ActionBar actionBar = getActionBar();
         actionBar.setTitle("Mamytas");
-      //  actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME
-               //| ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
+        actionBar.setDisplayOptions(ActionBar.DISPLAY_SHOW_HOME
+                | ActionBar.DISPLAY_SHOW_TITLE | ActionBar.DISPLAY_SHOW_CUSTOM);
         actionBar.show();
 
     }
+
     protected abstract void refresh();
 
     protected void setContentResId(int id) {
@@ -33,8 +34,8 @@ public abstract class RESTfulActivity extends Activity {
     }
 
     protected void startRefreshing() {
-        refreshing=true;
-        if(refreshingItem!=null) {
+        refreshing = true;
+        if (refreshingItem != null) {
             refreshingItem.setActionView(R.layout.progress_bar);
             refreshingItem.expandActionView();
         }
@@ -42,18 +43,18 @@ public abstract class RESTfulActivity extends Activity {
     }
 
     protected void stopRefreshing() {
-        refreshing=false;
-        if(refreshingItem!=null) {
+        refreshing = false;
+        if (refreshingItem != null) {
             refreshingItem.collapseActionView();
             refreshingItem.setActionView(null);
         }
 
     }
 
-    protected void setRefreshingItem(MenuItem item){
+    protected void setRefreshingItem(MenuItem item) {
 
-        this.refreshingItem=item;
-        if(refreshing)
+        this.refreshingItem = item;
+        if (refreshing)
             startRefreshing();
     }
 
