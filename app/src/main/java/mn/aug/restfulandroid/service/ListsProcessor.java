@@ -160,6 +160,9 @@ public class ListsProcessor {
                     ownershipDBAccess.addList(user, list);
                 } else {
                     listsDBAccess.updateList(list);
+                    if(!ownershipDBAccess.userOwnsList(user,list.getId())) {
+                        ownershipDBAccess.shareListwithUser(user,list);
+                    }
                     listsDBAccess.setStatus((int) list.getId(), "up_to_date");
                 }
 
