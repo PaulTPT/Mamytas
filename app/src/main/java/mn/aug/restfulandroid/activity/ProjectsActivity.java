@@ -269,7 +269,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                 setPosition(holder.position);
                 backBtn = (TextView) view.findViewById(R.id.delete);
                 front = (RelativeLayout) view.findViewById(R.id.front);
-                Logger.debug("holderPosition","holder.position:"+holder.position);
+                front.setBackgroundColor(0xFFE9E9F3);
                 initialX = X;
                 front.setTranslationX(0);
             }
@@ -280,7 +280,6 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_normal));
                     backBtn.setText("Editer");
                     backBtn.setGravity(Gravity.RIGHT);
-                    //front.setBackgroundColor(0xffFF0000);
                 }else{
                     backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_normal));
                     backBtn.setText("Retirer");
@@ -348,6 +347,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     i.putExtra("list_id", lists.get(position).getId());
                     context.startActivity(i);
                 }
+                front.setBackgroundColor(0xFFF5F5FF);
             }
             return true;
         }
