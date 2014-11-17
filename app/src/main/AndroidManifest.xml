@@ -10,13 +10,6 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
 
-    <android:uses-permission
-        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
-    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <android:uses-permission
-        android:name="android.permission.READ_EXTERNAL_STORAGE"
-        android:maxSdkVersion="18" />
 
     <application
         android:icon="@drawable/ic_launcher"
@@ -42,19 +35,19 @@
                 </data>
             </intent-filter>
         </activity>
+
         <activity android:name="mn.aug.restfulandroid.activity.TasksActivity" />
         <activity android:name="mn.aug.restfulandroid.activity.TaskActivity" />
         <activity android:name="mn.aug.restfulandroid.activity.TaskEditor" />
-        <activity android:name="mn.aug.restfulandroid.activity.ListEditor" />
         <activity android:name="mn.aug.restfulandroid.activity.AboutActivity" />
-        <activity android:name="mn.aug.restfulandroid.activity.ListsActivity" />
+        <activity android:name=".activity.ProjectEditor" />
+        <activity android:name=".activity.ProjectsActivity" />
 
         <service android:name="mn.aug.restfulandroid.service.WunderlistService" />
         <service android:name="mn.aug.restfulandroid.activity.TimerService" />
-        <service
-            android:name="mn.aug.restfulandroid.activity.MyIntentService"
-            android:exported="false" >
-        </service>
+
+
+
     </application>
 
 </manifest>

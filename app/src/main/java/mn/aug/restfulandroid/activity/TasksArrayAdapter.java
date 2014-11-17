@@ -16,13 +16,13 @@ import java.util.List;
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.rest.resource.Task;
 
-public class MyArrayAdapterTask extends ArrayAdapter<Task> {
+public class TasksArrayAdapter extends ArrayAdapter<Task> {
     private final Context context;
     private final List<Task> todos;
     private final int layout;
 
 
-    public MyArrayAdapterTask(Context context, int layout, List<Task> todos) {
+    public TasksArrayAdapter(Context context, int layout, List<Task> todos) {
         super(context, layout, todos);
         this.context = context;
         this.todos=todos;

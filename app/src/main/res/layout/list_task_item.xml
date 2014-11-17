@@ -13,7 +13,7 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@drawable/button_stop_normal"
-            android:text="Delete"
+            android:text="Retirer"
             android:gravity="left|center_vertical"
             android:textColor="#FFF"
             android:id="@+id/delete"
@@ -26,13 +26,15 @@
         android:orientation="vertical"
         android:id="@+id/front"
         android:tag="front"
-        style="@style/MyListFrontContent">
+        android:background="@drawable/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent"
+        android:padding="8dp">
 
         <TextView
             android:layout_width="fill_parent"
             android:text="Nom de la tache"
             android:layout_height="wrap_content"
-            style="@style/MyListTitle"
             android:id="@+id/name"/>
     </RelativeLayout>
 </FrameLayout>

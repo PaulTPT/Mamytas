@@ -18,12 +18,12 @@ import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.util.Logger;
 
-public class MyArrayAdapterList extends ArrayAdapter<Listw> {
+public class ProjectsArrayAdapter extends ArrayAdapter<Listw> {
     private final Context context;
     private final List<Listw> lists;
     private final int layout;
 
-    public MyArrayAdapterList(Context context, int layout, List<Listw> lists) {
+    public ProjectsArrayAdapter(Context context, int layout, List<Listw> lists) {
         super(context, layout, lists);
         this.context = context;
         this.lists=lists;

@@ -2,11 +2,13 @@
 
     <style name="AppTheme" parent="Theme.AppCompat.Light">
         <item name="android:actionBarStyle">@style/ActionBar</item>
+        <item name="android:windowContentOverlay">@null</item>
     </style>
 
-      <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar">
-            <item name="android:background">@color/actionBar_background</item>
-        </style>
+    <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+
+        <item name="android:background">@drawable/nav_bar_bcg</item>
+    </style>
 
     <style name="ProgressBar">
         <item name="android:indeterminateOnly">true</item>
@@ -22,14 +24,12 @@
     <style name="MyListBackContent">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">#FFF</item>
         <item name="android:gravity">right</item>
     </style>
 
     <style name="MyListFrontContent">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">#FFF</item>
         <item name="android:padding">8dp</item>
     </style>
 

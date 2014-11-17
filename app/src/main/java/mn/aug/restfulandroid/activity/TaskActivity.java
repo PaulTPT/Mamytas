@@ -189,7 +189,7 @@ public class TaskActivity extends ListActivity {
                             Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
                             String user = AuthorizationManager.getInstance(context).getUser();
 
-                            ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_timer_item, timersList);
+                            ArrayAdapter<Timer> adapter = new TimersArrayAdapter(context, R.layout.list_timer_item, timersList);
                             setListAdapter(adapter);
 
                             Date parsedTimeStamp = null, firstDate = null, lastDate = null;

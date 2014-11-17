@@ -18,7 +18,7 @@ import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
 
-public class ListEditor extends Activity {
+public class ProjectEditor extends Activity {
 
     private EditText listName ;
     private Button btnCreateTask;
