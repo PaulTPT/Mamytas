@@ -57,7 +57,7 @@ public class RestMethodFactory {
 
                 switch (method) {
                     case GET:
-                        return new GetTasksRestMethod(mContext, headers);
+                        return new GetTasksRestMethod(mContext, headers, id);
                     case POST:
                         return new PostTaskRestMethod(mContext, headers,body);
                     default :

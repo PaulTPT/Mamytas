@@ -63,14 +63,15 @@ public class WunderlistService extends IntentService {
             case RESOURCE_TYPE_TASKS:
 
                 if (method.equalsIgnoreCase(METHOD_GET) ) {
+                    long list_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
                     TasksProcessor processor = new TasksProcessor(getApplicationContext());
-                    processor.getTasks(makeProcessorCallback());
+                    processor.getTasks(makeProcessorCallback(),list_id);
                 }else if (method.equalsIgnoreCase(METHOD_POST) ) {
 
                     long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
 
                     TasksProcessor processor = new TasksProcessor(getApplicationContext());
-                    processor.postTask(makeProcessorCallback(),task_id, body);
+                    processor.postTask(makeProcessorCallback(),task_id,body);
                 }else{
                     mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
                 }
@@ -150,7 +151,7 @@ public class WunderlistService extends IntentService {
                     mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
                 }
                 break;
-			
+
 		default:
 			mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
 			break;

@@ -2,10 +2,8 @@ package mn.aug.restfulandroid.service;
 
 import android.content.Context;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
 import mn.aug.restfulandroid.rest.RestMethod;
 import mn.aug.restfulandroid.rest.RestMethodFactory;
@@ -27,19 +25,17 @@ public class TasksProcessor {
 
     private ProcessorCallback mCallback;
     private Context mContext;
-    private OwnershipDBAccess ownershipDBAccess;
     private TasksDBAccess tasksDBAccess;
 
 
     public TasksProcessor(Context context) {
 
         mContext = context;
-        ownershipDBAccess = new OwnershipDBAccess(mContext);
         tasksDBAccess = new TasksDBAccess(mContext);
     }
 
 
-    void getTasks(ProcessorCallback callback) {
+    void getTasks(ProcessorCallback callback,long list_id) {
 
 		/*
         Processor is a POJO
@@ -58,7 +54,7 @@ public class TasksProcessor {
         // Look at ContentProvider example, and build a content provider
         // that tracks the necessary data.
         tasksDBAccess.open();
-        List<Integer> list_ids = tasksDBAccess.retrieveAllTasks();
+        List<Integer> list_ids = tasksDBAccess.retrieveTodosFromList(list_id);
         if (list_ids != null) for (int id : list_ids) {
             tasksDBAccess.setStatus(id, "updating");
         }
@@ -69,7 +65,7 @@ public class TasksProcessor {
         // and performs the HTTP operation.
 
         RestMethod<Tasks> getTasksMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
-                Tasks.CONTENT_URI, Method.GET, null, null, 0);
+                Tasks.CONTENT_URI, Method.GET, null, null, list_id);
         RestMethodResult<Tasks> result = getTasksMethod.execute();
 
 				/*
@@ -129,18 +125,11 @@ public class TasksProcessor {
 
         if (result.getStatusCode() == 200) {
 
-            ownershipDBAccess.open();
-            ownershipDBAccess.removeTask(task_id);
+            tasksDBAccess.open();
+            tasksDBAccess.deleteTodo(task_id);
             Task task = result.getResource();
-            String user = AuthorizationManager.getInstance(mContext).getUser();
-            ownershipDBAccess.addTask(user, task);
-            ArrayList<String> listOwners = ownershipDBAccess.getListOwners(task.getList_id());
-            for (String owner : listOwners) {
-                if (!owner.equals(user)) {
-                    ownershipDBAccess.addSharedTask(owner, task);
-                }
-            }
-            ownershipDBAccess.close();
+            tasksDBAccess.storeTodo(task);
+            tasksDBAccess.close();
               }
 
         // (9) Operation complete callback to Service
@@ -159,37 +148,27 @@ public class TasksProcessor {
         if (tasks != null && user != null) {
             // insert/update row for each Task
             tasksDBAccess.open();
-            ownershipDBAccess.open();
-            for (Task task : tasks) {
+                      for (Task task : tasks) {
 
                 if (!tasksDBAccess.TodoIsInDB(task)) {
-                    ownershipDBAccess.addTask(user, task);
-                    ArrayList<String> listOwners = ownershipDBAccess.getListOwners(task.getList_id());
-                    for (String owner : listOwners) {
-                        if (!owner.equals(user)) {
-                            ownershipDBAccess.addSharedTask(owner, task);
-                        }
-
-                    }
+                    tasksDBAccess.storeTodo(task);
                 } else {
                     tasksDBAccess.updateTodo(task);
                     tasksDBAccess.setStatus((int) task.getId(), "up_to_date");
                 }
 
-                if (!ownershipDBAccess.userOwnsTask(user, task.getId())) {
-                    ownershipDBAccess.addSharedTask(user, task);
-                }
+
             }
 
 
             List<Integer> list_ids = tasksDBAccess.retrieveTasksWithState("updating");
             if (list_ids != null) for (int id : list_ids) {
-                ownershipDBAccess.removeTask(id);
+                tasksDBAccess.deleteTodo(id);
             }
 
 
             tasksDBAccess.close();
-            ownershipDBAccess.close();
+
         }
 
 

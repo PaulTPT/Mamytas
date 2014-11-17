@@ -41,7 +41,6 @@ public class WunderlistServiceHelper {
 
 	private static WunderlistServiceHelper instance;
 
-	//TODO: refactor the key
 	private Map<String,Long> pendingRequests = new HashMap<String,Long>();
 	private Context ctx;
 
@@ -56,10 +55,10 @@ public class WunderlistServiceHelper {
 			}
 		}
 
-		return instance;		
+		return instance;
 	}
 
-	public long getTasks() {
+	public long getTasks(Long list_id) {
 
 		long requestId = generateRequestID();
 		pendingRequests.put(getTasksHashkey, requestId);
@@ -70,16 +69,18 @@ public class WunderlistServiceHelper {
 				handleResponse(resultCode, resultData, getTasksHashkey);
 			}
 		};
-
+        String body_text="list_id="+list_id;
+        byte[] body= body_text.getBytes();
 		Intent intent = new Intent(this.ctx, WunderlistService.class);
 		intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_GET);
 		intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TASKS);
 		intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,list_id);
 		intent.putExtra(REQUEST_ID, requestId);
 
 		this.ctx.startService(intent);
-		
-		return requestId;		
+
+		return requestId;
 	}
 
     public long getLists() {

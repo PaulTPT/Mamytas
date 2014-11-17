@@ -256,7 +256,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         this.registerReceiver(requestReceiver, filter);
 
         if (requestId == 0) {
-            requestId = mWunderlistServiceHelper.getTasks();
+            requestId = mWunderlistServiceHelper.getTasks(list_id);
             startRefreshing();
         }
 
@@ -289,7 +289,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
     @Override
     protected void refresh() {
-        requestId = mWunderlistServiceHelper.getTasks();
+        requestId = mWunderlistServiceHelper.getTasks(list_id);
     }
 
     protected void logoutAndFinish() {

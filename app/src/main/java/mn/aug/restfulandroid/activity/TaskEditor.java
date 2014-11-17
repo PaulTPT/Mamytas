@@ -1,8 +1,10 @@
 package mn.aug.restfulandroid.activity;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -38,6 +40,8 @@ public class TaskEditor extends Activity {
     private Task task=null;
     private long task_id=0;
     private long list_id=0;
+    private BroadcastReceiver requestReceiver;
+    private int requestId=0;
 
 
     @Override
@@ -105,6 +109,9 @@ public class TaskEditor extends Activity {
                 finish();
             }
         });
+
+
+
     }
 
     public void showDatePickerDialog(View v) {
