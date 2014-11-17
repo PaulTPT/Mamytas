@@ -9,13 +9,13 @@ import java.util.Date;
  */
 public class DateHelper {
 
-    public static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm");
+    public static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-    public static SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm");
+    public static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     /**
      *
-     * @param yourFormat String vous passez le format que vous voulez "yyyy-MM-dd hh:mm" par exemple
+     * @param yourFormat String vous passez le format que vous voulez "yyyy-MM-dd HH:mm" par exemple
      * @param yourDate en théorie à votre format ex: "2014-12-25"
      * @return String votre date à votre format
      * @throws ParseException Si jamais votre format ou votre date n'est pas bonne, bim grosse exception !
@@ -31,7 +31,7 @@ public class DateHelper {
 
     /**
      *
-     * @param yourFormat String vous passez le format que vous voulez "yyyy-MM-dd hh:mm" par exemple
+     * @param yourFormat String vous passez le format que vous voulez "yyyy-MM-dd HH:mm" par exemple
      * @param yourTime ex: 1785624688
      * @return String votre date à votre format
      * @throws ParseException Si jamais votre format ou votre date n'est pas bonne, bim grosse exception !
@@ -43,7 +43,7 @@ public class DateHelper {
 
     /**
      *
-     * @param dateTime String au format "yyyy-MM-dd hh:mm"
+     * @param dateTime String au format "yyyy-MM-dd HH:mm"
      * @return String "yyyy-MM-dd"
      * @throws ParseException format attendu non respecté
      */
@@ -57,7 +57,7 @@ public class DateHelper {
 
     /**
      *
-     * @param date String au format "yyyy-MM-dd" ou même "yyyy-MM-dd hh:mm"
+     * @param date String au format "yyyy-MM-dd" ou même "yyyy-MM-dd HH:mm"
      * @return String "yyyy-MM-dd"
      * @throws ParseException format attendu non respecté
      */
@@ -70,7 +70,7 @@ public class DateHelper {
 
     /**
      *
-     * @param dateTime String au format "yyyy-MM-dd hh:mm"
+     * @param dateTime String au format "yyyy-MM-dd HH:mm"
      * @return String "yyyy-MM-dd"
      * @throws ParseException format attendu non respecté
      */
@@ -82,7 +82,7 @@ public class DateHelper {
     }
     /**
      *
-     * @param time String au format "yyyy-MM-dd hh:mm"
+     * @param time String au format "yyyy-MM-dd HH:mm"
      * @return String "yyyy-MM-dd"
      * @throws ParseException format attendu non respecté
      */

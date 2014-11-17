@@ -73,7 +73,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         String project_name=listsDBAccess.retrieveList(list_id).getTitle();
         listsDBAccess.close();
         project_name_view=(TextView) findViewById(R.id.projectName);
-        project_name_view.setText(project_name);
+        project_name_view.setText("Taches du projet "+project_name);
         swipelistview = (SwipeListView) findViewById(R.id.example_swipe_lv_list);
 
         //These are the swipe listview settings. you can change these
