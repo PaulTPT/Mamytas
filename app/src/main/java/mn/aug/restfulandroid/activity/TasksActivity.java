@@ -78,7 +78,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         tasksDBAccess = new TasksDBAccess(this);
         listsDBAccess=new ListsDBAccess(this);
         listsDBAccess.open();
-        String project_name=listsDBAccess.retrieveList(list_id).getTitle();
+        String project_name = listsDBAccess.retrieveList(list_id).getTitle();
         listsDBAccess.close();
         project_name_view=(TextView) findViewById(R.id.projectName);
         project_name_view.setText("Taches du projet "+project_name);
@@ -355,7 +355,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                     Intent i = new Intent(getApplicationContext(), TaskEditor.class);
                     // sending data to new activity
                     i.putExtra(Task.TASK_ID_EXTRA, item.getId());
-                    i.putExtra(Listw.LIST_ID_EXTRA, list_id);
+                    i.putExtra(Listw.LIST_ID_EXTRA, item.getList_id());
                     startActivity(i);
                 } else{// Animate back if no action was performed.
                     animator = ValueAnimator.ofInt(offset, 0);
@@ -370,9 +370,11 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                 }
                 if (Math.abs(offset)<2){
                     // Launching new Activity on selecting single List Item
-                    Intent i = new Intent((Activity) context, TasksActivity.class);
+                    Intent i = new Intent((Activity) context, TaskActivity.class);
                     // sending data to new activity
-                    i.putExtra("list_id", tasks.get(position).getId());
+                    Task item = (Task) adapter.getItem(position);
+                    i.putExtra(Task.TASK_ID_EXTRA, item.getId());
+                    i.putExtra(Listw.LIST_ID_EXTRA, item.getList_id());
                     context.startActivity(i);
                 }
                 front.setBackgroundColor(0xFFF5F5FF);

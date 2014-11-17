@@ -327,7 +327,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     // Launching new Activity on selecting single List Item
                     Intent i = new Intent((Activity) context, ProjectEditor.class);
                     // sending data to new activity
-                    i.putExtra("list_id", lists.get(position).getId());
+                    i.putExtra(Listw.LIST_ID_EXTRA, lists.get(position).getId());
                     context.startActivity(i);
                 } else{// Animate back if no action was performed.
                     animator = ValueAnimator.ofInt(offset, 0);
@@ -344,7 +344,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     // Launching new Activity on selecting single List Item
                     Intent i = new Intent((Activity) context, TasksActivity.class);
                     // sending data to new activity
-                    i.putExtra("list_id", lists.get(position).getId());
+                    i.putExtra(Listw.LIST_ID_EXTRA, lists.get(position).getId());
                     context.startActivity(i);
                 }
                 front.setBackgroundColor(0xFFF5F5FF);
