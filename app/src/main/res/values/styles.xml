@@ -21,14 +21,12 @@
     <style name="MyListBackContent">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">#FFF</item>
         <item name="android:gravity">right</item>
     </style>
 
     <style name="MyListFrontContent">
         <item name="android:layout_width">fill_parent</item>
         <item name="android:layout_height">fill_parent</item>
-        <item name="android:background">#FFF</item>
         <item name="android:padding">8dp</item>
     </style>
 
