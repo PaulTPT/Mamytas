@@ -1,7 +1,6 @@
 package mn.aug.restfulandroid.activity;
 
 import android.app.Activity;
-import android.app.DialogFragment;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -16,6 +15,7 @@ import java.text.ParseException;
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
+import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
@@ -36,7 +36,9 @@ public class TaskEditor extends Activity {
     private Context context;
     private Boolean edit=false;
     private Task task=null;
+    private long task_id=0;
     private long list_id=0;
+
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -47,7 +49,8 @@ public class TaskEditor extends Activity {
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
         this.context=this;
         Intent i = getIntent();
-        Long task_id= i.getLongExtra(Task.TASK_ID_EXTRA,0L);
+        task_id= i.getLongExtra(Task.TASK_ID_EXTRA,0L);
+        list_id= i.getLongExtra(Listw.LIST_ID_EXTRA,0L);
 
         // Initialisation elem vue
         taskName = (EditText) findViewById(R.id.inputTaskName);
@@ -84,7 +87,7 @@ public class TaskEditor extends Activity {
                     dueDate += " "+DateHelper.getTimeFromTime(taskDueTime.getText().toString());
                 } catch (ParseException e) {showToast("Mauvais format pour l'heure");return;}
 
-                Logger.debug("show", "Creating Product " + taskName.getText().toString() + " with due date: " + dueDate);
+                Logger.debug("show", "Creating Product " + taskName.getText().toString() + " with due date: " + dueDate + " and list_id: "+list_id);
                 showToast(toastVerb+" task " + taskName.getText().toString() + " with due date: " + dueDate);
                 if(!edit) {
                     ownershipDBAccess.open();

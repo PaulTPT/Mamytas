@@ -23,6 +23,7 @@ import java.util.List;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.provider.TasksDBAccess;
+import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Timer;
 import mn.aug.restfulandroid.rest.resource.Timers;
@@ -47,6 +48,7 @@ public class TaskActivity extends ListActivity {
     private WunderlistServiceHelper mWunderlistServiceHelper;
 
     long task_id;
+    long list_id;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,7 +62,8 @@ public class TaskActivity extends ListActivity {
         super.onResume();
         Intent i = getIntent();
         // getting attached intent data
-        task_id = i.getLongExtra("task_id",0);
+        task_id = i.getLongExtra(Task.TASK_ID_EXTRA,0);
+        list_id = i.getLongExtra(Listw.LIST_ID_EXTRA,0);
 
         // displaying selected product name
         tasksDBAccess.open();
@@ -84,7 +87,8 @@ public class TaskActivity extends ListActivity {
             public void onClick(View view) {
                 // Launching create new task activity
                 Intent i = new Intent(getApplicationContext(), TaskEditor.class);
-                i.putExtra(Task.TASK_ID_EXTRA, tache.getId());
+                i.putExtra(Task.TASK_ID_EXTRA, task_id);
+                i.putExtra(Listw.LIST_ID_EXTRA, list_id);
                 startActivity(i);
             }
         });

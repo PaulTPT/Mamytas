@@ -122,7 +122,8 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                 // Launching new Activity on selecting single List Item
                 Intent i = new Intent(getApplicationContext(), TaskActivity.class);
                 // sending data to new activity
-                i.putExtra("task_id", item.getId());
+                i.putExtra(Task.TASK_ID_EXTRA, item.getId());
+                i.putExtra(Listw.LIST_ID_EXTRA, list_id);
                 startActivity(i);
 
             }

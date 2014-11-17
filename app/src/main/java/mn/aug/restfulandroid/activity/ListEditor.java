@@ -14,7 +14,6 @@ import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.provider.ListsDBAccess;
 import mn.aug.restfulandroid.provider.OwnershipDBAccess;
 import mn.aug.restfulandroid.rest.resource.Listw;
-import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
 import mn.aug.restfulandroid.util.Logger;
@@ -41,7 +40,7 @@ public class ListEditor extends Activity {
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
         this.context=this;
         Intent i = getIntent();
-        Long list_id= i.getLongExtra(Task.TASK_ID_EXTRA,0L);
+        Long list_id= i.getLongExtra(Listw.LIST_ID_EXTRA,0L);
 
         // Initialisation elem vue
         listName = (EditText) findViewById(R.id.inputListName);
