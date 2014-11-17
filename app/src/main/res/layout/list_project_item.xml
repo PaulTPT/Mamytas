@@ -13,13 +13,12 @@
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
             android:background="@drawable/button_stop_normal"
-            android:text="Delete"
+            android:text="Retirer"
             android:gravity="left|center_vertical"
             android:textColor="#FFF"
             android:id="@+id/delete"
-            android:textSize="22sp"
-            android:paddingStart="20sp"
-            android:paddingLeft="20sp"
+            android:textSize="17sp"
+            android:padding="8dp"
             android:phoneNumber="false" />
     </LinearLayout>
     <RelativeLayout

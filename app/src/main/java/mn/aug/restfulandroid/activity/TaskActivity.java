@@ -15,7 +15,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.Chronometer;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -132,7 +131,7 @@ public class TaskActivity extends ListActivity {
                             Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
                             String user = AuthorizationManager.getInstance(context).getUser();
 
-                            ArrayAdapter<Timer> adapter = new MyTimersArrayAdapter(context, R.layout.list_timer_item, timersList);
+                            ArrayAdapter<Timer> adapter = new TimersArrayAdapter(context, R.layout.list_timer_item, timersList);
                             setListAdapter(adapter);
 
                             Date parsedTimeStamp = null, firstDate = null, lastDate = null;

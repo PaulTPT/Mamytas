@@ -130,7 +130,7 @@ public class LoginActivity extends RESTfulActivity {
     }
 
     private void startHomeActivity() {
-        Intent startHomeActivity = new Intent(this, ListsActivity.class);
+        Intent startHomeActivity = new Intent(this, ProjectsActivity.class);
         startActivity(startHomeActivity);
         finish();
     }

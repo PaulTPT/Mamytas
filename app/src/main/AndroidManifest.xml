@@ -38,9 +38,9 @@
         <activity android:name=".activity.TaskActivity" />
 
         <activity android:name=".activity.TaskEditor" />
-        <activity android:name=".activity.ListEditor" />
+        <activity android:name=".activity.ProjectEditor" />
         <activity android:name=".activity.AboutActivity" />
-        <activity android:name=".activity.ListsActivity" />
+        <activity android:name=".activity.ProjectsActivity" />
 
 
 

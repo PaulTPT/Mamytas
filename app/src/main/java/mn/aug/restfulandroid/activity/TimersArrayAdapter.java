@@ -12,13 +12,13 @@ import java.util.List;
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.rest.resource.Timer;
 
-public class MyTimersArrayAdapter extends ArrayAdapter<Timer> {
+public class TimersArrayAdapter extends ArrayAdapter<Timer> {
     private final Context context;
     private final List<Timer> timerList;
     private final int layout;
 
 
-    public MyTimersArrayAdapter(Context context,int layout, List<Timer> timerList ) {
+    public TimersArrayAdapter(Context context, int layout, List<Timer> timerList) {
         super(context, layout, timerList);
         this.context = context;
         this.timerList = timerList;
