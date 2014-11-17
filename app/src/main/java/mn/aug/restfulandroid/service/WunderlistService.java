@@ -22,6 +22,7 @@ public class WunderlistService extends IntentService {
     public static final String BODY_EXTRA = "wunderlist.BODY_EXTRA";
 
     public static final String INFO_EXTRA = "wunderlist.INFO_EXTRA";
+    public static final String INFO_EXTRA_2 = "wunderlist.INFO_EXTRA_2";
 
 
 	public static final int RESOURCE_TYPE_TASKS = 1;
@@ -147,7 +148,20 @@ public class WunderlistService extends IntentService {
                     long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
                     TimersProcessor processor = new TimersProcessor(getApplicationContext());
                     processor.getTimers(makeProcessorCallback(),task_id);
-                }else{
+                }else if (method.equalsIgnoreCase(METHOD_POST) ) {
+
+                    long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+                    long timer_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA_2,0);
+
+                    TimersProcessor processor = new TimersProcessor(getApplicationContext());
+                    processor.postTimer(makeProcessorCallback(),task_id, body,timer_id);
+                }else if (method.equalsIgnoreCase(METHOD_PUT) ) {
+
+                    long task_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA,0);
+                    long timer_id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA_2,0);
+                    TimersProcessor processor = new TimersProcessor(getApplicationContext());
+                    processor.putTimer(makeProcessorCallback(), task_id, body,timer_id);
+                }else {
                     mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
                 }
                 break;

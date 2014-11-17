@@ -11,6 +11,7 @@ import java.util.UUID;
 
 import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
+import mn.aug.restfulandroid.rest.resource.Timer;
 import mn.aug.restfulandroid.rest.resource.Timers;
 
 
@@ -36,6 +37,8 @@ public class WunderlistServiceHelper {
     private static final String deleteListHashkey = "DELETE_LIST";
     private static final String loginHashkey = "LOGIN";
     private static final String getTimersHashkey = "GET_TIMERS";
+    private static final String postTimerHashkey = "POST_TIMER";
+    private static final String putTimerHashkey = "PUT_TIMER";
 
 	private static Object lock = new Object();
 
@@ -130,6 +133,36 @@ public class WunderlistServiceHelper {
         return requestId;
     }
 
+    public long postTimer(Timer timer) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(postTimerHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, postTimerHashkey);
+            }
+        };
+
+
+
+        byte[] body= timer.toString().getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_POST);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TIMERS);
+        intent.putExtra(WunderlistService.BODY_EXTRA, body);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,timer.getTask_id());
+        intent.putExtra(WunderlistService.INFO_EXTRA_2,timer.getOwnership_id());
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
+
     public long postTask(Task task) {
 
         long requestId = generateRequestID();
@@ -210,6 +243,37 @@ public class WunderlistServiceHelper {
         intent.putExtra(WunderlistService.BODY_EXTRA, body);
         intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
         intent.putExtra(WunderlistService.INFO_EXTRA,task.getId());
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
+
+
+    public long putTimer(Timer timer) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(putTimerHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData, putTimerHashkey);
+            }
+        };
+
+
+
+        byte[] body= timer.toString().getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_PUT);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_TIMERS);
+        intent.putExtra(WunderlistService.BODY_EXTRA, body);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,timer.getTask_id());
+        intent.putExtra(WunderlistService.INFO_EXTRA_2,timer.getOwnership_id());
         intent.putExtra(REQUEST_ID, requestId);
 
         this.ctx.startService(intent);
