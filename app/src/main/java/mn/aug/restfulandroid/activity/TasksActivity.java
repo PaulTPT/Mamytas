@@ -1,18 +1,26 @@
 package mn.aug.restfulandroid.activity;
 
+import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,14 +57,14 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
     private OwnershipDBAccess ownershipDBAccess;
     private TasksDBAccess tasksDBAccess;
     private ListsDBAccess listsDBAccess;
+    private Long list_id;
+    private TextView project_name_view;
 
-    private SwipeListView swipelistview;
+    private ListView tasksListView;
     private TasksArrayAdapter adapter;
     private List<Task> tasks;
     private Context context = this;
-    private Long list_id;
-
-    private TextView project_name_view;
+    private OnTouchListener gestureListener;
 
 
     @Override
@@ -74,80 +82,12 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         listsDBAccess.close();
         project_name_view=(TextView) findViewById(R.id.projectName);
         project_name_view.setText("Taches du projet "+project_name);
-        swipelistview = (SwipeListView) findViewById(R.id.example_swipe_lv_list);
-
-        //These are the swipe listview settings. you can change these
-        //setting as your requrement
-        swipelistview.setSwipeMode(SwipeListView.SWIPE_MODE_RIGHT); // there are five swiping modes
-        swipelistview.setSwipeActionRight(SwipeListView.SWIPE_ACTION_REVEAL);
-        swipelistview.setAnimationTime(50); // animarion time
-        swipelistview.setSwipeOpenOnLongPress(false); // enable or disable SwipeOpenOnLongPress
 
         tasks = new ArrayList<Task>();
-
-        adapter = new TasksArrayAdapter(this, R.layout.list_task_item, tasks);
-        swipelistview.setAdapter(adapter);
-
-        swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
-            @Override
-            public void onOpened(int position, boolean toRight) {
-                Task task = tasks.get(position);
-                task.setPosition(position);
-                mUndoBarController.showUndoBar(
-                        false,
-                        "Tâche supprimée",
-                        task);
-                tasks.remove(position);
-
-                adapter = new TasksArrayAdapter(context, R.layout.list_task_item, tasks);
-                swipelistview.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onClosed(int position, boolean fromRight) {
-            }
-
-            @Override
-            public void onListChanged() {
-            }
-
-            @Override
-            public void onMove(int position, float x) {
-            }
-
-            @Override
-            public void onStartOpen(int position, int action, boolean right) {
-                // Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
-            }
-
-            @Override
-            public void onStartClose(int position, boolean right) {
-                //Log.d("swipe", String.format("onStartClose %d", position));
-            }
-
-            @Override
-            public void onClickFrontView(int position) {
-                Task item = (Task) adapter.getItem(position);
-                // Launching new Activity on selecting single List Item
-                Intent i = new Intent(getApplicationContext(), TaskActivity.class);
-                // sending data to new activity
-                i.putExtra(Task.TASK_ID_EXTRA, item.getId());
-                i.putExtra(Listw.LIST_ID_EXTRA, list_id);
-                startActivity(i);
-
-            }
-
-            @Override
-            public void onClickBackView(int position) {
-            }
-
-            @Override
-            public void onDismiss(int[] reverseSortedPositions) {
-
-            }
-
-        });
+        tasksListView = (ListView)findViewById(R.id.list);
+        gestureListener = new OnTouchListener();
+        adapter = new TasksArrayAdapter(this, R.layout.list_task_item, tasks, gestureListener);
+        tasksListView.setAdapter(adapter);
 
         // view products click event
         newTask = (Button) findViewById(R.id.create);
@@ -233,8 +173,8 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
                         Logger.debug("list id :", String.valueOf(list_id));
                         tasksDBAccess.close();
                         tasks = todos;
-                        adapter = new TasksArrayAdapter(context, R.layout.list_task_item, tasks);
-                        swipelistview.setAdapter(adapter);
+                        adapter = new TasksArrayAdapter(context, R.layout.list_task_item, tasks, gestureListener);
+                        tasksListView.setAdapter(adapter);
                         requestId = 0L;
 
 
@@ -312,8 +252,8 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         Task task = (Task) token;
         if (task != null) {
             tasks.add(task.getPosition(), task);
-            adapter = new TasksArrayAdapter(context, R.layout.list_task_item, tasks);
-            swipelistview.setAdapter(adapter);
+            adapter = new TasksArrayAdapter(context, R.layout.list_task_item, tasks, gestureListener);
+            tasksListView.setAdapter(adapter);
             mUndoBarController.clearUndoToken();
         }
 
@@ -325,6 +265,119 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         if (task != null) {
             Logger.debug("Undo", "undo disabled");
             mWunderlistServiceHelper.deleteTask(task);
+        }
+    }
+
+    public class OnTouchListener implements View.OnTouchListener {
+        int initialX = 0;
+        RelativeLayout front;
+        TextView backBtn;
+
+        private TasksArrayAdapter.RowHolder holder;
+        private int position;
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
+        public boolean onTouch(View view, MotionEvent event) {
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+
+            int X = (int) event.getRawX();
+            int offset = X - initialX;
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                holder = ((TasksArrayAdapter.RowHolder) view.getTag());
+                setPosition(holder.position);
+                backBtn = (TextView) view.findViewById(R.id.delete);
+                front = (RelativeLayout) view.findViewById(R.id.front);
+                front.setBackgroundColor(0xFFE9E9F3);
+                initialX = X;
+                front.setTranslationX(0);
+            }
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                front.setTranslationX(offset);
+
+                if (offset < 0){
+                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_normal));
+                    backBtn.setText("Editer");
+                    backBtn.setGravity(Gravity.RIGHT);
+                }else{
+                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_normal));
+                    backBtn.setText("Retirer");
+                    backBtn.setGravity(Gravity.LEFT);
+                }
+                if (offset > (int)width/2) {
+                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_selected));
+                } else if (offset < -(int)width/2) {
+                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_selected));
+                }
+            }
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
+                ValueAnimator animator = null;
+                if (offset > (int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On supprime loulou
+                    animator = ValueAnimator.ofInt(offset, width);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
+                        }
+                    });
+                    animator.setDuration(150);
+                    animator.start();
+
+                    Task task = tasks.get(position);
+                    task.setPosition(position);
+                    mUndoBarController.showUndoBar(
+                            false,
+                            "Tâche supprimée",
+                            task);
+                    tasks.remove(position);
+                    adapter = new TasksArrayAdapter(context, R.layout.list_task_item, tasks, gestureListener);
+                    tasksListView.setAdapter(adapter);
+                } else if (offset < -(int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On redirige vers la page d'édition
+                    animator = ValueAnimator.ofInt(offset, -width);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
+                        }
+                    });
+                    animator.setDuration(150);
+                    animator.start();
+
+                    Task item = (Task) adapter.getItem(position);
+                    // Launching new Activity on selecting single List Item
+                    Intent i = new Intent(getApplicationContext(), TaskEditor.class);
+                    // sending data to new activity
+                    i.putExtra(Task.TASK_ID_EXTRA, item.getId());
+                    i.putExtra(Listw.LIST_ID_EXTRA, list_id);
+                    startActivity(i);
+                } else{// Animate back if no action was performed.
+                    animator = ValueAnimator.ofInt(offset, 0);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
+                        }
+                    });
+                    animator.setDuration(150);
+                    animator.start();
+                }
+                if (Math.abs(offset)<2){
+                    // Launching new Activity on selecting single List Item
+                    Intent i = new Intent((Activity) context, TasksActivity.class);
+                    // sending data to new activity
+                    i.putExtra("list_id", tasks.get(position).getId());
+                    context.startActivity(i);
+                }
+                front.setBackgroundColor(0xFFF5F5FF);
+            }
+            return true;
         }
     }
 }

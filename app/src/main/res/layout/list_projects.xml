@@ -39,7 +39,7 @@
         android:background="@drawable/button_add" />
 
     <LinearLayout android:id="@+id/undobar" style="@style/UndoBar"
-        android:layout_below="@+id/example_swipe_lv_list"
+        android:layout_below="@+id/list"
         android:layout_marginBottom="30dp">
         <TextView android:id="@+id/undobar_message" style="@style/UndoBarMessage" />
         <Button android:id="@+id/undobar_button" style="@style/UndoBarButton" />

@@ -3,7 +3,6 @@ package mn.aug.restfulandroid.activity;
 /**
  * Created by Paul on 13/11/2014.
  */
-
 import android.animation.ValueAnimator;
 import android.app.Activity;
 import android.content.Context;
@@ -32,7 +31,6 @@ public class ProjectsArrayAdapter extends ArrayAdapter<Listw> {
     private final List<Listw> lists;
     private final int layout;
     private final LayoutInflater inflator;
-
     public ProjectsActivity.OnTouchListener listener;
 
     public ProjectsArrayAdapter(Context contextProjects, int layout, List<Listw> lists, ProjectsActivity.OnTouchListener _listener) {
@@ -81,15 +79,8 @@ public class ProjectsArrayAdapter extends ArrayAdapter<Listw> {
 
     public static class RowHolder{
         public Listw model;
-
-        public void RowHolder(){
-
-        }
-
-        TextView name;
+        public TextView name;
         public RelativeLayout front;
-        public Button btnEditTask;
-        public long projectID;
         public int position;
     }
 

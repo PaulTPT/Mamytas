@@ -27,14 +27,14 @@
         android:tag="front"
         android:background="@drawable/list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent">
+        android:layout_height="fill_parent"
+        android:padding="8dp">
 
         <TextView
             android:layout_width="fill_parent"
             android:text="Nom du projet"
             android:layout_height="wrap_content"
             android:id="@+id/name"
-            android:padding="8dp"
             android:textSize="17sp"/>
     </RelativeLayout>
 </FrameLayout>
