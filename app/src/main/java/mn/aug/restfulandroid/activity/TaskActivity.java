@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -38,20 +37,19 @@ public class TaskActivity extends ListActivity {
 
     private static final String TAG = TaskActivity.class.getSimpleName();
     private TasksDBAccess tasksDBAccess = new TasksDBAccess(this);
-
+    private Context context;
     private Long requestId = 0L;
+    private Long requestId_timer = 0L;
     private BroadcastReceiver requestReceiver;
+    private BroadcastReceiver requestReceiver_timer;
     private Button startStopWork, btnEditTask;
 
     private TextView newWorkTimer;
-    private long startTime = 0L;
     private Handler customHandler= new Handler();
-    private long timeInMilliseconds = 0L;
-    private long timeSwapBuff = 0L;
     private long updatedTime = 0L;
 
     private Task tache;
-
+    private TimerServiceHelper mTimerServiceHelper;
     private WunderlistServiceHelper mWunderlistServiceHelper;
 
     long task_id;
@@ -62,64 +60,62 @@ public class TaskActivity extends ListActivity {
         @Override
         public void onClick(View v) {
             if (startStopWork.getText().toString().equals("Start")) {
-                startTime = SystemClock.uptimeMillis();
-                timerThread = new Thread(timerRunnable);
-                timerThread.start();
-                startStopWork.setText("Stop");
+                mTimerServiceHelper.startChrono(context,task_id,updatedTime);
+                                startStopWork.setText("Stop");
                 startStopWork.setBackground(getResources().getDrawable(R.drawable.button_stop));
             } else {
-                timeSwapBuff += timeInMilliseconds;
-                timerThread.interrupt();
-                customHandler.removeCallbacks(timerThread);
+                mTimerServiceHelper.stopChrono(context, task_id);
+                customHandler.removeCallbacks(timer_update_runnable);
                 startStopWork.setText("Start");
                 startStopWork.setBackground(getResources().getDrawable(R.drawable.button_play));
             }
         }
     };
-    private Runnable timerRunnable = new Runnable() {
 
-        private int secs=0;
-        private int mins=0;
-        private int dix_seconds=0;
+    private Runnable timer_update_runnable = new Runnable() {
+        private int secs = 0;
+        private int mins = 0;
+        private int dix_seconds = 0;
 
-        private Runnable updateUIRunnable = new Runnable() {
-           public void run() {
-                newWorkTimer.setText("" + mins + ":"
-                        + String.format("%02d", secs) + ":"
-                        + String.format("%01d", dix_seconds));
-            }
-        };
 
         public void run() {
-            while (!Thread.currentThread().isInterrupted()) {
-                timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
-                updatedTime = timeSwapBuff + timeInMilliseconds;
-
-                 secs = (int) (updatedTime / 1000);
-                 mins = secs / 60;
-                 secs = secs % 60;
-                 dix_seconds = (int) (updatedTime % 1000)/100;
-                try {
-                    Thread.sleep(50);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
-                    Thread.currentThread().interrupt();
-                }
-                customHandler.post(updateUIRunnable);
-            }
+            secs = (int) (updatedTime / 1000);
+            mins = secs / 60;
+            secs = secs % 60;
+            dix_seconds = (int) (updatedTime % 1000) / 100;
+            newWorkTimer.setText("" + mins + ":"
+                    + String.format("%02d", secs) + ":"
+                    + String.format("%01d", dix_seconds));
         }
-
-
     };
 
-    private Thread timerThread;
+    private Runnable actualize_runnable=new Runnable() {
+
+        @Override
+        public void run() {
+            while(!Thread.currentThread().isInterrupted()){
+                requestId_timer=mTimerServiceHelper.getChrono(context,list_id);
+                try {
+                    wait(50);
+                } catch (InterruptedException e) {
+
+                    Thread.currentThread().interrupt();
+                }
+
+            }
+        }
+    };
+
+    private Thread timerThread=new Thread(actualize_runnable);
 
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         this.setContentView(R.layout.tache_view);
+        context=this;
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
+        mTimerServiceHelper= TimerServiceHelper.getInstance(this);
     }
 
     @Override
@@ -245,6 +241,32 @@ public class TaskActivity extends ListActivity {
         this.registerReceiver(requestReceiver, filter);
         if (requestId == 0L)
             requestId = mWunderlistServiceHelper.getTimers(task_id); // Si la requestId n'existe plus c'est un fail on relance.
+
+
+
+        IntentFilter filter_timer = new IntentFilter(TimerServiceHelper.ACTION_REQUEST_RESULT);
+        requestReceiver_timer = new BroadcastReceiver() {
+
+            @Override
+            public void onReceive(Context context, Intent intent) {
+
+                long resultRequestId = intent
+                        .getLongExtra(TimerServiceHelper.EXTRA_REQUEST_ID, 0);
+                int resultCode = intent.getIntExtra(TimerServiceHelper.EXTRA_RESULT_CODE, 0);
+
+                if (resultRequestId == requestId) {
+                    if (resultCode == 1) {
+                        updatedTime = intent.getLongExtra(TimerServiceHelper.EXTRA_RESULT, 0);
+                        customHandler.post(timer_update_runnable);
+                    }
+                }
+
+            }
+        };
+
+        this.registerReceiver(requestReceiver_timer, filter_timer);
+
+        timerThread.start();
     }
 
     @Override
@@ -258,6 +280,19 @@ public class TaskActivity extends ListActivity {
             } catch (IllegalArgumentException e) {
                 Logger.error(TAG, e.getLocalizedMessage(), e);
             }
+        }
+
+        // Unregister for broadcast
+        if (requestReceiver_timer != null) {
+            try {
+                this.unregisterReceiver(requestReceiver_timer);
+            } catch (IllegalArgumentException e) {
+                Logger.error(TAG, e.getLocalizedMessage(), e);
+            }
+        }
+
+        if(timerThread!=null) {
+            timerThread.interrupt();
         }
     }
 

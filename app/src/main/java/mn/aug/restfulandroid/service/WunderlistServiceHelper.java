@@ -41,7 +41,6 @@ public class WunderlistServiceHelper {
 
 	private static WunderlistServiceHelper instance;
 
-	//TODO: refactor the key
 	private Map<String,Long> pendingRequests = new HashMap<String,Long>();
 	private Context ctx;
 
@@ -56,7 +55,7 @@ public class WunderlistServiceHelper {
 			}
 		}
 
-		return instance;		
+		return instance;
 	}
 
 	public long getTasks() {
@@ -78,8 +77,8 @@ public class WunderlistServiceHelper {
 		intent.putExtra(REQUEST_ID, requestId);
 
 		this.ctx.startService(intent);
-		
-		return requestId;		
+
+		return requestId;
 	}
 
     public long getLists() {

@@ -4,18 +4,26 @@
     android:versionCode="2"
     android:versionName="0.2" >
 
-
-    <uses-sdk android:minSdkVersion="16"
-              android:targetSdkVersion="19"/>
+    <uses-sdk
+        android:minSdkVersion="16"
+        android:targetSdkVersion="19" />
 
     <uses-permission android:name="android.permission.INTERNET" />
+
+    <android:uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
+    <android:uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <android:uses-permission
+        android:name="android.permission.READ_EXTERNAL_STORAGE"
+        android:maxSdkVersion="18" />
 
     <application
         android:icon="@drawable/ic_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
         <activity
-            android:name=".activity.LoginActivity"
+            android:name="mn.aug.restfulandroid.activity.LoginActivity"
             android:launchMode="singleTop" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -34,19 +42,19 @@
                 </data>
             </intent-filter>
         </activity>
-        <activity android:name=".activity.TasksActivity" />
-        <activity android:name=".activity.TaskActivity" />
+        <activity android:name="mn.aug.restfulandroid.activity.TasksActivity" />
+        <activity android:name="mn.aug.restfulandroid.activity.TaskActivity" />
+        <activity android:name="mn.aug.restfulandroid.activity.TaskEditor" />
+        <activity android:name="mn.aug.restfulandroid.activity.ListEditor" />
+        <activity android:name="mn.aug.restfulandroid.activity.AboutActivity" />
+        <activity android:name="mn.aug.restfulandroid.activity.ListsActivity" />
 
-        <activity android:name=".activity.TaskEditor" />
-        <activity android:name=".activity.ListEditor" />
-        <activity android:name=".activity.AboutActivity" />
-        <activity android:name=".activity.ListsActivity" />
-
-
-
-        <service android:name=".service.WunderlistService" />
-
-
+        <service android:name="mn.aug.restfulandroid.service.WunderlistService" />
+        <service android:name="mn.aug.restfulandroid.activity.TimerService" />
+        <service
+            android:name="mn.aug.restfulandroid.activity.MyIntentService"
+            android:exported="false" >
+        </service>
     </application>
 
 </manifest>
