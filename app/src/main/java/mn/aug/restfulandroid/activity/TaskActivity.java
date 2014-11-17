@@ -43,8 +43,6 @@ public class TaskActivity extends ListActivity {
 
     private static final String TAG = TaskActivity.class.getSimpleName();
 
-    public OnTouchListener gestureListener;
-
     private static final String UPDATED_TIME = "updated_time";
     private TasksDBAccess tasksDBAccess = new TasksDBAccess(this);
     private Context context;
@@ -198,8 +196,7 @@ public class TaskActivity extends ListActivity {
                         if (timersList != null && !timersList.isEmpty()) {
                             Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
                             String user = AuthorizationManager.getInstance(context).getUser();
-                            gestureListener = new OnTouchListener();
-                            ArrayAdapter<Timer> adapter = new TimersArrayAdapter(context, R.layout.list_timer_item, timersList, gestureListener);
+                            ArrayAdapter<Timer> adapter = new TimersArrayAdapter(context, R.layout.list_timer_item, timersList);
                             setListAdapter(adapter);
 
                             Date parsedTimeStamp = null, firstDate = null, lastDate = null;
@@ -341,67 +338,6 @@ public class TaskActivity extends ListActivity {
         startActivity(login);
         finish();
 
-    }
-
-    public class OnTouchListener implements View.OnTouchListener {
-        int initialX = 20;
-        RelativeLayout front;
-        TextView backBtn;
-
-        public boolean onTouch(View view, MotionEvent event) {
-            Display display = getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x;
-            int height = size.y;
-
-            backBtn = (TextView) view.findViewById(R.id.delete);
-            front = (RelativeLayout) view.findViewById(R.id.front);
-            int X = (int) event.getRawX();
-            int offset = X - initialX;
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                initialX = X;
-                front.setTranslationX(0);
-            }
-            if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                front.setTranslationX(offset);
-
-                if (offset < 0){
-                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_normal));
-                    backBtn.setText("Editer");
-                    backBtn.setGravity(Gravity.RIGHT);
-                    //front.setBackgroundColor(0xffFF0000);
-                }else{
-                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_normal));
-                    backBtn.setText("Retirer");
-                    backBtn.setGravity(Gravity.LEFT);
-                }
-                if (offset > (int)width/2) {
-                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_selected));
-                } else if (offset < -(int)width/2) {
-                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_selected));
-                }
-            }
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
-                ValueAnimator animator = null;
-                if (offset > (int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On supprime loulou
-                    animator = ValueAnimator.ofInt(offset, width);
-                } else if (offset < -(int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On redirige vers la page d'édition
-                    animator = ValueAnimator.ofInt(offset, -width);
-                } else{// Animate back if no action was performed.
-                    animator = ValueAnimator.ofInt(X - initialX, 0);
-                }
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
-                    }
-                });
-                animator.setDuration(150);
-                animator.start();
-            }
-            return true;
-        }
     }
 
     @Override

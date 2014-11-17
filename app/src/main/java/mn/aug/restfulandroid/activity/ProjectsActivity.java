@@ -1,6 +1,7 @@
 package mn.aug.restfulandroid.activity;
 
 import android.animation.ValueAnimator;
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -16,13 +17,12 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
-
-import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
-import com.fortysevendeg.swipelistview.SwipeListView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +50,11 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
 
-    private  SwipeListView swipelistview;
+    private ListView listView;
     private ProjectsArrayAdapter adapter;
-    private  List<Listw> lists;
+    private List<Listw> lists;
     private Context context=this;
-
-
+    private OnTouchListener gestureListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,77 +62,12 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
         super.onCreate(savedInstanceState);
         mUndoBarController = new UndoBarController(findViewById(R.id.undobar), this);
         ownershipDBAccess = new OwnershipDBAccess(this);
-        swipelistview=(SwipeListView)findViewById(R.id.example_swipe_lv_list);
-
-        //These are the swipe listview settings. you can change these
-        //setting as your requrement
-        swipelistview.setSwipeMode(SwipeListView.SWIPE_MODE_RIGHT); // there are five swiping modes
-        swipelistview.setSwipeActionRight(SwipeListView.SWIPE_ACTION_REVEAL);
-        swipelistview.setAnimationTime(50); // animarion time
-        swipelistview.setSwipeOpenOnLongPress(false); // enable or disable SwipeOpenOnLongPress
 
         lists=new ArrayList<Listw>();
-        adapter=new ProjectsArrayAdapter(this,R.layout.list_project_item,lists);
-        swipelistview.setAdapter(adapter);
-
-        swipelistview.setSwipeListViewListener(new BaseSwipeListViewListener() {
-            @Override
-            public void onOpened(int position, boolean toRight) {
-                Listw list=lists.get(position);
-                list.setPosition(position);
-                mUndoBarController.showUndoBar(
-                        false,
-                        "Liste supprimée",
-                        list);
-                lists.remove(position);
-                adapter=new ProjectsArrayAdapter(context,R.layout.list_project_item,lists);
-                swipelistview.setAdapter(adapter);
-
-            }
-
-            @Override
-            public void onClosed(int position, boolean fromRight) {
-            }
-
-            @Override
-            public void onListChanged() {
-            }
-
-            @Override
-            public void onMove(int position, float x) {
-            }
-
-            @Override
-            public void onStartOpen(int position, int action, boolean right) {
-                // Log.d("swipe", String.format("onStartOpen %d - action %d", position, action));
-            }
-
-            @Override
-            public void onStartClose(int position, boolean right) {
-                //Log.d("swipe", String.format("onStartClose %d", position));
-            }
-
-            @Override
-            public void onClickFrontView(int position) {
-                Listw item = (Listw) adapter.getItem(position);
-                // Launching new Activity on selecting single List Item
-                Intent i = new Intent(getApplicationContext(), TasksActivity.class);
-                // sending data to new activity
-                i.putExtra("list_id", item.getId());
-                startActivity(i);
-
-            }
-
-            @Override
-            public void onClickBackView(int position) {
-            }
-
-            @Override
-            public void onDismiss(int[] reverseSortedPositions) {
-
-            }
-
-        });
+        listView = (ListView)findViewById(R.id.list);
+        gestureListener = new OnTouchListener();
+        adapter=new ProjectsArrayAdapter(this,R.layout.list_project_item,lists, gestureListener);
+        listView.setAdapter(adapter);
 
         // view products click event
         newList = (Button) findViewById(R.id.create);
@@ -212,8 +146,8 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                         List<Listw> new_lists= ownershipDBAccess.getLists(user);
                         ownershipDBAccess.close();
                         lists=new_lists;
-                        adapter=new ProjectsArrayAdapter(context,R.layout.list_project_item,lists);
-                        swipelistview.setAdapter(adapter);
+                        adapter=new ProjectsArrayAdapter(context,R.layout.list_project_item,lists, gestureListener);
+                        listView.setAdapter(adapter);
                         requestId=0L;
 
 
@@ -292,8 +226,8 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
         Listw list= (Listw) token;
         if (list!=null) {
             lists.add(list.getPosition(), list);
-            adapter = new ProjectsArrayAdapter(context, R.layout.list_project_item, lists);
-            swipelistview.setAdapter(adapter);
+            adapter = new ProjectsArrayAdapter(context, R.layout.list_project_item, lists, gestureListener);
+            listView.setAdapter(adapter);
             mUndoBarController.clearUndoToken();
         }
 
@@ -313,8 +247,15 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
         RelativeLayout front;
         TextView backBtn;
 
+        private int position;
+
+        public void setPosition(int position) {
+            this.position = position;
+        }
+
         public boolean onTouch(View view, MotionEvent event) {
-            Display display = getWindowManager().getDefaultDisplay();
+            WindowManager wm = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
+            Display display = wm.getDefaultDisplay();
             Point size = new Point();
             display.getSize(size);
             int width = size.x;
@@ -351,19 +292,51 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                 ValueAnimator animator = null;
                 if (offset > (int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On supprime loulou
                     animator = ValueAnimator.ofInt(offset, width);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
+                        }
+                    });
+                    animator.setDuration(150);
+                    animator.start();
+
+                    Listw list=lists.get(position);
+                    list.setPosition(position);
+                    mUndoBarController.showUndoBar(
+                            false,
+                            "Liste supprimée",
+                            list);
+                    lists.remove(position);
+                    adapter=new ProjectsArrayAdapter(context,R.layout.list_project_item,lists, gestureListener);
+                    listView.setAdapter(adapter);
                 } else if (offset < -(int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On redirige vers la page d'édition
                     animator = ValueAnimator.ofInt(offset, -width);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
+                        }
+                    });
+                    animator.setDuration(150);
+                    animator.start();
+
+                    // Launching new Activity on selecting single List Item
+                    Intent i = new Intent((Activity) context, TasksActivity.class);
+                    // sending data to new activity
+                    i.putExtra("list_id", lists.get(position).getId());
+                    context.startActivity(i);
                 } else{// Animate back if no action was performed.
                     animator = ValueAnimator.ofInt(X - initialX, 0);
+                    animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                        @Override
+                        public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                            front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
+                        }
+                    });
+                    animator.setDuration(150);
+                    animator.start();
                 }
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
-                    }
-                });
-                animator.setDuration(150);
-                animator.start();
             }
             return true;
         }
