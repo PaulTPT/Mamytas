@@ -99,6 +99,7 @@ public class TimersProcessor {
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
 
+
         RestMethod<Timer> postTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
                 Timers.CONTENT_URI, Method.POST, null, body, task_id);
         RestMethodResult<Timer> result = postTaskMethod.execute();
@@ -119,7 +120,7 @@ public class TimersProcessor {
             ownershipDBAccess.open();
             ownershipDBAccess.deleteTimer(timer_id);
             Timer timer = result.getResource();
-            ownershipDBAccess.storeTimer(timer);
+            ownershipDBAccess.storeTimerWithId(timer);
             tasksDBAccess.close();
             callback.send(result.getStatusCode(),timer);
         }else {
@@ -154,7 +155,6 @@ public class TimersProcessor {
         // (5) Call the REST method
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
-
         RestMethod<Timer> putTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
                 Timers.CONTENT_URI, RestMethodFactory.Method.PUT, null, body, task_id);
         RestMethodResult<Timer> result = putTaskMethod.execute();

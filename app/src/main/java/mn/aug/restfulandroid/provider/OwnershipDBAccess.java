@@ -584,6 +584,27 @@ public class OwnershipDBAccess {
 
     }
 
+
+
+    public Timer getCurretTimer(long task_id) {
+
+        Cursor c = null;
+        try {
+            c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_OWNER,ProviderDbHelper.OWNERSHIP_TIMER,ProviderDbHelper.OWNERSHIP_TIMER_START,ProviderDbHelper.OWNERSHIP_ID,ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID},
+                    ProviderDbHelper.OWNERSHIP_STATE+ " ='" + "CURRENT" + "' AND " + ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + task_id + "'", null, null, null, null);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+        if (c.getCount() == 0)
+            return null;
+        else {
+            c.moveToFirst();
+            return new Timer(c.getString(0),c.getString(1),c.getString(2),c.getLong(3),c.getLong(4));
+        }
+
+    }
+
     public boolean setTimer_Start(long id, String owner, String timer_start) {
 
         try {
@@ -605,6 +626,25 @@ public class OwnershipDBAccess {
             values.put(ProviderDbHelper.OWNERSHIP_TYPE, "TASKS");
             values.put(ProviderDbHelper.OWNERSHIP_OWNER,timer.getName());
             values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID,timer.getTask_id());
+            values.put(ProviderDbHelper.OWNERSHIP_TIMER,timer.getTimer());
+            values.put(ProviderDbHelper.OWNERSHIP_TIMER_START,timer.getTimer_start());
+            long id = bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);
+            timer.setOwnership_id(id);
+            return timer;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+
+    public Timer storeTimerWithId(Timer timer){
+        try {
+            ContentValues values = new ContentValues();
+            values.put(ProviderDbHelper.OWNERSHIP_TYPE, "TASKS");
+            values.put(ProviderDbHelper.OWNERSHIP_OWNER,timer.getName());
+            values.put(ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID,timer.getTask_id());
+            values.put(ProviderDbHelper.OWNERSHIP_ID,timer.getOwnership_id());
             values.put(ProviderDbHelper.OWNERSHIP_TIMER,timer.getTimer());
             values.put(ProviderDbHelper.OWNERSHIP_TIMER_START,timer.getTimer_start());
             long id = bdd.insert(ProviderDbHelper.TABLE_OWNERSHIP, null, values);

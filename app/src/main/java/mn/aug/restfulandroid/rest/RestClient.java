@@ -39,6 +39,7 @@ public class RestClient {
             }
 
             byte[] payload = request.getBody();
+
             switch (request.getMethod()) {
                 case GET:
                     conn.setRequestMethod("GET");
