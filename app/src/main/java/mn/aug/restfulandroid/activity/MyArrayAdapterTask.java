@@ -3,7 +3,6 @@ package mn.aug.restfulandroid.activity;
 /**
  * Created by Paul on 13/11/2014.
  */
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
@@ -32,38 +31,22 @@ public class MyArrayAdapterTask extends ArrayAdapter<Task> {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-
-
         RowHolder holder = null;
         View row = convertView;
 
-        if(holder == null)
-        {
+        if(holder == null) {
             if(row==null) {
                 LayoutInflater inflater = ((Activity) context).getLayoutInflater();
                 row = inflater.inflate(layout, parent, false);
             }
-
             holder = new RowHolder();
-
             holder.name = (TextView)row.findViewById(R.id.name);
             row.setTag(holder);
-        }
-        else
-        {
+        } else
             holder = (RowHolder)row.getTag();
-        }
-
         holder.name.setText(todos.get(position).getTitle());
-
-
         return row;
     }
 
-
-    static class RowHolder{
-
-        TextView name;
-    }
-
+    static class RowHolder{ TextView name; }
 }

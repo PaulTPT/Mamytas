@@ -6,6 +6,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -36,13 +38,19 @@ import mn.aug.restfulandroid.util.Logger;
 public class TaskActivity extends ListActivity {
 
     private static final String TAG = TaskActivity.class.getSimpleName();
-
     private TasksDBAccess tasksDBAccess=new TasksDBAccess(this);
 
     private Long requestId=0L;
     private BroadcastReceiver requestReceiver;
     private Button startStopWork, btnEditTask;
-    private Chronometer newWorkTimer;
+
+    private TextView newWorkTimer;
+    private long startTime = 0L;
+    private Handler customHandler = new Handler();
+    private long timeInMilliseconds = 0L;
+    private long timeSwapBuff = 0L;
+    private long updatedTime = 0L;
+
     private Task tache;
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
@@ -76,7 +84,7 @@ public class TaskActivity extends ListActivity {
         TextView txtProduct = (TextView) findViewById(R.id.taskName);
         txtProduct.setText(tache.getTitle());
 
-        newWorkTimer = (Chronometer)findViewById(R.id.newWorkTimer);
+        newWorkTimer = (TextView)findViewById(R.id.newWorkTimer);
         startStopWork = (Button)findViewById(R.id.startWork);
         startStopWork.setOnClickListener(play);
 
@@ -211,23 +219,36 @@ public class TaskActivity extends ListActivity {
         return true;
     }
 
-
-
     // Listener du bouton StartStop
     private OnClickListener play = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            TextView startStopBtn = (TextView) findViewById(R.id.startWork);
-
             if (startStopWork.getText().toString().equals("Start")){
-                newWorkTimer.start();
-                startStopBtn.setText("Stop");
-                startStopBtn.setBackground(getResources().getDrawable(R.drawable.button_stop));
+                startTime = SystemClock.uptimeMillis();
+                customHandler.postDelayed(updateTimerThread, 0);
+                startStopWork.setText("Stop");
+                startStopWork.setBackground(getResources().getDrawable(R.drawable.button_stop));
             }else{
-                newWorkTimer.stop();
-                startStopBtn.setText("Start");
-                startStopBtn.setBackground(getResources().getDrawable(R.drawable.button_play));
+                timeSwapBuff += timeInMilliseconds;
+                customHandler.removeCallbacks(updateTimerThread);
+                startStopWork.setText("Start");
+                startStopWork.setBackground(getResources().getDrawable(R.drawable.button_play));
             }
+        }
+    };
+    private Runnable updateTimerThread = new Runnable() {
+        public void run() {
+            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+            updatedTime = timeSwapBuff + timeInMilliseconds;
+
+            int secs = (int) (updatedTime / 1000);
+            int mins = secs / 60;
+            secs = secs % 60;
+            int milliseconds = (int) (updatedTime % 1000);
+            newWorkTimer.setText("" + mins + ":"
+                    + String.format("%02d", secs) + ":"
+                    + String.format("%03d", milliseconds));
+            customHandler.postDelayed(this, 0);
         }
     };
 
