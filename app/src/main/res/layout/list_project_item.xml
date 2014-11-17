@@ -27,13 +27,29 @@
         android:tag="front"
         android:background="@drawable/list"
         android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:padding="8dp">
+        android:layout_height="fill_parent">
 
         <TextView
             android:layout_width="fill_parent"
             android:text="Nom du projet"
             android:layout_height="wrap_content"
-            android:id="@+id/name"/>
+            android:id="@+id/name"
+            android:padding="8dp"
+            android:textSize="17sp"
+            android:layout_toLeftOf="@+id/editBtn"
+            android:layout_toStartOf="@+id/editBtn" />
+
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="#efefff"
+            android:text="Edit"
+            android:padding="0dp"
+            android:textSize="17sp"
+            android:id="@+id/editBtn"
+            android:layout_alignParentTop="true"
+            android:layout_alignParentRight="true"
+            android:layout_alignParentEnd="true"
+            android:minHeight="30dp" />
     </RelativeLayout>
 </FrameLayout>

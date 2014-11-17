@@ -34,7 +34,7 @@ public class ProjectEditor extends Activity {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.add_list);
+        setContentView(R.layout.add_project);
         ownershipDBAccess = new OwnershipDBAccess(this);
         listsDBAccess = new ListsDBAccess(this);
         mWunderlistServiceHelper = WunderlistServiceHelper.getInstance(this);
@@ -51,11 +51,11 @@ public class ProjectEditor extends Activity {
             list = listsDBAccess.retrieveList(list_id);
             listsDBAccess.close();
             listName.setText(list.getTitle());
-            btnCreateTask.setText("Editer la liste");
+            btnCreateTask.setText("Editer le projet");
             toastVerb = "Editing";
             edit = true;
         }else{
-            btnCreateTask.setText("Ajouter la liste");
+            btnCreateTask.setText("Ajouter le projet");
         }
 
         // Create button
@@ -64,8 +64,8 @@ public class ProjectEditor extends Activity {
         btnCreateTask.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Logger.debug("show", "Creating Product " + listName.getText().toString());
-                showToast(toastVerb+" task " + listName.getText().toString());
+                Logger.debug("show", "Creating projet " + listName.getText().toString());
+                showToast(toastVerb+" projet " + listName.getText().toString());
                 if(!edit) {
                     ownershipDBAccess.open();
                     list = ownershipDBAccess.addListGetId(AuthorizationManager.getInstance(context).getUser(), new Listw(listName.getText().toString()));

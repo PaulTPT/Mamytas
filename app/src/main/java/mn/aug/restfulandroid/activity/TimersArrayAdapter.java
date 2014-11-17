@@ -1,10 +1,15 @@
 package mn.aug.restfulandroid.activity;
 
+import android.animation.ValueAnimator;
 import android.content.Context;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
@@ -16,10 +21,11 @@ public class TimersArrayAdapter extends ArrayAdapter<Timer> {
     private final Context context;
     private final List<Timer> timerList;
     private final int layout;
+    private final View.OnTouchListener listener;
 
-
-    public TimersArrayAdapter(Context context, int layout, List<Timer> timerList) {
+    public TimersArrayAdapter(Context context, int layout, List<Timer> timerList, View.OnTouchListener _listener) {
         super(context, layout, timerList);
+        this.listener = _listener;
         this.context = context;
         this.timerList = timerList;
         this.layout=layout;
@@ -36,6 +42,10 @@ public class TimersArrayAdapter extends ArrayAdapter<Timer> {
         workUserName.setText(timerList.get(position).getName()+": ");
         workTimeSpent.setText(timerList.get(position).getTimer() + "min");
         workDate.setText("le " + timerList.get(position).getTimer_start());
+        if(this.listener != null)
+            rowView.setOnTouchListener(this.listener);
         return rowView;
     }
+
+
 }

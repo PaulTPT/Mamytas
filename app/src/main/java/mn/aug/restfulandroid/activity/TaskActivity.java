@@ -1,5 +1,6 @@
 package mn.aug.restfulandroid.activity;
 
+import android.animation.ValueAnimator;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -11,10 +12,13 @@ import android.os.SystemClock;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,6 +42,8 @@ public class TaskActivity extends ListActivity {
 
     private static final String TAG = TaskActivity.class.getSimpleName();
     private TasksDBAccess tasksDBAccess=new TasksDBAccess(this);
+
+    public OnTouchListener gestureListener;
 
     private Long requestId=0L;
     private BroadcastReceiver requestReceiver;
@@ -130,8 +136,8 @@ public class TaskActivity extends ListActivity {
                         if (timersList != null && !timersList.isEmpty()){
                             Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
                             String user = AuthorizationManager.getInstance(context).getUser();
-
-                            ArrayAdapter<Timer> adapter = new TimersArrayAdapter(context, R.layout.list_timer_item, timersList);
+                            gestureListener = new OnTouchListener();
+                            ArrayAdapter<Timer> adapter = new TimersArrayAdapter(context, R.layout.list_timer_item, timersList, gestureListener);
                             setListAdapter(adapter);
 
                             Date parsedTimeStamp = null, firstDate = null, lastDate = null;
@@ -259,4 +265,42 @@ public class TaskActivity extends ListActivity {
 
     }
 
+    public class OnTouchListener implements View.OnTouchListener {
+        int initialX = 20;
+        RelativeLayout front;
+        LinearLayout back;
+        public boolean onTouch(View view, MotionEvent event) {
+            back = (LinearLayout)view.findViewById(R.id.back);
+            front = (RelativeLayout)view.findViewById(R.id.front);
+            int X = (int) event.getRawX();
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                initialX = X;
+                front.setBackgroundColor(0xff00FF00);
+                front.setTranslationX(initialX);
+            } else if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                front.setBackgroundColor(0xffFF0000);
+                int offset = X - initialX;
+                front.setTranslationX(offset);
+                if (offset > 120) {
+                    // TODO :: Do Right to Left action! And do nothing on action_up.
+                } else if (offset < -120) {
+                    // TODO :: Do Left to Right action! And do nothing on action_up.
+                }
+            } else if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+                front.setBackgroundColor(0xff0000FF);
+                // Animate back if no action was performed.
+                ValueAnimator animator = ValueAnimator.ofInt(X - initialX, 0);
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
+                    }
+                });
+                animator.setDuration(150);
+                animator.start();
+                front.setTranslationX(-10);
+            }
+            return false;
+        }
+    }
 }
