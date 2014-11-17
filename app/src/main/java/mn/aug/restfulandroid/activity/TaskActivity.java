@@ -382,11 +382,11 @@ public class TaskActivity extends ListActivity {
                     backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_selected));
                 }
             }
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
                 ValueAnimator animator = null;
-                if (offset > (int)width/2) { // On supprime loulou
+                if (offset > (int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On supprime loulou
                     animator = ValueAnimator.ofInt(offset, width);
-                } else if (offset < -(int)width/2) { // On redirige vers la page d'édition
+                } else if (offset < -(int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On redirige vers la page d'édition
                     animator = ValueAnimator.ofInt(offset, -width);
                 } else{// Animate back if no action was performed.
                     animator = ValueAnimator.ofInt(X - initialX, 0);

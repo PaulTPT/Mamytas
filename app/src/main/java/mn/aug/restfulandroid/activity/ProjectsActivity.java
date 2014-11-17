@@ -1,18 +1,24 @@
 package mn.aug.restfulandroid.activity;
 
+import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
+import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fortysevendeg.swipelistview.BaseSwipeListViewListener;
@@ -299,6 +305,67 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
         if (list!=null){
             Logger.debug("Undo","undo disabled");
             mWunderlistServiceHelper.deleteList(list);
+        }
+    }
+
+    public class OnTouchListener implements View.OnTouchListener {
+        int initialX = 20;
+        RelativeLayout front;
+        TextView backBtn;
+
+        public boolean onTouch(View view, MotionEvent event) {
+            Display display = getWindowManager().getDefaultDisplay();
+            Point size = new Point();
+            display.getSize(size);
+            int width = size.x;
+            int height = size.y;
+
+            backBtn = (TextView) view.findViewById(R.id.delete);
+            front = (RelativeLayout) view.findViewById(R.id.front);
+            int X = (int) event.getRawX();
+            int offset = X - initialX;
+            if (event.getAction() == MotionEvent.ACTION_DOWN) {
+                initialX = X;
+                front.setTranslationX(0);
+            }
+            if (event.getAction() == MotionEvent.ACTION_MOVE) {
+                front.setTranslationX(offset);
+
+                if (offset < 0){
+                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_normal));
+                    backBtn.setText("Editer");
+                    backBtn.setGravity(Gravity.RIGHT);
+                    //front.setBackgroundColor(0xffFF0000);
+                }else{
+                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_normal));
+                    backBtn.setText("Retirer");
+                    backBtn.setGravity(Gravity.LEFT);
+                }
+                if (offset > (int)width/2) {
+                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_selected));
+                } else if (offset < -(int)width/2) {
+                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_selected));
+                }
+            }
+            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
+                ValueAnimator animator = null;
+                if (offset > (int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On supprime loulou
+                    animator = ValueAnimator.ofInt(offset, width);
+                } else if (offset < -(int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On redirige vers la page d'édition
+                    animator = ValueAnimator.ofInt(offset, -width);
+                } else{// Animate back if no action was performed.
+                    animator = ValueAnimator.ofInt(X - initialX, 0);
+                }
+                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                    @Override
+                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                        front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
+                    }
+                });
+                animator.setDuration(150);
+                animator.start();
+            }
+            return true;
         }
     }
 }
