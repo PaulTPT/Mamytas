@@ -40,7 +40,7 @@
         android:singleLine="false"
         android:layout_alignParentTop="true" />
 
-    <Chronometer
+    <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceSmall"
