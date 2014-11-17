@@ -3,6 +3,7 @@ package mn.aug.restfulandroid.service;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.os.ResultReceiver;
 
 import java.util.HashMap;
@@ -12,7 +13,6 @@ import java.util.UUID;
 import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
 import mn.aug.restfulandroid.rest.resource.Timer;
-import mn.aug.restfulandroid.rest.resource.Timers;
 
 
 /**
@@ -413,14 +413,14 @@ public class WunderlistServiceHelper {
 
 		if(origIntent != null){
 			long requestId = origIntent.getLongExtra(REQUEST_ID, 0);
-            Timers timers = origIntent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
+            Parcelable resource= origIntent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
 
 			pendingRequests.remove(hashKey);
 
 			Intent resultBroadcast = new Intent(ACTION_REQUEST_RESULT);
 			resultBroadcast.putExtra(EXTRA_REQUEST_ID, requestId);
 			resultBroadcast.putExtra(EXTRA_RESULT_CODE, resultCode);
-            resultBroadcast.putExtra(WunderlistService.RESOURCE_EXTRA, timers);
+            resultBroadcast.putExtra(WunderlistService.RESOURCE_EXTRA, resource);
 
 			ctx.sendBroadcast(resultBroadcast);
 		}

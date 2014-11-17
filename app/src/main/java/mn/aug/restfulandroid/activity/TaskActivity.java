@@ -66,10 +66,13 @@ public class TaskActivity extends ListActivity {
         @Override
         public void onClick(View v) {
             if (startStopWork.getText().toString().equals("Start")) {
+                updatedTime=0L;
                 timer=new Timer(AuthorizationManager.getInstance(context).getUser(),String.valueOf(updatedTime), String.valueOf(SystemClock.uptimeMillis()),task_id);
+                ownershipDBAccess.open();
                 timer=ownershipDBAccess.storeTimer(timer);
-                requestId_post=mWunderlistServiceHelper.postTimer(timer);
                 ownershipDBAccess.setStatus(timer.getOwnership_id(),"new");
+                ownershipDBAccess.close();
+                requestId_post=mWunderlistServiceHelper.postTimer(timer);
                 mTimerServiceHelper.startChrono(context,task_id,updatedTime);
                                 startStopWork.setText("Stop");
                 startStopWork.setBackground(getResources().getDrawable(R.drawable.button_stop));
@@ -77,6 +80,7 @@ public class TaskActivity extends ListActivity {
                 mTimerServiceHelper.stopChrono(context, task_id);
                 customHandler.removeCallbacks(timer_update_runnable);
                 requestId_timer=0L;
+                requestId = mWunderlistServiceHelper.getTimers(task_id);
                 startStopWork.setText("Start");
                 startStopWork.setBackground(getResources().getDrawable(R.drawable.button_play));
             }
@@ -127,8 +131,10 @@ public class TaskActivity extends ListActivity {
             while(!Thread.currentThread().isInterrupted()){
                 if(timer!=null) {
                     timer.setTimer(String.valueOf(updatedTime));
+                    ownershipDBAccess.open();
                     ownershipDBAccess.updateTimer(timer);
                     ownershipDBAccess.setStatus(timer.getOwnership_id(),"updated");
+                    ownershipDBAccess.close();
                     mWunderlistServiceHelper.putTimer(timer);
                 }
                 try {
