@@ -19,15 +19,12 @@ package mn.aug.restfulandroid.activity.base;
  * limitations under the License.
  */
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -119,7 +116,7 @@ public class UndoBarController {
             mUndoMessage = null;
             mUndoToken = null;
         }
-        mUndoListener.undoDisabled(mUndoToken);
+
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -142,6 +139,7 @@ public class UndoBarController {
         @Override
         public void run() {
             hideUndoBar(false);
+            mUndoListener.undoDisabled(mUndoToken);
         }
     };
 

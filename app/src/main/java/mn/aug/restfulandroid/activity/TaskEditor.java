@@ -4,7 +4,6 @@ import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
@@ -95,7 +94,7 @@ public class TaskEditor extends Activity {
                 showToast(toastVerb+" task " + taskName.getText().toString() + " with due date: " + dueDate);
                 if(!edit) {
                     ownershipDBAccess.open();
-                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), taskDueDate.getText().toString(), list_id));
+                    task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), dueDate, list_id));
                     ownershipDBAccess.close();
                     mWunderlistServiceHelper.postTask(task);
                 }else{
