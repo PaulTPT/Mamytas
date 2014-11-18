@@ -31,12 +31,14 @@ public class WunderlistService extends IntentService {
     public static final int RESOURCE_TYPE_TIMERS= 4;
     public static final int RESOURCE_TYPE_LISTS = 5;
     public static final int RESOURCE_TYPE_LIST = 6;
+    public static final int RESOURCE_TYPE_SHARE = 7;
 
 	public static final String SERVICE_CALLBACK = "wunderlist.SERVICE_CALLBACK";
 
 	public static final String ORIGINAL_INTENT_EXTRA = "wunderlist.ORIGINAL_INTENT_EXTRA";
 
 	private static final int REQUEST_INVALID = -1;
+
 
 
     private ResultReceiver mCallback;
@@ -165,7 +167,17 @@ public class WunderlistService extends IntentService {
                     mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
                 }
                 break;
+            case RESOURCE_TYPE_SHARE:
+                if (method.equalsIgnoreCase(METHOD_POST) ) {
 
+                    long id = requestIntent.getLongExtra(WunderlistService.INFO_EXTRA, 0);
+
+                    ShareProcessor processor = new ShareProcessor(getApplicationContext());
+                    processor.shareList(makeProcessorCallback(), id, body);
+                }else {
+                    mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
+                }
+                break;
 		default:
 			mCallback.send(REQUEST_INVALID, getOriginalIntentBundle());
 			break;

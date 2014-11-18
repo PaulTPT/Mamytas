@@ -39,6 +39,7 @@ public class WunderlistServiceHelper {
     private static final String getTimersHashkey = "GET_TIMERS";
     private static final String postTimerHashkey = "POST_TIMER";
     private static final String putTimerHashkey = "PUT_TIMER";
+    private static final String shareHashkey = "share";
 
 	private static Object lock = new Object();
 
@@ -396,6 +397,34 @@ public class WunderlistServiceHelper {
         return requestId;
     }
 
+    public long shareList(long id, String recipient) {
+
+        long requestId = generateRequestID();
+        pendingRequests.put(shareHashkey, requestId);
+
+        ResultReceiver serviceCallback = new ResultReceiver(null){
+            @Override
+            protected void onReceiveResult(int resultCode, Bundle resultData) {
+                handleResponse(resultCode, resultData,shareHashkey);
+            }
+        };
+
+
+
+        byte[] body= ("recipient="+recipient).getBytes();
+
+        Intent intent = new Intent(this.ctx, WunderlistService.class);
+        intent.putExtra(WunderlistService.METHOD_EXTRA, WunderlistService.METHOD_POST);
+        intent.putExtra(WunderlistService.RESOURCE_TYPE_EXTRA, WunderlistService.RESOURCE_TYPE_SHARE);
+        intent.putExtra(WunderlistService.BODY_EXTRA, body);
+        intent.putExtra(WunderlistService.SERVICE_CALLBACK, serviceCallback);
+        intent.putExtra(WunderlistService.INFO_EXTRA,id);
+        intent.putExtra(REQUEST_ID, requestId);
+
+        this.ctx.startService(intent);
+
+        return requestId;
+    }
 
 	private long generateRequestID() {
 		long requestId = UUID.randomUUID().getLeastSignificantBits();
@@ -425,7 +454,6 @@ public class WunderlistServiceHelper {
 			ctx.sendBroadcast(resultBroadcast);
 		}
 	}
-
 
 
 
