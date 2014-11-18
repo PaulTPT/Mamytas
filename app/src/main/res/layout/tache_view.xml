@@ -16,48 +16,49 @@
         android:textSize="20sp"
         android:textColor="#000"
         android:layout_marginLeft="16dp"
-        android:layout_marginRight="8dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="12dp"
+        android:layout_toLeftOf="@+id/btnEditTask"
+        android:layout_toStartOf="@+id/btnEditTask" />
+
+    <!-- Button Create Product -->
+    <Button android:id="@+id/btnEditTask"
+        android:layout_width="wrap_content"
+        android:layout_height="36dp"
+        android:minHeight="36dp"
+        android:background="@drawable/button_login"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
         android:layout_marginTop="16dp"
-        android:layout_marginBottom="8dp" />
+        android:layout_marginBottom="8dp"
+        android:paddingRight="8dip"
+        android:paddingLeft="8dip"
+        android:textColor="#fff"
+        android:textSize="14dip"
+        android:text="Editer"
+        android:textAllCaps="true"
+        android:gravity="center_vertical|center_horizontal" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center_vertical|right"
         android:id="@+id/newWorkTimer"
-        android:layout_alignParentTop="true"
-        android:layout_alignParentLeft="true"
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/btnEditTask"
         android:text="00:00:00"
         android:textColor="#000"
-        android:textSize="13sp"
+        android:textSize="14sp"
         android:layout_marginRight="16dp"
         android:layout_marginLeft="16dp"
-        android:layout_marginTop="23dp"
-        android:layout_alignParentRight="true"
         android:layout_alignParentEnd="true" />
-
-    <RelativeLayout
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/taskName"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="8dp"
-        android:id="@+id/relativeLayout"
-        android:paddingRight="16dp"
-        android:paddingLeft="16dp"
-        android:textColor="#000">
-
-
-
-
-
-    </RelativeLayout>
 
     <TableLayout
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/relativeLayout"
+        android:layout_below="@+id/taskName"
         android:id="@+id/sumUpDta"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true">
@@ -141,7 +142,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text=""
+                android:text="du 16/01/2014 "
                 android:id="@+id/totalWorkFirstDate"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp"
@@ -150,7 +151,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text=""
+                android:text="au 02/11/2014"
                 android:id="@+id/totalWorkLastDate"
                 android:layout_marginBottom="8dp"
                 android:textColor="#000"/>
@@ -168,21 +169,6 @@
         android:layout_alignParentStart="true"
         android:clickable="false"
         android:textColor="#000"/>
-
-    <!-- Button Create Product -->
-    <Button android:id="@+id/btnEditTask"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:minHeight="36dp"
-        android:background="@drawable/button_login"
-        android:layout_below="@android:id/list"
-        android:layout_margin="16dp"
-        android:paddingRight="8dip"
-        android:paddingLeft="8dip"
-        android:textColor="#fff"
-        android:textSize="17dip"
-        android:text="Editer la tache"
-        android:gravity="center_vertical|center_horizontal" />
 
     <RelativeLayout android:id="@+id/actionBar"
         android:layout_width="match_parent"
