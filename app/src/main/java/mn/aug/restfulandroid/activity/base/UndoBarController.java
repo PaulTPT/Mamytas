@@ -102,7 +102,7 @@ public class UndoBarController {
             //mBarView.setVisibility(View.GONE);
             actionBar.setTranslationY(150);
             mUndoMessage = null;
-            mUndoToken = null;
+
         } else {
             animator = ValueAnimator.ofInt(0, mBarView.getMeasuredHeight());
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -114,7 +114,7 @@ public class UndoBarController {
             animator.setDuration(150);
             animator.start();
             mUndoMessage = null;
-            mUndoToken = null;
+
         }
 
     }
