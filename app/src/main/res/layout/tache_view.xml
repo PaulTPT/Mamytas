@@ -160,7 +160,7 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="du 01/01/2014 "
+                android:text=""
                 android:id="@+id/totalWorkFirstDate"
                 android:textSize="14sp"
                 android:layout_marginBottom="8dp"
@@ -169,7 +169,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:textAppearance="?android:attr/textAppearanceSmall"
-                android:text="au 00/00/2014"
+                android:text=""
                 android:id="@+id/totalWorkLastDate"
                 android:layout_marginBottom="8dp"
                 android:textColor="#000"/>

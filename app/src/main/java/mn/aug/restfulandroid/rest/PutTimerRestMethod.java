@@ -33,7 +33,6 @@ public class PutTimerRestMethod extends AbstractRestMethod<Timer> {
 
     @Override
     protected Request buildRequest() {
-
         Request request = new Request(RestMethodFactory.Method.PUT, put_URI, headers, body);
         return request;
     }

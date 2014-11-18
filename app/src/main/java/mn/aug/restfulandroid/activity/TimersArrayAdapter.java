@@ -8,18 +8,18 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewConfiguration;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ArrayAdapter;
-import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import java.util.Date;
 import java.util.List;
 
 import mn.aug.restfulandroid.R;
 import mn.aug.restfulandroid.rest.resource.Timer;
+import mn.aug.restfulandroid.util.DateHelper;
 
 public class TimersArrayAdapter extends ArrayAdapter<Timer> {
     private final Context context;
@@ -44,10 +44,14 @@ public class TimersArrayAdapter extends ArrayAdapter<Timer> {
         TextView workTimeSpent = (TextView) rowView.findViewById(R.id.workTimeSpent);
         TextView workDate = (TextView) rowView.findViewById(R.id.workFirstDate);
         workUserName.setText(timerList.get(position).getName()+": ");
-        workTimeSpent.setText(timerList.get(position).getTimer() + "min");
-        workDate.setText("le " + timerList.get(position).getTimer_start());
-        if(this.listener != null)
-            rowView.setOnTouchListener(this.listener);
+        String time_min=String.valueOf((Long) (Long.parseLong(timerList.get(position).getTimer()) / 60000));
+        workTimeSpent.setText(time_min + " min");
+        Date date=new Date(Long.parseLong(timerList.get(position).getTimer_start()));
+        String parsed_date = DateHelper.dateTimeFormat.format(date.getTime());
+        workDate.setText("le " + parsed_date);
+        workDate.setText("le " + parsed_date);
+        //if(this.listener != null)
+           // rowView.setOnTouchListener(this.listener);
         return rowView;
     }
 

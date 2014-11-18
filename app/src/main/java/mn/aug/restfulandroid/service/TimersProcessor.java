@@ -92,12 +92,11 @@ public class TimersProcessor {
         // results column
         // Look at ContentProvider example, and build a content provider
         // that tracks the necessary data.
-        ownershipDBAccess.open();
-        ownershipDBAccess.setStatus(timer_id, "uploading");
-        ownershipDBAccess.close();
+
         // (5) Call the REST method
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
+
 
         RestMethod<Timer> postTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
                 Timers.CONTENT_URI, Method.POST, null, body, task_id);
@@ -112,14 +111,12 @@ public class TimersProcessor {
 
         if (result.getStatusCode() == 200) {
 
-            ownershipDBAccess.open();
-            ownershipDBAccess.setStatus(timer_id, "up_to_date");
-            ownershipDBAccess.close();
+
 
             ownershipDBAccess.open();
             ownershipDBAccess.deleteTimer(timer_id);
             Timer timer = result.getResource();
-            ownershipDBAccess.storeTimer(timer);
+            ownershipDBAccess.storeTimerWithId(timer);
             tasksDBAccess.close();
             callback.send(result.getStatusCode(),timer);
         }else {
@@ -148,13 +145,10 @@ public class TimersProcessor {
         // results column
         // Look at ContentProvider example, and build a content provider
         // that tracks the necessary data.
-        ownershipDBAccess.open();
-        ownershipDBAccess.setStatus(timer_id, "updating");
-        ownershipDBAccess.close();
+
         // (5) Call the REST method
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
-
         RestMethod<Timer> putTaskMethod = RestMethodFactory.getInstance(mContext).getRestMethod(
                 Timers.CONTENT_URI, RestMethodFactory.Method.PUT, null, body, task_id);
         RestMethodResult<Timer> result = putTaskMethod.execute();
@@ -167,9 +161,7 @@ public class TimersProcessor {
 
         if (result.getStatusCode() == 200 ) {
 
-            ownershipDBAccess.open();
-            ownershipDBAccess.setStatus(timer_id, "up_to_date");
-            ownershipDBAccess.close();
+
 
 
         }

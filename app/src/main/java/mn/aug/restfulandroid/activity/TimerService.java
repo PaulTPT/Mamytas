@@ -48,10 +48,11 @@ public class TimerService extends IntentService {
             long task_id = mOriginalRequestIntent.getLongExtra(TimerServiceHelper.EXTRA_TASK_ID, 0L);
             long initial_timer = mOriginalRequestIntent.getLongExtra(TimerServiceHelper.EXTRA_INIT_VALUE, 0L);
 
-            if (!chronos.containsKey(task_id)) {
+            if (chronos.containsKey(task_id)) {
+                chronos.remove(task_id);
+            }
                 Time_storage storage=new Time_storage(initial_timer, SystemClock.uptimeMillis());
                 chronos.put(task_id,storage);
-            }
 
         } else if (action.equals(TimerServiceHelper.STOP_CHRONO)) {
             long task_id = mOriginalRequestIntent.getLongExtra(TimerServiceHelper.EXTRA_TASK_ID, 0L);
