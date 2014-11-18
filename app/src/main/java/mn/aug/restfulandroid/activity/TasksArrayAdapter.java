@@ -9,44 +9,71 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import java.util.List;
 
 import mn.aug.restfulandroid.R;
+import mn.aug.restfulandroid.rest.resource.Listw;
 import mn.aug.restfulandroid.rest.resource.Task;
 
 public class TasksArrayAdapter extends ArrayAdapter<Task> {
     private final Context context;
-    private final List<Task> todos;
+    private final List<Task> tasks;
     private final int layout;
+    private final LayoutInflater inflator;
+    public TasksActivity.OnTouchListener listener;
 
-
-    public TasksArrayAdapter(Context context, int layout, List<Task> todos) {
-        super(context, layout, todos);
+    public TasksArrayAdapter(Context context, int layout, List<Task> tasks, TasksActivity.OnTouchListener _listener) {
+        super(context, layout, tasks);
         this.context = context;
-        this.todos=todos;
+        this.tasks =tasks;
         this.layout=layout;
+        this.listener = _listener;
+        inflator = ((Activity) context).getLayoutInflater();
     }
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        RowHolder holder = null;
-        View row = convertView;
+        View view = null;
+        if(position > tasks.size())
+            return null;
+        Task m = tasks.get(position);
+        final RowHolder viewHolder = new RowHolder();
+        RowHolder Holder = null;
+        if (convertView == null) {
 
-        if(holder == null) {
-            if(row==null) {
-                LayoutInflater inflater = ((Activity) context).getLayoutInflater();
-                row = inflater.inflate(layout, parent, false);
-            }
-            holder = new RowHolder();
-            holder.name = (TextView)row.findViewById(R.id.name);
-            row.setTag(holder);
-        } else
-            holder = (RowHolder)row.getTag();
-        holder.name.setText(todos.get(position).getTitle());
-        return row;
+            view = inflator.inflate(layout, parent, false);
+
+            view.setTag(viewHolder);
+
+            viewHolder.name = (TextView)view.findViewById(R.id.name);
+            viewHolder.front = (RelativeLayout)view.findViewById(R.id.front);
+            viewHolder.front.setTag(m);
+
+            viewHolder.position = position;
+
+            Holder = viewHolder;
+        } else {
+            view = convertView;
+            Holder = ((RowHolder) view.getTag());
+        }
+
+        if(this.listener != null)
+            view.setOnTouchListener(this.listener);
+
+        Holder.model = m;
+        Holder.position = position;
+        Holder.name.setText(m.getTitle());
+        return view;
     }
 
-    static class RowHolder{ TextView name; }
+    public static class RowHolder{
+        public Task model;
+        public TextView name;
+        public RelativeLayout front;
+        public int position;
+    }
 }

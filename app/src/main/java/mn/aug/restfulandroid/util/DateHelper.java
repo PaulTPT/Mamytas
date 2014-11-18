@@ -9,8 +9,8 @@ import java.util.Date;
  */
 public class DateHelper {
 
-    public static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
-    public static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+    public static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
+    public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
     public static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     /**

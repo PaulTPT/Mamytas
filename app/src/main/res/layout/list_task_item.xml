@@ -17,9 +17,8 @@
             android:gravity="left|center_vertical"
             android:textColor="#FFF"
             android:id="@+id/delete"
-            android:textSize="22sp"
-            android:paddingStart="20sp"
-            android:paddingLeft="20sp"
+            android:textSize="16sp"
+            android:padding="16dp"
             android:phoneNumber="false" />
     </LinearLayout>
     <RelativeLayout
@@ -29,12 +28,13 @@
         android:background="@drawable/list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:padding="8dp">
+        android:padding="16dp">
 
         <TextView
             android:layout_width="fill_parent"
             android:text="Nom de la tache"
             android:layout_height="wrap_content"
-            android:id="@+id/name"/>
+            android:id="@+id/name"
+            android:textSize="16sp"/>
     </RelativeLayout>
 </FrameLayout>

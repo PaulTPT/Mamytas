@@ -1,25 +1,19 @@
 package mn.aug.restfulandroid.activity;
 
-import android.animation.ValueAnimator;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Point;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.SystemClock;
-import android.view.Display;
 import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -37,13 +31,12 @@ import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
+import mn.aug.restfulandroid.util.DateHelper;
 import mn.aug.restfulandroid.util.Logger;
 
 public class TaskActivity extends RESTfulListActivity {
 
     private static final String TAG = TaskActivity.class.getSimpleName();
-
-    public OnTouchListener gestureListener;
 
     private static final String UPDATED_TIME = "updated_time";
     private static final String TASK_ID = "task_id";
@@ -84,7 +77,7 @@ public class TaskActivity extends RESTfulListActivity {
                 if (timerThread != null) {
                     timerThread.interrupt();
                 }
-                startTime = SystemClock.uptimeMillis();
+                startTime =System.currentTimeMillis();
                 timer = new Timer(AuthorizationManager.getInstance(context).getUser(), String.valueOf(0L), String.valueOf(startTime), task_id);
                 ownershipDBAccess.open();
                 timer = ownershipDBAccess.storeTimer(timer);
@@ -142,7 +135,7 @@ public class TaskActivity extends RESTfulListActivity {
 
                 if (timer != null) {
                     try {
-                        updatedTime = SystemClock.uptimeMillis() - startTime;
+                        updatedTime = System.currentTimeMillis() - startTime;
                         customHandler.post(timer_update_runnable);
                     } catch (NumberFormatException e) {
                         e.printStackTrace();
@@ -279,47 +272,48 @@ public class TaskActivity extends RESTfulListActivity {
                         if (timersList != null && !timersList.isEmpty()) {
                             Logger.debug(TAG, "On a bien reçu " + timersList.size() + " timers de la tâche " + resultRequestId);
                             String user = AuthorizationManager.getInstance(context).getUser();
-                            gestureListener = new OnTouchListener();
-                            ArrayAdapter<Timer> adapter = new TimersArrayAdapter(context, R.layout.list_timer_item, timersList, gestureListener);
+                            ArrayAdapter<Timer> adapter = new TimersArrayAdapter(context, R.layout.list_timer_item, timersList);
                             setListAdapter(adapter);
 
                             Date parsedTimeStamp = null, firstDate = null, lastDate = null;
                             int totalWorkTime = 0;
                             for (Timer timer_list : timersList) {
                                 if (timer_list.getTimer() != null && !timer_list.getTimer().isEmpty())
-                                   totalWorkTime += Integer.valueOf(timer_list.getTimer());
-                                /*if (timer_list.getTimer_start() != null) {
+                                   totalWorkTime +=(int) (Integer.valueOf(timer_list.getTimer())/60000);
+                                if (timer_list.getTimer_start() != null) {
+
                                     try {
-                                        parsedTimeStamp = DateHelper.dateTimeFormat.parse(timer_list.getTimer_start());
-                                    } catch (ParseException e) {
+                                        parsedTimeStamp = new Date(Long.parseLong(timer_list.getTimer_start()));
+                                    } catch (NumberFormatException e) {
                                         e.printStackTrace();
                                     }
+
                                     if (parsedTimeStamp != null) {
                                         if (firstDate == null)
-                                            firstDate = (Date) parsedTimeStamp.clone();
+                                            firstDate = new Date(parsedTimeStamp.getTime());
                                         else if (parsedTimeStamp.getTime() < firstDate.getTime())
-                                            firstDate = (Date) parsedTimeStamp.clone();
+                                            firstDate =  new Date(parsedTimeStamp.getTime());
                                         if (lastDate == null)
-                                            lastDate = (Date) parsedTimeStamp.clone();
+                                            lastDate = (Date) new Date(parsedTimeStamp.getTime());
                                         else if (parsedTimeStamp.getTime() > lastDate.getTime())
-                                            lastDate = (Date) parsedTimeStamp.clone();
+                                            lastDate = (Date) new Date(parsedTimeStamp.getTime());
                                     }
-                                }*/
+                                }
                             }
 
-                           /* TextView totalTimeSpent = (TextView) findViewById(R.id.totalTimeSpent);
+                            TextView totalTimeSpent = (TextView) findViewById(R.id.totalTimeSpent);
                             totalTimeSpent.setText(totalWorkTime + " min");
                             TextView totalWorkFirstDate = (TextView) findViewById(R.id.totalWorkFirstDate);
                             TextView totalWorkLastDate = (TextView) findViewById(R.id.totalWorkLastDate);
                             if (firstDate != null) {
                                 if (firstDate.getTime() != lastDate.getTime()) {
                                     totalWorkFirstDate.setText("du " + DateHelper.dateFormat.format(firstDate.getTime()));
-                                    totalWorkLastDate.setText("au " + DateHelper.dateFormat.format(lastDate.getTime()));
+                                    totalWorkLastDate.setText(" au " + DateHelper.dateFormat.format(lastDate.getTime()));
                                 } else {
                                     totalWorkLastDate.setText("le " + DateHelper.dateFormat.format(lastDate.getTime()));
                                     totalWorkFirstDate.setText("");
                                 }
-                            }*/
+                            }
                         } else showToast("Vous n'avez pas encore travaillé sur cette tâche");
                         requestId_get_timers = 0L;
                         stopRefreshing();
@@ -456,67 +450,6 @@ public class TaskActivity extends RESTfulListActivity {
 
     }
 
-    public class OnTouchListener implements View.OnTouchListener {
-        int initialX = 20;
-        RelativeLayout front;
-        TextView backBtn;
-
-        public boolean onTouch(View view, MotionEvent event) {
-            Display display = getWindowManager().getDefaultDisplay();
-            Point size = new Point();
-            display.getSize(size);
-            int width = size.x;
-            int height = size.y;
-
-            backBtn = (TextView) view.findViewById(R.id.delete);
-            front = (RelativeLayout) view.findViewById(R.id.front);
-            int X = (int) event.getRawX();
-            int offset = X - initialX;
-            if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                initialX = X;
-                front.setTranslationX(0);
-            }
-            if (event.getAction() == MotionEvent.ACTION_MOVE) {
-                front.setTranslationX(offset);
-
-                if (offset < 0) {
-                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_normal));
-                    backBtn.setText("Editer");
-                    backBtn.setGravity(Gravity.RIGHT);
-                    //front.setBackgroundColor(0xffFF0000);
-                } else {
-                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_normal));
-                    backBtn.setText("Retirer");
-                    backBtn.setGravity(Gravity.LEFT);
-                }
-                if (offset > (int) width / 2) {
-                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_selected));
-                } else if (offset < -(int) width / 2) {
-                    backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_selected));
-                }
-            }
-            if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL) {
-                ValueAnimator animator = null;
-                if (offset > (int) width / 2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On supprime loulou
-                    animator = ValueAnimator.ofInt(offset, width);
-                } else if (offset < -(int) width / 2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On redirige vers la page d'édition
-                    animator = ValueAnimator.ofInt(offset, -width);
-                } else {// Animate back if no action was performed.
-                    animator = ValueAnimator.ofInt(X - initialX, 0);
-                }
-                animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
-                    @Override
-                    public void onAnimationUpdate(ValueAnimator valueAnimator) {
-                        front.setTranslationX((Integer) valueAnimator.getAnimatedValue());
-                    }
-                });
-                animator.setDuration(150);
-                animator.start();
-            }
-            return true;
-        }
-
-    }
 
     @Override
     public void onDestroy() {
