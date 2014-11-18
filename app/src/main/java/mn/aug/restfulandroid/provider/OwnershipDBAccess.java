@@ -585,17 +585,19 @@ public class OwnershipDBAccess {
     }
 
 
+    public static final String CURRENT="CURRENT";
 
-    public Timer getCurretTimer(long task_id) {
+    public Timer getCurrentTimer(long task_id) {
 
         Cursor c = null;
         try {
             c = bdd.query(ProviderDbHelper.TABLE_OWNERSHIP, new String[]{ProviderDbHelper.OWNERSHIP_OWNER,ProviderDbHelper.OWNERSHIP_TIMER,ProviderDbHelper.OWNERSHIP_TIMER_START,ProviderDbHelper.OWNERSHIP_ID,ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID},
-                    ProviderDbHelper.OWNERSHIP_STATE+ " ='" + "CURRENT" + "' AND " + ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + task_id + "'", null, null, null, null);
+                    ProviderDbHelper.OWNERSHIP_STATE+ " ='" + CURRENT + "' AND " + ProviderDbHelper.OWNERSHIP_EFFECTIVE_ID + " ='" + task_id + "'", null, null, null, null);
         } catch (Exception e) {
             e.printStackTrace();
             return null;
         }
+        Logger.debug("retrieve last",String.valueOf(c.getCount()));
         if (c.getCount() == 0)
             return null;
         else {

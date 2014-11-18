@@ -23,7 +23,6 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.text.ParseException;
 import java.util.Date;
 import java.util.List;
 
@@ -38,7 +37,6 @@ import mn.aug.restfulandroid.rest.resource.Timers;
 import mn.aug.restfulandroid.security.AuthorizationManager;
 import mn.aug.restfulandroid.service.WunderlistService;
 import mn.aug.restfulandroid.service.WunderlistServiceHelper;
-import mn.aug.restfulandroid.util.DateHelper;
 import mn.aug.restfulandroid.util.Logger;
 
 public class TaskActivity extends RESTfulListActivity {
@@ -48,6 +46,8 @@ public class TaskActivity extends RESTfulListActivity {
     public OnTouchListener gestureListener;
 
     private static final String UPDATED_TIME = "updated_time";
+    private static final String TASK_ID = "task_id";
+    private static final String LIST_ID = "list_id";
     private static final String START_TIME = "start_time";
     private static final String TIMER = "timer";
     private TasksDBAccess tasksDBAccess = new TasksDBAccess(this);
@@ -77,6 +77,7 @@ public class TaskActivity extends RESTfulListActivity {
         @Override
         public void onClick(View v) {
             if (startStopWork.getText().toString().equals("Start")) {
+                Logger.debug("start"," button");
                 if (store_thread != null) {
                     store_thread.interrupt();
                 }
@@ -94,6 +95,7 @@ public class TaskActivity extends RESTfulListActivity {
                 startStopWork.setBackground(getResources().getDrawable(R.drawable.button_stop));
 
             } else {
+                Logger.debug("stop"," button");
                 if (store_thread != null) {
                     store_thread.interrupt();
                 }
@@ -283,12 +285,12 @@ public class TaskActivity extends RESTfulListActivity {
 
                             Date parsedTimeStamp = null, firstDate = null, lastDate = null;
                             int totalWorkTime = 0;
-                            for (Timer timer : timersList) {
-                                if (timer.getTimer() != null && !timer.getTimer().isEmpty())
-                                    totalWorkTime += Integer.valueOf(timer.getTimer());
-                                if (timer.getTimer_start() != null) {
+                            for (Timer timer_list : timersList) {
+                                if (timer_list.getTimer() != null && !timer_list.getTimer().isEmpty())
+                                   totalWorkTime += Integer.valueOf(timer_list.getTimer());
+                                /*if (timer_list.getTimer_start() != null) {
                                     try {
-                                        parsedTimeStamp = DateHelper.dateTimeFormat.parse(timer.getTimer_start());
+                                        parsedTimeStamp = DateHelper.dateTimeFormat.parse(timer_list.getTimer_start());
                                     } catch (ParseException e) {
                                         e.printStackTrace();
                                     }
@@ -302,10 +304,10 @@ public class TaskActivity extends RESTfulListActivity {
                                         else if (parsedTimeStamp.getTime() > lastDate.getTime())
                                             lastDate = (Date) parsedTimeStamp.clone();
                                     }
-                                }
+                                }*/
                             }
 
-                            TextView totalTimeSpent = (TextView) findViewById(R.id.totalTimeSpent);
+                           /* TextView totalTimeSpent = (TextView) findViewById(R.id.totalTimeSpent);
                             totalTimeSpent.setText(totalWorkTime + " min");
                             TextView totalWorkFirstDate = (TextView) findViewById(R.id.totalWorkFirstDate);
                             TextView totalWorkLastDate = (TextView) findViewById(R.id.totalWorkLastDate);
@@ -317,7 +319,7 @@ public class TaskActivity extends RESTfulListActivity {
                                     totalWorkLastDate.setText("le " + DateHelper.dateFormat.format(lastDate.getTime()));
                                     totalWorkFirstDate.setText("");
                                 }
-                            }
+                            }*/
                         } else showToast("Vous n'avez pas encore travaillé sur cette tâche");
                         requestId_get_timers = 0L;
                         stopRefreshing();
@@ -333,9 +335,9 @@ public class TaskActivity extends RESTfulListActivity {
                         timer = (Timer) intent.getParcelableExtra(WunderlistService.RESOURCE_EXTRA);
                         Logger.debug("timer id", String.valueOf(timer.getOwnership_id()));
                         ownershipDBAccess.open();
-                        ownershipDBAccess.setStatus(timer.getOwnership_id(), "CURRENT");
+                        ownershipDBAccess.setStatus(timer.getOwnership_id(), OwnershipDBAccess.CURRENT);
+                        Logger.debug("state written",ownershipDBAccess.getStatus(timer.getOwnership_id()));
                         ownershipDBAccess.close();
-                        Logger.debug("new timer", String.valueOf(timer.getOwnership_id()));
                         store_thread = new Thread(store_runnable);
                         store_thread.start();
                         timerThread = new Thread(actualize_runnable);
@@ -349,20 +351,20 @@ public class TaskActivity extends RESTfulListActivity {
             }
         };
 
-        requestId_get_timers = mWunderlistServiceHelper.getTimers(task_id);
+
 
         registerReceiver(requestReceiver, filter);
-        if (store_thread != null) {
-            store_thread.interrupt();
-        }
-        if (timerThread != null) {
-            timerThread.interrupt();
-        }
+
 
         ownershipDBAccess.open();
-        Timer timer = ownershipDBAccess.getCurretTimer(task_id);
+        Timer currentTimer = ownershipDBAccess.getCurrentTimer(task_id);
+
         ownershipDBAccess.close();
-        if (timer != null) {
+
+
+        if (currentTimer != null) {
+            timer = currentTimer;
+            Logger.debug("timer retrieved", timer.getTimer());
             try {
                 startTime = Long.parseLong(timer.getTimer_start());
             } catch (NumberFormatException e) {
@@ -370,17 +372,23 @@ public class TaskActivity extends RESTfulListActivity {
             }
             startStopWork.setText("Stop");
             startStopWork.setBackground(getResources().getDrawable(R.drawable.button_stop));
-            if (timerThread == null || timerThread.isInterrupted()) {
-                timerThread = new Thread(actualize_runnable);
-                timerThread.start();
+
+            if (timerThread != null) {
+                timerThread.interrupt();
+                customHandler.removeCallbacks(timerThread);
             }
-            if (store_thread == null || store_thread.isInterrupted()) {
-                store_thread = new Thread(store_runnable);
-                store_thread.start();
+
+            if (store_thread != null) {
+                store_thread.interrupt();
+                customHandler.removeCallbacks(store_thread);
             }
+            timerThread = new Thread(actualize_runnable);
+            timerThread.start();
+            store_thread = new Thread(store_runnable);
+            store_thread.start();
         }
 
-
+        requestId_get_timers = mWunderlistServiceHelper.getTimers(task_id);
     }
 
     @Override
@@ -420,6 +428,7 @@ public class TaskActivity extends RESTfulListActivity {
         super.onCreateOptionsMenu(menu);
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu, menu);
+        setRefreshingItem(menu.findItem(R.id.refresh));
         return true;
     }
 
@@ -506,6 +515,7 @@ public class TaskActivity extends RESTfulListActivity {
             }
             return true;
         }
+
     }
 
     @Override
@@ -528,6 +538,8 @@ public class TaskActivity extends RESTfulListActivity {
         savedInstanceState.putLong(UPDATED_TIME, updatedTime);
         savedInstanceState.putLong(START_TIME, startTime);
         savedInstanceState.putParcelable(TIMER, timer);
+        savedInstanceState.putLong(TASK_ID, task_id);
+        savedInstanceState.putLong(LIST_ID, list_id);
         // Always call the superclass so it can save the view hierarchy state
         super.onSaveInstanceState(savedInstanceState);
     }
@@ -540,6 +552,8 @@ public class TaskActivity extends RESTfulListActivity {
         updatedTime = savedInstanceState.getLong(UPDATED_TIME);
         startTime = savedInstanceState.getLong(START_TIME);
         timer = (Timer) savedInstanceState.getParcelable(TIMER);
+        task_id=savedInstanceState.getLong(TASK_ID);
+        list_id=savedInstanceState.getLong(LIST_ID);
 
     }
 }

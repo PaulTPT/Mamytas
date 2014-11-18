@@ -92,9 +92,7 @@ public class TimersProcessor {
         // results column
         // Look at ContentProvider example, and build a content provider
         // that tracks the necessary data.
-        ownershipDBAccess.open();
-        ownershipDBAccess.setStatus(timer_id, "uploading");
-        ownershipDBAccess.close();
+
         // (5) Call the REST method
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
@@ -113,9 +111,7 @@ public class TimersProcessor {
 
         if (result.getStatusCode() == 200) {
 
-            ownershipDBAccess.open();
-            ownershipDBAccess.setStatus(timer_id, "up_to_date");
-            ownershipDBAccess.close();
+
 
             ownershipDBAccess.open();
             ownershipDBAccess.deleteTimer(timer_id);
@@ -149,9 +145,7 @@ public class TimersProcessor {
         // results column
         // Look at ContentProvider example, and build a content provider
         // that tracks the necessary data.
-        ownershipDBAccess.open();
-        ownershipDBAccess.setStatus(timer_id, "updating");
-        ownershipDBAccess.close();
+
         // (5) Call the REST method
         // Create a RESTMethod class that knows how to assemble the URL,
         // and performs the HTTP operation.
@@ -167,9 +161,7 @@ public class TimersProcessor {
 
         if (result.getStatusCode() == 200 ) {
 
-            ownershipDBAccess.open();
-            ownershipDBAccess.setStatus(timer_id, "up_to_date");
-            ownershipDBAccess.close();
+
 
 
         }
