@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Point;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.Parcelable;
 import android.util.DisplayMetrics;
 import android.view.Display;
@@ -55,6 +56,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
     private List<Listw> lists;
     private Context context=this;
     private OnTouchListener gestureListener;
+    private Handler myHandler=new Handler();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -247,6 +249,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
         int initialX = 0;
         RelativeLayout front;
         TextView backBtn;
+        public boolean alive=false;
 
         private ProjectsArrayAdapter.RowHolder holder;
         private int position;
@@ -262,6 +265,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
             display.getSize(size);
             int width = size.x;
             int height = size.y;
+
 
             int X = (int) event.getRawX();
             int offset = X - initialX;
@@ -331,6 +335,8 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     i.putExtra(Listw.LIST_ID_EXTRA, lists.get(position).getId());
                     context.startActivity(i);
                 } else{// Animate back if no action was performed.
+
+
                     animator = ValueAnimator.ofInt(offset, 0);
                     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
