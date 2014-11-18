@@ -22,7 +22,7 @@ public class ProjectEditor extends Activity {
 
     private EditText listName, listShare ;
     private Button btnCreateTask;
-    private String toastVerb = "Creating";
+    private String toastVerb = "Création";
 
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
@@ -53,7 +53,7 @@ public class ProjectEditor extends Activity {
             listsDBAccess.close();
             listName.setText(list.getTitle());
             btnCreateTask.setText("Editer le projet");
-            toastVerb = "Editing";
+            toastVerb = "Edition";
             edit = true;
         }else{
             btnCreateTask.setText("Ajouter le projet");
@@ -66,7 +66,7 @@ public class ProjectEditor extends Activity {
             @Override
             public void onClick(View view) {
                 Logger.debug("show", "Creating projet " + listName.getText().toString());
-                showToast(toastVerb+" projet " + listName.getText().toString());
+                showToast(toastVerb+" du projet " + listName.getText().toString());
                 if(!edit) {
                     ownershipDBAccess.open();
                     list = ownershipDBAccess.addListGetId(AuthorizationManager.getInstance(context).getUser(), new Listw(listName.getText().toString()));

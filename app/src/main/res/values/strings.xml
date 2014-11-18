@@ -3,7 +3,7 @@
 
     <string name="app_name">Mamytas</string>
     <string name="app_log_tag">Mamytas</string>
-    <string name="button_login_label">Login</string>
-    <string name="error_occurred">An error has occurred.</string>
+    <string name="button_login_label">Connexion</string>
+    <string name="error_occurred">Une erreur est survenue</string>
 
 </resources>

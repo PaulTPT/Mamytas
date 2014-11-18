@@ -7,7 +7,7 @@
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:inputType="textPersonName"
-        android:hint="Login"
+        android:hint="Identifiant"
         android:textSize="17dip"
         android:id="@+id/email"
         android:layout_margin="40dp" />
@@ -20,7 +20,7 @@
         android:textSize="17dip"
         android:layout_marginLeft="40dp"
         android:layout_marginRight="40dp"
-        android:hint="Password"
+        android:hint="Mot de passe"
         android:layout_below="@+id/email" />
 
     <Button

@@ -85,7 +85,7 @@ public class LoginActivity extends RESTfulActivity {
                     if (resultCode == 200) {
                         stopRefreshing();
                         Logger.debug(TAG, "Loggin Succesfull");
-                        showToast("Login Succesfull !");
+                        showToast("Connexion réussie !");
 
 
 
@@ -93,14 +93,15 @@ public class LoginActivity extends RESTfulActivity {
 
 
                     } else if (resultCode == 401) {
-                        showToast("Login failed... Try again");
+                        showToast("Mauvais identifiants");
                         mButtonLogin.setVisibility(View.VISIBLE);
 
                     } else {
-                        showToast("The connexion with the server failed");
+                        showToast("La connexion au serveur à échoué");
                         mButtonLogin.setVisibility(View.VISIBLE);
 
                     }
+                    stopRefreshing();
                 } else {
                     Logger.debug(TAG, "Result is NOT for our request ID");
                 }

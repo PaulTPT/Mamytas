@@ -323,7 +323,7 @@ public class TaskActivity extends RESTfulListActivity {
                         requestId_get_timers = 0L;
                         stopRefreshing();
                     } else if (resultCode == 401) {
-                        showToast("Your session has expired");
+                        showToast("Votre session a expiré");
                         logoutAndFinish();
                     }
                 } else if (resultRequestId == requestId_post_timer) {

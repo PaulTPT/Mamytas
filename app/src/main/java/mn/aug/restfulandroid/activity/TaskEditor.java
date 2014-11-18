@@ -30,7 +30,7 @@ public class TaskEditor extends Activity {
 
     private  Button button;
     private EditText taskName, taskDueDate, taskDueTime ;
-    private String toastVerb = "Creating";
+    private String toastVerb = "Création";
     private WunderlistServiceHelper mWunderlistServiceHelper;
     private OwnershipDBAccess ownershipDBAccess;
     private TasksDBAccess tasksDBAccess;
@@ -67,7 +67,7 @@ public class TaskEditor extends Activity {
             tasksDBAccess.close();
             taskName.setText(task.getTitle());
             button.setText("Modifier la tâche");
-            toastVerb = "Editing";
+            toastVerb = "Edition";
             try {
                 taskDueDate.setText(DateHelper.getDateFromDate(task.getDue_date()));
                 taskDueTime.setText(DateHelper.getTimeFromDateTime(task.getDue_date()));
@@ -91,7 +91,7 @@ public class TaskEditor extends Activity {
                 } catch (ParseException e) {showToast("Mauvais format pour l'heure");return;}
 
                 Logger.debug("show", "Creating Product " + taskName.getText().toString() + " with due date: " + dueDate + " and list_id: "+list_id);
-                showToast(toastVerb+" task " + taskName.getText().toString() + " with due date: " + dueDate);
+                showToast(toastVerb+" de la tâche " + taskName.getText().toString() + " avec pour échéance le : " + dueDate);
                 if(!edit) {
                     ownershipDBAccess.open();
                     task = ownershipDBAccess.addTaskGetID(AuthorizationManager.getInstance(context).getUser(), new Task(taskName.getText().toString(), dueDate, list_id));

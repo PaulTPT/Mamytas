@@ -128,10 +128,6 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
     protected void onResume() {
         super.onResume();
 
-/*		String name = getNameFromContentProvider();
-        if (name != null) {
-			showNameToast(name);
-		}*/
 
 		/*
          * 1. Register for broadcast from WunderlistServiceHelper
@@ -177,10 +173,10 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
 
 
                     } else if (resultCode == 401) {
-                        showToast("Your session has expired");
+                        showToast("Votre session a expiré");
                         logoutAndFinish();
                     } else {
-                        showToast("Connexion to the server failed");
+                        showToast("La connexion au serveur a échoué");
                         logoutAndFinish();
                     }
                 } else {

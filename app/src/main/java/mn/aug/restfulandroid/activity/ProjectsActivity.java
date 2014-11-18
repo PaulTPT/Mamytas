@@ -154,10 +154,10 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
 
 
                     }  else if(resultCode==401){
-                        showToast("Your session has expired");
+                        showToast("Votre session a expiré");
                         logoutAndFinish();
                     }else{
-                        showToast("Connexion to the server failed");
+                        showToast("La connexion au serveur a échoué");
                         logoutAndFinish();
                     }
                 } else {
