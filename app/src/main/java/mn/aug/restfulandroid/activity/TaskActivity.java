@@ -14,6 +14,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -50,7 +51,8 @@ public class TaskActivity extends RESTfulListActivity {
     private Long requestId_post_timer = 0L;
 
     private BroadcastReceiver requestReceiver;
-    private Button startStopWork, btnEditTask;
+    private Button btnEditTask;
+    private ImageButton startStopWork;
     private Timer timer;
 
 
@@ -69,8 +71,9 @@ public class TaskActivity extends RESTfulListActivity {
     private OnClickListener play = new OnClickListener() {
         @Override
         public void onClick(View v) {
-            if (startStopWork.getText().toString().equals("Start")) {
-                Logger.debug("start"," button");
+            //android:src="@drawable/ic_play_arrow_black_24dp"
+            if (startStopWork.getTag().toString().equals("Start")) {
+                Logger.debug("Start"," button");
                 if (store_thread != null) {
                     store_thread.interrupt();
                 }
@@ -84,8 +87,9 @@ public class TaskActivity extends RESTfulListActivity {
                 Logger.debug("timer", String.valueOf(timer.getOwnership_id()));
                 ownershipDBAccess.close();
                 requestId_post_timer = mWunderlistServiceHelper.postTimer(timer);
-                startStopWork.setText("Stop");
-                startStopWork.setBackground(getResources().getDrawable(R.drawable.button_stop));
+                startStopWork.setTag("Stop");
+                startStopWork.setImageResource(R.drawable.ic_stop_white_24dp);
+                startStopWork.setBackground(getResources().getDrawable(R.drawable.button_round_stop));
 
             } else {
                 Logger.debug("stop"," button");
@@ -95,8 +99,9 @@ public class TaskActivity extends RESTfulListActivity {
                 if (timerThread != null) {
                     timerThread.interrupt();
                 }
-                startStopWork.setText("Start");
-                startStopWork.setBackground(getResources().getDrawable(R.drawable.button_play));
+                startStopWork.setTag("Start");
+                startStopWork.setImageResource(R.drawable.ic_play_arrow_white_24dp);
+                startStopWork.setBackground(getResources().getDrawable(R.drawable.button_round_play_green));
                 timer.setTimer(String.valueOf(updatedTime));
                 ownershipDBAccess.open();
                 ownershipDBAccess.updateTimer(timer);
@@ -169,7 +174,7 @@ public class TaskActivity extends RESTfulListActivity {
                     Thread.currentThread().interrupt();
                 }
 
-                if (timer != null && startStopWork.getText().toString().equals("Stop")) {
+                if (timer != null && startStopWork.getTag().toString().equals("Stop")) {
                     timer.setTimer(String.valueOf(updatedTime));
                     ownershipDBAccess.open();
                     ownershipDBAccess.updateTimer(timer);
@@ -209,7 +214,7 @@ public class TaskActivity extends RESTfulListActivity {
         txtProduct.setText(tache.getTitle());
 
         newWorkTimer = (TextView) findViewById(R.id.newWorkTimer);
-        startStopWork = (Button) findViewById(R.id.startWork);
+        startStopWork = (ImageButton) findViewById(R.id.startWork);
         startStopWork.setOnClickListener(play);
 
         // view products click event
@@ -364,8 +369,9 @@ public class TaskActivity extends RESTfulListActivity {
             } catch (NumberFormatException e) {
                 e.printStackTrace();
             }
-            startStopWork.setText("Stop");
-            startStopWork.setBackground(getResources().getDrawable(R.drawable.button_stop));
+            startStopWork.setTag("Stop");
+            startStopWork.setImageResource(R.drawable.ic_stop_white_24dp);
+            startStopWork.setBackground(getResources().getDrawable(R.drawable.button_round_stop));
 
             if (timerThread != null) {
                 timerThread.interrupt();

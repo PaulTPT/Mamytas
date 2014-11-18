@@ -6,6 +6,8 @@
     </style>
 
     <style name="ActionBar" parent="Widget.AppCompat.Light.ActionBar">
+        <item name="android:layout_height">48dp</item>
+        <item name="android:height">48dp</item>
         <item name="android:background">@drawable/nav_bar_bcg</item>
     </style>
 
