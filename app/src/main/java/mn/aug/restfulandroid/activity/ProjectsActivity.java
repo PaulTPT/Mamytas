@@ -60,7 +60,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
     protected void onCreate(Bundle savedInstanceState) {
         setContentResId(R.layout.list_projects);
         super.onCreate(savedInstanceState);
-        mUndoBarController = new UndoBarController(findViewById(R.id.undobar), this);
+        mUndoBarController = new UndoBarController(findViewById(R.id.actionBar), this);
         ownershipDBAccess = new OwnershipDBAccess(this);
 
         lists=new ArrayList<Listw>();

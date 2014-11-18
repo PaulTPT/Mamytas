@@ -37,6 +37,8 @@
         android:background="@drawable/button_play"
         android:textColor="#fff"
         android:shadowColor="#333"
+        android:paddingRight="8dp"
+        android:paddingLeft="8dp"
         android:singleLine="false"
         android:layout_alignParentTop="true" />
 
