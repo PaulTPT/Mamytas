@@ -3,52 +3,49 @@
 android:layout_width="match_parent"
 android:layout_height="match_parent"
 android:orientation="vertical" >
-
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Nom de votre projet :"
-        android:layout_marginTop="20dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:textSize="17dip"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textSize="16sp"/>
 
     <EditText android:id="@+id/inputListName"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="... ... ..."
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:textSize="17dip"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textSize="16dp"
         android:singleLine="true"/>
 
     <TextView android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:text="Partager le projet avec :"
-        android:layout_marginTop="20dip"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:textSize="17dip"/>
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textSize="16dip"/>
 
     <EditText android:id="@+id/inputUserNames"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:hint="Pierre;Paul;Jacques"
-        android:layout_marginLeft="10dip"
-        android:layout_marginRight="10dip"
-        android:textSize="17dip"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textSize="16dp"
         android:singleLine="true"/>
 
-<Button android:id="@+id/btnCreateTask"
-    android:layout_width="fill_parent"
-    android:layout_height="wrap_content"
-    android:background="@drawable/button_login"
-    android:layout_marginTop="20dip"
-    android:layout_marginLeft="10dip"
-    android:layout_marginRight="10dip"
-    android:padding="10dip"
-    android:textColor="#fff"
-    android:textSize="17dip"
-    android:text="Ajouter le projet"
-    android:gravity="center_vertical|center_horizontal" />
-
+    <Button android:id="@+id/btnCreateTask"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/button_login"
+        android:layout_marginTop="16dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:textColor="#fff"
+        android:textSize="16dip"
+        android:text="Ajouter le projet"
+        android:gravity="center_vertical|center_horizontal" />
 </LinearLayout>

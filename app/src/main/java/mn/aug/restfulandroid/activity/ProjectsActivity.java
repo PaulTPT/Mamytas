@@ -285,15 +285,15 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     backBtn.setText("Retirer");
                     backBtn.setGravity(Gravity.LEFT);
                 }
-                if (offset > (int)width/2) {
+                if (offset > (int)width/3) {
                     backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_stop_selected));
-                } else if (offset < -(int)width/2) {
+                } else if (offset < -(int)width/3) {
                     backBtn.setBackground(context.getResources().getDrawable(R.drawable.button_login_selected));
                 }
             }
             if (event.getAction() == MotionEvent.ACTION_UP || event.getAction() == MotionEvent.ACTION_CANCEL ) {
                 ValueAnimator animator = null;
-                if (offset > (int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On supprime loulou
+                if (offset > (int)width/3 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On supprime loulou
                     animator = ValueAnimator.ofInt(offset, width);
                     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
@@ -313,7 +313,7 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
                     lists.remove(position);
                     adapter=new ProjectsArrayAdapter(context,R.layout.list_project_item,lists, gestureListener);
                     listView.setAdapter(adapter);
-                } else if (offset < -(int)width/2 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On redirige vers la page d'édition
+                } else if (offset < -(int)width/3 && event.getAction() != MotionEvent.ACTION_CANCEL) { // On redirige vers la page d'édition
                     animator = ValueAnimator.ofInt(offset, -width);
                     animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
                         @Override
