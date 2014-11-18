@@ -21,21 +21,24 @@ package mn.aug.restfulandroid.activity.base;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.ViewPropertyAnimator;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import mn.aug.restfulandroid.R;
+import mn.aug.restfulandroid.util.Logger;
 
 
 public class UndoBarController {
+    private final View actionBar;
     private View mBarView;
     private TextView mMessageView;
-    private ViewPropertyAnimator mBarAnimator;
     private Handler mHideHandler = new Handler();
 
     private UndoListener mUndoListener;
@@ -43,19 +46,21 @@ public class UndoBarController {
     // State objects
     private Parcelable mUndoToken=null;
     private CharSequence mUndoMessage="";
+    ValueAnimator animator;
 
     public interface UndoListener {
         void onUndo(Parcelable token);
         void undoDisabled(Parcelable token);
     }
 
-    public UndoBarController(View undoBarView, UndoListener undoListener) {
-        mBarView = undoBarView;
-        mBarAnimator = mBarView.animate();
+    public UndoBarController(View actionBar, UndoListener undoListener) {
+        this.actionBar = actionBar;
+        mBarView = (RelativeLayout) actionBar.findViewById(R.id.undobar);
+
         mUndoListener = undoListener;
 
-        mMessageView = (TextView) mBarView.findViewById(R.id.undobar_message);
-        mBarView.findViewById(R.id.undobar_button)
+        mMessageView = (TextView) actionBar.findViewById(R.id.undobar_message);
+        actionBar.findViewById(R.id.undobar_button)
                 .setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
@@ -63,8 +68,6 @@ public class UndoBarController {
                         hideUndoBar(false);
                     }
                 });
-
-
         hideUndoBar(true);
     }
 
@@ -75,44 +78,46 @@ public class UndoBarController {
 
         mHideHandler.removeCallbacks(mHideRunnable);
         mHideHandler.postDelayed(mHideRunnable,
-                mBarView.getResources().getInteger(R.integer.undobar_hide_delay));
+                actionBar.getResources().getInteger(R.integer.undobar_hide_delay));
 
-        mBarView.setVisibility(View.VISIBLE);
+        //mBarView.setVisibility(View.VISIBLE);
+
         if (immediate) {
-            mBarView.setAlpha(1);
+            actionBar.setTranslationY(0);
         } else {
-            mBarAnimator.cancel();
-            mBarAnimator
-                    .alpha(1)
-                    .setDuration(
-                            mBarView.getResources()
-                                    .getInteger(android.R.integer.config_shortAnimTime))
-                    .setListener(null);
+            animator = ValueAnimator.ofInt(mBarView.getMeasuredHeight(), 0);
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    actionBar.setTranslationY((Integer) valueAnimator.getAnimatedValue());
+                }
+            });
+            animator.setDuration(150);
+            animator.start();
         }
     }
 
     public void hideUndoBar(boolean immediate) {
+        Logger.debug("mBarView.getMeasuredHeight","height:"+mBarView.getMeasuredHeight());
+        Logger.debug("mBarView.getMeasuredHeight","height:"+mBarView.getHeight());
         mHideHandler.removeCallbacks(mHideRunnable);
         if (immediate) {
-            mBarView.setVisibility(View.GONE);
-            mBarView.setAlpha(0);
+            //mBarView.setVisibility(View.GONE);
+            actionBar.setTranslationY(150);
             mUndoMessage = null;
             mUndoToken = null;
-
         } else {
-            mBarAnimator.cancel();
-            mBarAnimator
-                    .alpha(0)
-                    .setDuration(mBarView.getResources()
-                            .getInteger(android.R.integer.config_shortAnimTime))
-                    .setListener(new AnimatorListenerAdapter() {
-                        @Override
-                        public void onAnimationEnd(Animator animation) {
-                            mBarView.setVisibility(View.GONE);
-                            mUndoMessage = null;
-                            mUndoToken = null;
-                        }
-                    });
+            animator = ValueAnimator.ofInt(0, mBarView.getMeasuredHeight());
+            animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
+                @Override
+                public void onAnimationUpdate(ValueAnimator valueAnimator) {
+                    actionBar.setTranslationY((Integer) valueAnimator.getAnimatedValue());
+                }
+            });
+            animator.setDuration(150);
+            animator.start();
+            mUndoMessage = null;
+            mUndoToken = null;
         }
         mUndoListener.undoDisabled(mUndoToken);
     }

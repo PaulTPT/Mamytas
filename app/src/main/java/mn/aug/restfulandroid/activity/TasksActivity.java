@@ -73,7 +73,7 @@ public class TasksActivity extends RESTfulActivity implements UndoBarController.
         super.onCreate(savedInstanceState);
         Intent i = getIntent();
         list_id = i.getLongExtra(Listw.LIST_ID_EXTRA, 0L);
-        mUndoBarController = new UndoBarController(findViewById(R.id.undobar), this);
+        mUndoBarController = new UndoBarController(findViewById(R.id.actionBar), this);
         ownershipDBAccess = new OwnershipDBAccess(this);
         tasksDBAccess = new TasksDBAccess(this);
         listsDBAccess=new ListsDBAccess(this);

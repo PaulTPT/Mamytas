@@ -25,24 +25,64 @@
         android:layout_below="@+id/listTasksTitle"
         />
 
-    <Button
-        android:layout_width="60sp"
-        android:layout_height="60sp"
-        android:text="+"
-        android:id="@+id/create"
+    <RelativeLayout android:id="@+id/actionBar"
+        android:layout_width="match_parent"
         android:layout_alignParentBottom="true"
-        android:layout_alignParentRight="true"
-        android:layout_marginRight="20dp"
-        android:layout_marginBottom="20dp"
-        android:gravity="center_horizontal|center_vertical"
-        android:textSize="40sp"
-        android:textColor="#fff"
-        android:background="@drawable/button_add" />
+        android:layout_height="wrap_content" >
 
-    <LinearLayout android:id="@+id/undobar" style="@style/UndoBar"
-        android:layout_below="@+id/list"
-        android:layout_marginBottom="30dp">
-        <TextView android:id="@+id/undobar_message" style="@style/UndoBarMessage" />
-        <Button android:id="@+id/undobar_button" style="@style/UndoBarButton" />
-    </LinearLayout>
+        <Button
+            android:layout_width="56dp"
+            android:layout_height="56dp"
+            android:text="+"
+            android:id="@+id/create"
+            android:layout_above="@+id/undobar"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="20dp"
+            android:layout_marginBottom="20dp"
+            android:gravity="center_horizontal|center_vertical"
+            android:textSize="24sp"
+            android:textColor="#fff"
+            android:background="@drawable/button_add" />
+
+        <RelativeLayout android:id="@+id/undobar"
+            android:layout_width="fill_parent"
+            android:layout_height="48dp"
+            android:height="48dp"
+            android:background="#323232"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="0dp"
+            android:layout_marginRight="0dp"
+            android:layout_marginBottom="0dp"
+            android:layout_marginTop="0dp"
+            android:weightSum="1">
+            <TextView android:id="@+id/undobar_message"
+                android:text="Projet retiré"
+                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginLeft="24dp"
+                android:textSize="14sp"
+                android:textColor="#fff"
+                android:layout_toLeftOf="@+id/undobar_button"
+                android:layout_toStartOf="@+id/undobar_button" />
+            <Button android:id="@+id/undobar_button"
+                android:layout_height="fill_parent"
+                android:layout_width="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_alignParentEnd="true"
+                android:text="Annuler"
+                android:textColor="#F44336"
+                android:layout_marginTop="16dp"
+                android:layout_marginBottom="12dp"
+                android:layout_marginRight="24dp"
+                android:layout_marginLeft="24dp"
+                android:textSize="14sp"
+                android:textAllCaps="true"
+                android:background="@drawable/undobar_button"
+                />
+        </RelativeLayout>
+    </RelativeLayout>
 </RelativeLayout>
