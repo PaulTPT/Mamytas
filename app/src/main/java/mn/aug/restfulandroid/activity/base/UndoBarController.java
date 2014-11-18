@@ -19,15 +19,12 @@ package mn.aug.restfulandroid.activity.base;
  * limitations under the License.
  */
 
-import android.animation.Animator;
-import android.animation.AnimatorListenerAdapter;
 import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Parcelable;
 import android.text.TextUtils;
 import android.view.View;
-import android.view.ViewPropertyAnimator;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -105,7 +102,7 @@ public class UndoBarController {
             //mBarView.setVisibility(View.GONE);
             actionBar.setTranslationY(150);
             mUndoMessage = null;
-            mUndoToken = null;
+
         } else {
             animator = ValueAnimator.ofInt(0, mBarView.getMeasuredHeight());
             animator.addUpdateListener(new ValueAnimator.AnimatorUpdateListener() {
@@ -117,9 +114,9 @@ public class UndoBarController {
             animator.setDuration(150);
             animator.start();
             mUndoMessage = null;
-            mUndoToken = null;
+
         }
-        mUndoListener.undoDisabled(mUndoToken);
+
     }
 
     public void onSaveInstanceState(Bundle outState) {
@@ -142,6 +139,7 @@ public class UndoBarController {
         @Override
         public void run() {
             hideUndoBar(false);
+            mUndoListener.undoDisabled(mUndoToken);
         }
     };
 

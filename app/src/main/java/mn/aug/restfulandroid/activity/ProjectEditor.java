@@ -20,7 +20,7 @@ import mn.aug.restfulandroid.util.Logger;
 
 public class ProjectEditor extends Activity {
 
-    private EditText listName ;
+    private EditText listName, listShare ;
     private Button btnCreateTask;
     private String toastVerb = "Creating";
 
@@ -44,6 +44,7 @@ public class ProjectEditor extends Activity {
 
         // Initialisation elem vue
         listName = (EditText) findViewById(R.id.inputListName);
+        listShare= (EditText) findViewById(R.id.inputUserNames);
         btnCreateTask = (Button) findViewById(R.id.btnCreateTask);
 
         if(list_id!=0){
@@ -78,6 +79,7 @@ public class ProjectEditor extends Activity {
                     listsDBAccess.close();
                     mWunderlistServiceHelper.putList(list);
                 }
+                mWunderlistServiceHelper.shareList(list.getId(),listShare.getText().toString());
                 finish();
             }
         });

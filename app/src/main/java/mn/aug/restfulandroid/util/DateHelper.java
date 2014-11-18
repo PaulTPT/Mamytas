@@ -8,9 +8,10 @@ import java.util.Date;
  * Created by Antoine on 16/11/2014.
  */
 public class DateHelper {
-
     public static SimpleDateFormat dateTimeFormat = new SimpleDateFormat("dd-MM-yyyy à HH:mm");
     public static SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MM-yyyy");
+    public static SimpleDateFormat dateTimeFormatUS = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+    public static SimpleDateFormat dateFormatUS = new SimpleDateFormat("yyyy-MM-dd");
     public static SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm");
 
     /**
@@ -49,8 +50,8 @@ public class DateHelper {
      */
     public static String getDateTimeFromDateTime(String dateTime) throws ParseException{
         String retour = null;
-        Date parsedTimeStamp = dateTimeFormat.parse(dateTime);
-        retour = String.valueOf(dateTimeFormat.format(parsedTimeStamp.getTime()));
+        Date parsedTimeStamp = dateTimeFormatUS.parse(dateTime);
+        retour = String.valueOf(dateTimeFormatUS.format(parsedTimeStamp.getTime()));
         return retour;
     }
 
@@ -63,8 +64,8 @@ public class DateHelper {
      */
     public static String getDateFromDate(String date) throws ParseException{
         String retour = null;
-        Date parsedTimeStamp = dateFormat.parse(date);
-        retour = String.valueOf(dateFormat.format(parsedTimeStamp.getTime()));
+        Date parsedTimeStamp = dateFormatUS.parse(date);
+        retour = String.valueOf(dateFormatUS.format(parsedTimeStamp.getTime()));
         return retour;
     }
 
@@ -76,7 +77,7 @@ public class DateHelper {
      */
     public static String getTimeFromDateTime(String dateTime) throws ParseException{
         String retour = null;
-        Date parsedTimeStamp = dateTimeFormat.parse(dateTime);
+        Date parsedTimeStamp = dateTimeFormatUS.parse(dateTime);
         retour = String.valueOf(timeFormat.format(parsedTimeStamp.getTime()));
         return retour;
     }
@@ -94,6 +95,12 @@ public class DateHelper {
     }
 
     public static String getDateFromDate(long time) {
-        return dateFormat.format(time);
+        return dateFormatUS.format(time);
     }
+
+
+
+
+
+
 }

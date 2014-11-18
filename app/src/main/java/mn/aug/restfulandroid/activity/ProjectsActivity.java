@@ -236,8 +236,9 @@ public class ProjectsActivity extends RESTfulActivity implements UndoBarControll
     @Override
     public void undoDisabled(Parcelable token) {
         Listw list= (Listw) token;
+        Logger.debug("Undo","undo disabled");
         if (list!=null){
-            Logger.debug("Undo","undo disabled");
+            Logger.debug("Undo","delete");
             mWunderlistServiceHelper.deleteList(list);
         }
     }
